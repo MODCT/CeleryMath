@@ -20,6 +20,7 @@ from PySide6.QtWidgets import (QApplication, QDoubleSpinBox, QGridLayout, QHBoxL
     QLabel, QLineEdit, QMainWindow, QPushButton,
     QSizePolicy, QSpacerItem, QStatusBar, QVBoxLayout,
     QWidget)
+# from . import celeryLatex_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -152,5 +153,8 @@ class Ui_MainWindow(object):
         self.btn_rec_hotkey.setText(QCoreApplication.translate("MainWindow", u"Ctrl+Alt+S", None))
         self.btn_hotkey_reset.setText(QCoreApplication.translate("MainWindow", u"Reset", None))
         self.btn_snip.setText(QCoreApplication.translate("MainWindow", u"Screenshot", None))
+#if QT_CONFIG(shortcut)
+        self.btn_snip.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+Alt+S", None))
+#endif // QT_CONFIG(shortcut)
     # retranslateUi
 

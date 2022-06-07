@@ -162,6 +162,9 @@
         <property name="text">
          <string>Screenshot</string>
         </property>
+        <property name="shortcut">
+         <string>Ctrl+Alt+S</string>
+        </property>
        </widget>
       </item>
      </layout>
@@ -177,6 +180,8 @@
    <header location="global">QtWebEngineWidgets/QWebEngineView</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="celeryLatex.qrc"/>
+ </resources>
  <connections/>
 </ui>
