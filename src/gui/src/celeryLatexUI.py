@@ -20,7 +20,7 @@ from PySide6.QtWidgets import (QApplication, QDoubleSpinBox, QGridLayout, QHBoxL
     QLabel, QLineEdit, QMainWindow, QPushButton,
     QSizePolicy, QSpacerItem, QStatusBar, QVBoxLayout,
     QWidget)
-# from . import celeryLatex_rc
+from . import celeryLatex_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -50,11 +50,19 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.ledit_tex1 = QLineEdit(self.centralwidget)
         self.ledit_tex1.setObjectName(u"ledit_tex1")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.ledit_tex1.sizePolicy().hasHeightForWidth())
+        self.ledit_tex1.setSizePolicy(sizePolicy1)
+        self.ledit_tex1.setMinimumSize(QSize(30, 30))
+        self.ledit_tex1.setClearButtonEnabled(False)
 
         self.horizontalLayout_2.addWidget(self.ledit_tex1)
 
         self.btn_copy1 = QPushButton(self.centralwidget)
         self.btn_copy1.setObjectName(u"btn_copy1")
+        self.btn_copy1.setMinimumSize(QSize(0, 30))
 
         self.horizontalLayout_2.addWidget(self.btn_copy1)
 
@@ -68,11 +76,15 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.ledit_tex2 = QLineEdit(self.centralwidget)
         self.ledit_tex2.setObjectName(u"ledit_tex2")
+        sizePolicy1.setHeightForWidth(self.ledit_tex2.sizePolicy().hasHeightForWidth())
+        self.ledit_tex2.setSizePolicy(sizePolicy1)
+        self.ledit_tex2.setMinimumSize(QSize(0, 30))
 
         self.horizontalLayout_3.addWidget(self.ledit_tex2)
 
         self.btn_copy2 = QPushButton(self.centralwidget)
         self.btn_copy2.setObjectName(u"btn_copy2")
+        self.btn_copy2.setMinimumSize(QSize(0, 30))
 
         self.horizontalLayout_3.addWidget(self.btn_copy2)
 
@@ -153,8 +165,5 @@ class Ui_MainWindow(object):
         self.btn_rec_hotkey.setText(QCoreApplication.translate("MainWindow", u"Ctrl+Alt+S", None))
         self.btn_hotkey_reset.setText(QCoreApplication.translate("MainWindow", u"Reset", None))
         self.btn_snip.setText(QCoreApplication.translate("MainWindow", u"Screenshot", None))
-#if QT_CONFIG(shortcut)
-        self.btn_snip.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+Alt+S", None))
-#endif // QT_CONFIG(shortcut)
     # retranslateUi
 

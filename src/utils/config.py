@@ -14,6 +14,7 @@ class Config(object):
     max_seq = 512
     min_img_size = [32, 32]
     max_img_size = [192, 896]
+    snip_hotkey = ""
 
     def __init__(self, conf_path: str):
         self.load(conf_path)

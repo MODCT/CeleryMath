@@ -1,0 +1,10 @@
+<RCC>
+  <qresource prefix="js">
+    <file>js/mathJaxConfig.js</file>
+    <file>js/extensions/asciimath2jax.js</file>
+    <file>js/jax/input/AsciiMath/config.js</file>
+    <file>js/jax/output/HTML-CSS/config.js</file>
+    <file>js/MathJax.js</file>
+    <file>js/tex_mml_chtml.js</file>
+  </qresource>
+</RCC>

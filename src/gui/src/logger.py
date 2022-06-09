@@ -2,15 +2,15 @@
 Description: logger
 Author: Rainyl
 Date: 2022-06-07 23:36:33
-LastEditTime: 2022-06-07 23:49:10
+LastEditTime: 2022-06-09 16:36:05
 '''
 import logging
 from colorlog import ColoredFormatter
 
 
 formatter = ColoredFormatter(
-    "%(log_color)s%(levelname)-8s%(reset)s %(blue)s%(message)s",
-    datefmt=None,
+    "%(name)s_%(log_color)s%(levelname)s%(reset)s_%(module)s_%(purple)s%(lineno)d_%(blue)s%(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
     reset=True,
     log_colors={
     'DEBUG':    'cyan',
