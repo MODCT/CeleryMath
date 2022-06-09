@@ -9,7 +9,7 @@ from PySide6.QtGui import QRegularExpressionValidator as QRegExpValidator
 from PIL import Image
 import keyboard
 
-from .celeryLatexUI import Ui_MainWindow
+from celeryLatex.gui.celeryLatexUI import Ui_MainWindow
 from .celeryScreenShotWidget import CeleryScreenShotWidget
 from .logger import get_logger
 from .celeryThread import CeleryInferThread

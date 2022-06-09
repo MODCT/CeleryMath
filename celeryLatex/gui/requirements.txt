@@ -1,0 +1,11 @@
+# model base #
+numpy
+pillow
+onnxruntime
+tokenizers
+pyside6
+keyboard
+colorlog
+# build #
+# nuitka
+# orderedset
