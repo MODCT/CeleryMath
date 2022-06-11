@@ -2,7 +2,8 @@ import sys
 
 from PySide6.QtWidgets import QApplication
 
-from .application import CeleryLatex
+from src.application import CeleryLatex
+from src.lib.utils.utils import seed_everything
 
 
 def main():
@@ -14,4 +15,5 @@ def main():
 
 
 if __name__ == "__main__":
+    seed_everything(241)
     main()

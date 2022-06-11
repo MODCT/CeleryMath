@@ -46,7 +46,7 @@ class CeleryScreenShotWidget(QMainWindow):
 
         # setting opacity level
         self.opacity_effect.setOpacity(0.3)
-  
+
     def setupUi(self):
         if not self.objectName():
             self.setObjectName(u"screenShotWidget")
@@ -84,7 +84,7 @@ class CeleryScreenShotWidget(QMainWindow):
         if event.key() == Qt.Key_Escape:
             QApplication.restoreOverrideCursor()
             self.close()
-            self.parent.show()
+            self.parent.on_sc_returned()
         event.accept()
 
     def take_screenshot(self):
@@ -111,7 +111,7 @@ class CeleryScreenShotWidget(QMainWindow):
         # self.logger.debug(f"button: {event.button()}")
         if event.button() != Qt.MouseButton.LeftButton:
             self.close()
-            self.parent.on_sc_returned(None)
+            self.parent.on_sc_returned()
             return
         self.logger.debug(f"release, {self.img_ltop}, {self.img_rbot}")
         self.is_snipping = False
@@ -143,11 +143,11 @@ class CeleryScreenShotWidget(QMainWindow):
         if self.is_snipping:
             brushColor = "#b1d5c8"
             lw = 1
-            opacity = 0.6
+            opacity = 0.8
         else:
             brushColor = "#FFFFFF"
-            lw = 2
-            opacity = 1.0
+            lw = 1
+            opacity = 1
         self.opacity_effect.setOpacity(opacity)
         self.label_image.setGraphicsEffect(self.opacity_effect)
         qp = QPainter(self)

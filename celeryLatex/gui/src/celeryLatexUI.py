@@ -114,21 +114,10 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout.addWidget(self.spinbox_tempe)
 
-        self.label_hotkey = QLabel(self.centralwidget)
-        self.label_hotkey.setObjectName(u"label_hotkey")
+        self.btn_settings = QPushButton(self.centralwidget)
+        self.btn_settings.setObjectName(u"btn_settings")
 
-        self.horizontalLayout.addWidget(self.label_hotkey)
-
-        self.btn_rec_hotkey = QPushButton(self.centralwidget)
-        self.btn_rec_hotkey.setObjectName(u"btn_rec_hotkey")
-        self.btn_rec_hotkey.setEnabled(True)
-
-        self.horizontalLayout.addWidget(self.btn_rec_hotkey)
-
-        self.btn_hotkey_reset = QPushButton(self.centralwidget)
-        self.btn_hotkey_reset.setObjectName(u"btn_hotkey_reset")
-
-        self.horizontalLayout.addWidget(self.btn_hotkey_reset)
+        self.horizontalLayout.addWidget(self.btn_settings)
 
         self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
@@ -161,9 +150,7 @@ class Ui_MainWindow(object):
         self.btn_copy2.setText(QCoreApplication.translate("MainWindow", u"Copy", None))
         self.label_tempe.setText(QCoreApplication.translate("MainWindow", u"Temperature:", None))
         self.spinbox_tempe.setPrefix("")
-        self.label_hotkey.setText(QCoreApplication.translate("MainWindow", u"HotKey:", None))
-        self.btn_rec_hotkey.setText(QCoreApplication.translate("MainWindow", u"Ctrl+Alt+S", None))
-        self.btn_hotkey_reset.setText(QCoreApplication.translate("MainWindow", u"Reset", None))
+        self.btn_settings.setText(QCoreApplication.translate("MainWindow", u"Settings", None))
         self.btn_snip.setText(QCoreApplication.translate("MainWindow", u"Screenshot", None))
     # retranslateUi
 

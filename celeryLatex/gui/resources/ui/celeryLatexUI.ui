@@ -160,26 +160,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label_hotkey">
+         <widget class="QPushButton" name="btn_settings">
           <property name="text">
-           <string>HotKey:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="btn_rec_hotkey">
-          <property name="enabled">
-           <bool>true</bool>
-          </property>
-          <property name="text">
-           <string>Ctrl+Alt+S</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="btn_hotkey_reset">
-          <property name="text">
-           <string>Reset</string>
+           <string>Settings</string>
           </property>
          </widget>
         </item>

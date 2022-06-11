@@ -12,10 +12,13 @@ class CeleryGlobalHotkey(QObject):
     
     def register_hotkey(self, ksequence: QKeySequence):
         kstr = self.keyseq2pynput(ksequence)
-        self.hotkey = keyboard.add_hotkey(kstr, self.pressed.emit, args=(), suppress=True)
+        if self.hotkey is not None:
+            self.unregister_hotkey()
+        self.hotkey = keyboard.add_hotkey(kstr, self.pressed.emit, args=(), suppress=True, trigger_on_release=True)
 
     def unregister_hotkey(self):
         keyboard.remove_hotkey(self.hotkey)
+        self.hotkey = None
 
     def keyseq2pynput(self, ksequence: QKeySequence) -> str:
         hotkey = ksequence.toString().lower()

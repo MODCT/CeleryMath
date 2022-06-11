@@ -1,12 +1,12 @@
-# from pathlib import Path
-import numpy as np
+import sys
 # from viztracer import VizTracer
 from argparse import ArgumentParser
 from PIL import Image
 
-from ..models.model import LatexModelONNX, get_model
-from ..utils.config import Config
-from ..utils.utils import post_process, timer, seed_everything
+sys.path.append("..")
+from lib.models.model import LatexModelONNX, get_model
+from lib.utils.config import Config
+from lib.utils.utils import post_process, timer, seed_everything
 
 @timer
 def main(impath: str, conf: Config):

@@ -1,12 +1,14 @@
+import sys
 import base64
 
 from fastapi import FastAPI, Form
 from PIL import Image
 from io import BytesIO
+sys.path.append("..")
 
 # from .utils.utils import verifyUser
-from ..models.model import get_model
-from ..utils.config import Config
+from lib.models.model import get_model
+from lib.utils.config import Config
 
 app = FastAPI(root_path="/api/v1", servers=[{"url": "/api/v1"}])
 

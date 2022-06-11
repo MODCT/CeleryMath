@@ -1,7 +1,7 @@
 from PySide6.QtCore import QThread, Signal
 from PIL import Image
 
-from ...models.model import LatexModelONNX
+from .lib.models.model import LatexModelONNX
 
 
 class CeleryInferThread(QThread):
