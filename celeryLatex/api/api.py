@@ -12,7 +12,7 @@ from lib.utils.config import Config
 
 app = FastAPI(root_path="/api/v1", servers=[{"url": "/api/v1"}])
 
-conf = Config("deploy/conf/conf.json")
+conf = Config("conf/conf.json")
 model = get_model(conf)
 
 
@@ -37,7 +37,7 @@ async def predict(img: str = Form(...), user: str = Form(...), token: str = Form
 
 @app.get("/api/v1/latexocr/test")
 async def test():
-    imgpath = "tmp/Snipaste_2022-06-06_18-10-12.png"
+    imgpath = "../tmp/test-3.png"
     with open(imgpath, "rb") as f:
         imgstr = base64.b64encode(f.read())
     img = Image.open(BytesIO(base64.b64decode(imgstr)))

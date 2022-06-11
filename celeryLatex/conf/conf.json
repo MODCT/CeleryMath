@@ -1,7 +1,7 @@
 {
-    "encoder_path": "src/checkpoints/celeryLatexEncoder.onnx",
-    "decoder_path": "src/checkpoints/celeryLatexDecoder.onnx",
-    "tokenizer_path": "src/conf/tokenizer.json",
+    "encoder_path": "checkpoints/celeryLatexEncoder.onnx",
+    "decoder_path": "checkpoints/celeryLatexDecoder.onnx",
+    "tokenizer_path": "conf/tokenizer.json",
     "device": "cpu",
     "pad_token": 0,
     "bos_token": 1,

@@ -26,9 +26,10 @@ if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("-i", dest="image", type=str, help="image to predict")
     parser.add_argument("-c", dest="config", type=str, help=".json config file")
-    args = parser.parse_args([
-        "-i", "tmp/test-3.png",
-        "-c", "deploy/conf/conf.json",
-    ])
+    # args = parser.parse_args([
+    #     "-i", "tmp/test-3.png",
+    #     "-c", "deploy/conf/conf.json",
+    # ])
+    args = parser.parse_args()
     seed_everything(241)
     main(args.image, Config(args.config))
