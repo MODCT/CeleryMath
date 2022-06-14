@@ -8,17 +8,11 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon, QScreen, QKeyEvent,
-    QMouseEvent, QPaintEvent, QPen,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtCore import (QPoint, QRect, Qt)
+from PySide6.QtGui import (QBrush, QColor, QCursor, QKeyEvent,
+    QMouseEvent, QPaintEvent, QPen, QPainter, QPixmap)
 from PySide6.QtWidgets import (QApplication, QGridLayout, QLabel, QSizePolicy,
-    QWidget, QMainWindow, QVBoxLayout, QGraphicsOpacityEffect, QGraphicsScene,
-    QGraphicsView)
+    QWidget, QMainWindow, QVBoxLayout, QGraphicsOpacityEffect)
 
 from PIL import ImageGrab
 
@@ -80,9 +74,16 @@ class CeleryScreenShotWidget(QMainWindow):
             self.label_image.setScaledContents(True)
             self.label_image.setPixmap(im)
 
+    def reset_rect(self):
+        self.img_ltop.setX(0)
+        self.img_ltop.setY(0)
+        self.img_rbot.setX(0)
+        self.img_rbot.setY(0)
+
     def keyPressEvent(self, event: QKeyEvent):
         if event.key() == Qt.Key_Escape:
             QApplication.restoreOverrideCursor()
+            self.reset_rect()
             self.close()
             self.parent.on_sc_returned()
         event.accept()
@@ -110,6 +111,7 @@ class CeleryScreenShotWidget(QMainWindow):
     def mouseReleaseEvent(self, event: QMouseEvent):
         # self.logger.debug(f"button: {event.button()}")
         if event.button() != Qt.MouseButton.LeftButton:
+            self.reset_rect()
             self.close()
             self.parent.on_sc_returned()
             return
@@ -133,8 +135,7 @@ class CeleryScreenShotWidget(QMainWindow):
         img = ImageGrab.grab(bbox=bbox, all_screens=True)
         QApplication.processEvents()
 
-        self.img_ltop = QPoint()
-        self.img_rbot = QPoint()
+        self.reset_rect()
         self.close()
         self.parent.on_sc_returned(img)
 
