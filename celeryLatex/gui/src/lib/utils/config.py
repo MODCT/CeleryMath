@@ -28,7 +28,8 @@ class Config(object):
         with open(conf_path, "r", encoding="utf-8") as f:
             conf: Dict[str, Union[str, int]] = json.load(f)
         for k, v in conf.items():
-            setattr(self, k, v)
+            if hasattr(self, k):
+                setattr(self, k, v)
 
     @property
     def json(self):

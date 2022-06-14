@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>CeleryLatex</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../celeryLatex.qrc">
+    <normaloff>:/icon/icons/logo.png</normaloff>:/icon/icons/logo.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">

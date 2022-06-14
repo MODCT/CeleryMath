@@ -2,9 +2,10 @@
 Description: logger
 Author: Rainyl
 Date: 2022-06-07 23:36:33
-LastEditTime: 2022-06-09 16:36:05
+LastEditTime: 2022-06-14 12:58:07
 '''
 import logging
+import os
 from colorlog import ColoredFormatter
 
 
@@ -27,7 +28,12 @@ formatter = ColoredFormatter(
 def get_logger(name, level=logging.DEBUG):
     handler = logging.StreamHandler()
     handler.setFormatter(formatter)
+    if not os.path.exists("log"):
+        os.mkdir("log")
+    file_handler = logging.FileHandler("log/celeryMath.log", encoding="utf-8")
+    file_handler.setFormatter(formatter)
     logger = logging.getLogger(name)
     logger.addHandler(handler)
+    logger.addHandler(file_handler)
     logger.setLevel(level)
     return logger

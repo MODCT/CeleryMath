@@ -7,3 +7,4 @@ venv*/
 .vscode/
 build/
 conf.json*
+log/

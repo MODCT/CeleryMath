@@ -39,9 +39,9 @@ class DeployTransform(object):
         img = (img - self.mean) / self.std
         return img
 
-    def save_img(self, img: np.ndarray, name="test.png"):
-        import matplotlib.pyplot as plt
-        plt.imsave(name, img, cmap="gray")
+    # def save_img(self, img: np.ndarray, name="test.png"):
+    #     import matplotlib.pyplot as plt
+    #     plt.imsave(name, img, cmap="gray")
 
     def resize(self, img: np.ndarray, r: float):
         new_size = (int(img.shape[2]*r), int(img.shape[1]*r))
