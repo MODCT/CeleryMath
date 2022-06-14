@@ -12,6 +12,7 @@ from PySide6.QtGui import QRegularExpressionValidator as QRegExpValidator
 from PIL import Image
 import keyboard
 import os
+import re
 
 from .celeryLatexUI import Ui_MainWindow
 from .dialogSettings import DialogSettings
@@ -23,17 +24,6 @@ from .lib.utils.config import Config
 
 
 class CeleryLatex(QMainWindow, Ui_MainWindow):
-    html_head = """
-        <html><head><meta charset="utf-8">
-        <meta name="viewport" content="width=device-width">
-        <script id="MathJax-script" src="qrc:js/js/MathJax.js"></script>
-        <script src="qrc:js/js/mathJaxConfig.js"></script>
-        </head>"""
-    html_body = """
-        <body>
-        <div id="equation" style="font-size:1em;">$${equation}$$</div>
-        </body>"""
-    html_end = """</html>"""
     tempe: float = 0.2
     logger = get_logger("celeryLatex")
     conf: Config = Config("conf/conf.json")
@@ -50,11 +40,9 @@ class CeleryLatex(QMainWindow, Ui_MainWindow):
         self.init_signals()
 
     def init_settings(self):
-        self.render_web("\star Welcome \star")
-        # try:
+        self.webTexView.load(QUrl("qrc:/html/index.html"))
+        
         self.tempe: float = self.conf.temperature
-        # except Exception as e:
-        #     self.logger.error(f"init settings error: {e}")
         self.update_model()
         self.btn_snip.setText(f"Screenshot({self.conf.snip_hotkey})")
 
@@ -96,7 +84,7 @@ class CeleryLatex(QMainWindow, Ui_MainWindow):
 
     def ledit_val_changed(self, v: str):
         v = v.replace("$", "").replace("\[", "").replace("\]", "")
-        self.render_web(v)
+        self.render_tex(v)
 
     def btn_copy1_clicked(self):
         txt = self.ledit_tex1.text()
@@ -131,10 +119,10 @@ class CeleryLatex(QMainWindow, Ui_MainWindow):
         res = self.model(img, temperature=self.tempe)
         return res
 
-    def render_web(self, s: str):
+    def render_tex(self, s: str):
         self.logger.debug(f"prediction: {s}")
-        s = self.html_head + self.html_body.format(equation=s) + self.html_end
-        self.webTexView.setHtml(s)
+        js = rf"""updateMath("$${re.escape(s)}$$");"""
+        self.webTexView.page().runJavaScript(js)
 
     def on_infer_finished(self, s: Union[List[str], str, Dict[str, Any]]):
         if isinstance(s, dict):
@@ -144,7 +132,7 @@ class CeleryLatex(QMainWindow, Ui_MainWindow):
                     tex = "\n".join(tex)
         if isinstance(s, list):
             tex = "\n".join(s)
-        self.render_web(tex)
+        self.render_tex(tex)
 
         self.ledit_tex1.setText(f"${tex}$")
         self.ledit_tex2.setText(f"\[{tex}\]")
@@ -162,7 +150,7 @@ class CeleryLatex(QMainWindow, Ui_MainWindow):
         self.infer_thread.start()
         # res = self.predict(img)
         # self.on_infer_finished(res)
-        self.webTexView.setHtml("<h1>Loading...</h1>")
+        self.render_tex("\mathrm{Loading...}")
 
     def keyPressEvent(self, event: QKeyEvent):
         event.accept()
