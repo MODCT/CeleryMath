@@ -19,6 +19,7 @@ Yet another LaTex OCR Project based on PyTorch
 - [x] Desktop Deploy
 - [x] ONNX
 - [ ] Compile to module
+- [ ] Reduce package size
 
 ## License
 
