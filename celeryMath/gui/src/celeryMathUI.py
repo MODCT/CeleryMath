@@ -18,8 +18,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWebEngineWidgets import QWebEngineView
 from PySide6.QtWidgets import (QApplication, QDoubleSpinBox, QGridLayout, QHBoxLayout,
     QLabel, QLineEdit, QMainWindow, QPushButton,
-    QSizePolicy, QSpacerItem, QStatusBar, QVBoxLayout,
-    QWidget)
+    QSizePolicy, QSpacerItem, QSplitter, QStatusBar,
+    QVBoxLayout, QWidget)
 from . import celeryMath_rc
 
 class Ui_MainWindow(object):
@@ -36,28 +36,45 @@ class Ui_MainWindow(object):
         self.gridLayout.setObjectName(u"gridLayout")
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.webTexView = QWebEngineView(self.centralwidget)
-        self.webTexView.setObjectName(u"webTexView")
+        self.splitter_tex_img = QSplitter(self.centralwidget)
+        self.splitter_tex_img.setObjectName(u"splitter_tex_img")
         sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.splitter_tex_img.sizePolicy().hasHeightForWidth())
+        self.splitter_tex_img.setSizePolicy(sizePolicy)
+        self.splitter_tex_img.setOrientation(Qt.Vertical)
+        self.label_original_img = QLabel(self.splitter_tex_img)
+        self.label_original_img.setObjectName(u"label_original_img")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.MinimumExpanding)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.label_original_img.sizePolicy().hasHeightForWidth())
+        self.label_original_img.setSizePolicy(sizePolicy1)
+        self.label_original_img.setMinimumSize(QSize(0, 50))
+        self.label_original_img.setStyleSheet(u"background-color: rgb(255, 255, 255)")
+        self.label_original_img.setScaledContents(True)
+        self.label_original_img.setAlignment(Qt.AlignCenter)
+        self.label_original_img.setWordWrap(False)
+        self.splitter_tex_img.addWidget(self.label_original_img)
+        self.webTexView = QWebEngineView(self.splitter_tex_img)
+        self.webTexView.setObjectName(u"webTexView")
         sizePolicy.setHeightForWidth(self.webTexView.sizePolicy().hasHeightForWidth())
         self.webTexView.setSizePolicy(sizePolicy)
         self.webTexView.setUrl(QUrl(u"about:blank"))
+        self.splitter_tex_img.addWidget(self.webTexView)
 
-        self.verticalLayout.addWidget(self.webTexView)
+        self.verticalLayout.addWidget(self.splitter_tex_img)
 
-        self.verticalLayout_2 = QVBoxLayout()
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.ledit_tex1 = QLineEdit(self.centralwidget)
         self.ledit_tex1.setObjectName(u"ledit_tex1")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.ledit_tex1.sizePolicy().hasHeightForWidth())
-        self.ledit_tex1.setSizePolicy(sizePolicy1)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.ledit_tex1.sizePolicy().hasHeightForWidth())
+        self.ledit_tex1.setSizePolicy(sizePolicy2)
         self.ledit_tex1.setMinimumSize(QSize(30, 30))
         self.ledit_tex1.setClearButtonEnabled(False)
 
@@ -70,17 +87,14 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.addWidget(self.btn_copy1)
 
 
-        self.verticalLayout_2.addLayout(self.horizontalLayout_2)
-
-
-        self.verticalLayout.addLayout(self.verticalLayout_2)
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
 
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.ledit_tex2 = QLineEdit(self.centralwidget)
         self.ledit_tex2.setObjectName(u"ledit_tex2")
-        sizePolicy1.setHeightForWidth(self.ledit_tex2.sizePolicy().hasHeightForWidth())
-        self.ledit_tex2.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.ledit_tex2.sizePolicy().hasHeightForWidth())
+        self.ledit_tex2.setSizePolicy(sizePolicy2)
         self.ledit_tex2.setMinimumSize(QSize(0, 30))
 
         self.horizontalLayout_3.addWidget(self.ledit_tex2)
@@ -93,10 +107,6 @@ class Ui_MainWindow(object):
 
 
         self.verticalLayout.addLayout(self.horizontalLayout_3)
-
-        self.verticalSpacer = QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Minimum)
-
-        self.verticalLayout.addItem(self.verticalSpacer)
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
@@ -149,6 +159,7 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"CeleryMath", None))
+        self.label_original_img.setText(QCoreApplication.translate("MainWindow", u"Original Image", None))
         self.btn_copy1.setText(QCoreApplication.translate("MainWindow", u"Copy", None))
         self.btn_copy2.setText(QCoreApplication.translate("MainWindow", u"Copy", None))
         self.label_tempe.setText(QCoreApplication.translate("MainWindow", u"Temperature:", None))

@@ -28,6 +28,7 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
     logger = get_logger("celeryMath")
     conf: Config = Config("conf/conf.json")
     model: LatexModelONNX = None
+    img = None
 
     def __init__(self, parent=None):
         super(CeleryMath, self).__init__(parent)
@@ -41,7 +42,7 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
 
     def init_settings(self):
         self.webTexView.load(QUrl("qrc:/html/index.html"))
-        
+
         self.tempe: float = self.conf.temperature
         self.update_model()
         self.btn_snip.setText(f"Screenshot({self.conf.snip_hotkey})")
@@ -56,6 +57,7 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         self.btn_snip.clicked.connect(self.btn_screenshot_clicked)
         self.settings_dialog.hotkey_sc.pressed.connect(self.btn_screenshot_clicked)
         self.settings_dialog.conf_updated.connect(self.on_conf_updated)
+        self.splitter_tex_img.splitterMoved.connect(self.on_splitter_tex_img_moved)
 
     def show_model_error_box(self):
         QMessageBox(
@@ -75,6 +77,9 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
             self.model = get_model(self.conf)
         else:
             self.show_model_error_box()
+
+    def on_splitter_tex_img_moved(self, pos: int, idx: int):
+        self.set_original_img(self.img)
 
     def on_conf_updated(self, conf: Config):
         self.conf = conf
@@ -150,7 +155,19 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         self.infer_thread.start()
         # res = self.predict(img)
         # self.on_infer_finished(res)
+        self.img = img
+        self.set_original_img(img)
         self.render_tex("\mathrm{Loading...}")
+
+    def set_original_img(self, img: Union[Image.Image, QPixmap] = None):
+        if img is None:
+            return
+        if isinstance(img, Image.Image):
+            img = img.toqpixmap()
+        h, w = self.label_original_img.height(), self.label_original_img.width()
+        img = img.scaled(w, h, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        self.label_original_img.setPixmap(img)
+        self.label_original_img.setScaledContents(False)
 
     def keyPressEvent(self, event: QKeyEvent):
         event.accept()
