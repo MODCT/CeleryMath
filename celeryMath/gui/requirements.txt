@@ -7,5 +7,5 @@ pyside6
 keyboard
 colorlog
 # build #
-# nuitka
-# orderedset
+nuitka
+orderedset
