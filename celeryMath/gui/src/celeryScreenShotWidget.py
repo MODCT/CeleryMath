@@ -8,7 +8,6 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-import PySide6
 from PySide6.QtCore import QPoint, QRect, Qt
 from PySide6.QtGui import (
     QColor,
@@ -55,7 +54,6 @@ class CeleryScreenShotWidget(QMainWindow):
 
     def set_image(self):
         screens = QApplication.screens()
-        self.logger.debug(screens)
         xs, ys = [], []
         for screen in screens:
             rect = screen.geometry()
@@ -72,11 +70,11 @@ class CeleryScreenShotWidget(QMainWindow):
         rb_x, rb_y = max(xs), max(ys)
         new_size = (rb_x - tl_x, rb_y - tl_y)
         self.move(tl_x, tl_y)
-        self.logger.debug(f"moved to {tl_x}, {tl_y}")
+        # self.logger.debug(f"moved to {tl_x}, {tl_y}")
         self.resize(new_size[0], new_size[1])
-        self.logger.debug(
-            f"resized to {new_size}",
-        )
+        # self.logger.debug(
+        #     f"resized to {new_size}",
+        # )
 
     def reset_rect(self):
         self.draw_ltop = QPoint()

@@ -1,16 +1,13 @@
 from typing import Any, Dict, List, Union
-from PySide6.QtCore import QSettings, Slot, QUrl, QThread, Signal, QObject, QTimer, Qt
-from PySide6.QtCore import QRegularExpression as QRegExp
+from PySide6.QtCore import QUrl, Qt
 from PySide6.QtWidgets import (
     QMainWindow,
     QMessageBox,
 )
-from PySide6.QtGui import QPixmap, QClipboard, QKeySequence, QKeyEvent, QCloseEvent
-from PySide6.QtGui import QRegularExpressionValidator as QRegExpValidator
+from PySide6.QtGui import QPixmap, QClipboard, QKeyEvent, QCloseEvent
 
-# from PySide6.QtWebEngineWidgets import QWebEnginePage, QWebEngineView
 from PIL import Image
-import keyboard
+from PyHotKey import manager as hotkManager
 import os
 import re
 
@@ -177,7 +174,9 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
 
     def closeEvent(self, event: QCloseEvent):
         try:
-            keyboard.remove_all_hotkeys()
+            # keyboard.remove_all_hotkeys()
+            hotkManager.unregister_all()
+            self.settings_dialog.hotkey_sc.unregister_hotkey()
         except Exception as e:
             self.logger.error(f"unregister snip hotkey error: {e}")
         event.accept()

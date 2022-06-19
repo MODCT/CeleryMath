@@ -1,9 +1,9 @@
-'''
+"""
 Description: logger
 Author: Rainyl
 Date: 2022-06-07 23:36:33
 LastEditTime: 2022-06-14 12:58:07
-'''
+"""
 import logging
 import os
 from colorlog import ColoredFormatter
@@ -14,14 +14,20 @@ formatter = ColoredFormatter(
     datefmt="%Y-%m-%d %H:%M:%S",
     reset=True,
     log_colors={
-    'DEBUG':    'cyan',
-    'INFO':     'green',
-    'WARNING':  'yellow',
-    'ERROR':    'red',
-    'CRITICAL': 'red,bg_white',
+        "DEBUG": "cyan",
+        "INFO": "green",
+        "WARNING": "yellow",
+        "ERROR": "red",
+        "CRITICAL": "red,bg_white",
     },
     secondary_log_colors={},
-    style='%',
+    style="%",
+)
+
+file_formatter = logging.Formatter(
+    "%(name)s_%(levelname)s_%(module)s_%(lineno)d_%(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    style="%",
 )
 
 
@@ -31,7 +37,7 @@ def get_logger(name, level=logging.DEBUG):
     if not os.path.exists("log"):
         os.mkdir("log")
     file_handler = logging.FileHandler("log/celeryMath.log", encoding="utf-8")
-    file_handler.setFormatter(formatter)
+    file_handler.setFormatter(file_formatter)
     logger = logging.getLogger(name)
     logger.addHandler(handler)
     logger.addHandler(file_handler)
