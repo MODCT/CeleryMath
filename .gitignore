@@ -9,3 +9,4 @@ build/
 conf.json*
 log/
 module/
+dependencies/
