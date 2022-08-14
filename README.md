@@ -1,17 +1,22 @@
 # Celery Math
 
-一个基于PyTorch实现的LaTex公式识别软件
+[English](README.md) | [简体中文](README_CN.md)
 
-Yet another LaTex OCR Project based on PyTorch
+Another LaTex OCR Project
 
-## 使用说明
+![images/preview1.png](images/preview1.png)
 
-1. 前往Release下载最新版程序与模型
-2. 解压文件
-3. 将`Tokenizer.json`、`celeryMathEncoder.onnx`、`celeryMathDecoder.onnx` 移动到`conf`文件夹内
-4. 双击`celeryMath.exe`
-5. 第一次运行需要设置上述`3`的三个文件路径，选择正确的路径即可
-6. 设置完成即可使用
+## Usage
+
+1. Download prebuilt files from [Release](https://github.com/MODCT/CeleryMath/releases).
+2. Extract `celeryMah-weights-\*.zip` and `celeryMath-\*.zip`
+3. Move `Tokenizer.json`、 `celeryMathEncoder.onnx`、 `celeryMathDecoder.onnx`  to `conf` directory.
+4. Open `celeryMath.exe` and Click settings to config path.
+5. Have fun!
+
+## NOTE
+
+We take **NO Responsibility** for the OCR results, you can open an issue when you have any errors, users should take care and check the results carefully themselves.
 
 ## TODO
 
@@ -20,6 +25,15 @@ Yet another LaTex OCR Project based on PyTorch
 - [x] ONNX
 - [ ] Compile to module
 - [ ] Reduce package size
+- [ ] Beam Search
+
+## Developers
+
+Any suggestions and PRs are welcome.
+
+## Thanks
+
+- Material Design Icons, [https://fonts.google.com/icons](https://fonts.google.com/icons)
 
 ## License
 
