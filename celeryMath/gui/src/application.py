@@ -12,9 +12,9 @@ import os
 import re
 
 from .celeryMathUI import Ui_MainWindow
-from .dialogSettings import DialogSettings
-from .celeryScreenShotWidget import CeleryScreenShotWidget
-from .logger import CeleryLogger
+from .widgets.dialogSettings import DialogSettings
+from .widgets.celeryScreenShotWidget import CeleryScreenShotWidget
+from .utils.logger import CeleryLogger
 from .celeryThread import CeleryInferThread
 from .lib.models.model import LatexModelONNX, get_model
 from .lib.utils.config import Config

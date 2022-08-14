@@ -30,6 +30,15 @@
     <file>html/index.html</file>
   </qresource>
   <qresource prefix="icon">
+    <file>icons/device_reset_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/folder_open_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/info_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/cancel_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/check_circle_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/thermometer_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/screenshot_monitor_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/settings_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/content_copy_FILL0_wght400_GRAD0_opsz48.svg</file>
     <file>icons/logo.png</file>
   </qresource>
 </RCC>
