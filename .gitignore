@@ -13,3 +13,4 @@ module/
 dependencies/
 depends/
 logo_old.ico
+celeryMath/conf/*.onnx
