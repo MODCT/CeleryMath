@@ -19,6 +19,7 @@ pyhotkey = {git = "https://github.com/rainyl/PyHotKey.git", rev = "3175397b290e1
 [tool.poetry.dev-dependencies]
 Nuitka = "^1.0.3"
 orderedset = "^2.0.3"
+black = "^22.6.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

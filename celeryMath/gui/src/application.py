@@ -164,10 +164,7 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
             return
         if isinstance(img, Image.Image):
             img = img.toqpixmap()
-        h, w = self.label_original_img.height(), self.label_original_img.width()
-        img = img.scaled(w, h, Qt.KeepAspectRatio, Qt.SmoothTransformation)
-        self.label_original_img.setPixmap(img)
-        self.label_original_img.setScaledContents(False)
+        self.imview_original.setPixmap(img)
 
     def keyPressEvent(self, event: QKeyEvent):
         event.accept()
