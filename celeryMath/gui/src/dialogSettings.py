@@ -4,13 +4,13 @@ from PySide6.QtWidgets import QDialog, QFileDialog, QDialogButtonBox
 
 from .celeryGlobalHotkey import CeleryGlobalHotkey
 from .dialogSettingUI import Ui_diaglog_settings
-from .logger import get_logger
+from .logger import CeleryLogger
 from .lib.utils.config import Config
 
 
 class DialogSettings(QDialog, Ui_diaglog_settings):
     _default_sc_hotkey_ = QKeySequence("Ctrl+Alt+S")
-    logger = get_logger("dialog_settings")
+    logger = CeleryLogger("dialog_settings")
     conf_updated = Signal(Config)
     snip_hotkey: QKeySequence = None
 

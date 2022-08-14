@@ -14,7 +14,7 @@ import re
 from .celeryMathUI import Ui_MainWindow
 from .dialogSettings import DialogSettings
 from .celeryScreenShotWidget import CeleryScreenShotWidget
-from .logger import get_logger
+from .logger import CeleryLogger
 from .celeryThread import CeleryInferThread
 from .lib.models.model import LatexModelONNX, get_model
 from .lib.utils.config import Config
@@ -22,7 +22,7 @@ from .lib.utils.config import Config
 
 class CeleryMath(QMainWindow, Ui_MainWindow):
     tempe: float = 0.2
-    logger = get_logger("celeryMath")
+    logger = CeleryLogger("celeryMath")
     conf: Config = Config("conf/conf.json")
     model: LatexModelONNX = None
     img = None
@@ -43,6 +43,9 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         self.tempe: float = self.conf.temperature
         self.update_model()
         self.btn_snip.setText(f"Screenshot({self.conf.snip_hotkey})")
+
+        self.splitter_tex_img.setStretchFactor(0, 1)
+        self.splitter_tex_img.setStretchFactor(1, 2)
 
     def init_signals(self):
         self.ledit_tex1.textEdited.connect(self.ledit_val_changed)

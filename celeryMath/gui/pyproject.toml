@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "celeryMathGUI"
+version = "0.1.2.0"
+description = "A LaTex Equation OCR Tool Based on ConvNeXt and Transformer"
+authors = ["rainyl <rainyliusy3@gmail.com>"]
+license = "GPL-3.0"
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.11"
+numpy = "^1.23.2"
+Pillow = "^9.2.0"
+onnxruntime = "^1.12.1"
+tokenizers = "^0.12.1"
+PySide6 = "^6.3.1"
+pynput = "^1.7.6"
+coloredlogs = "^15.0.1"
+pyhotkey = {git = "https://github.com/rainyl/PyHotKey.git", rev = "3175397b290e140d671e13493493bde499e2ada0"}
+
+[tool.poetry.dev-dependencies]
+Nuitka = "^1.0.3"
+orderedset = "^2.0.3"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

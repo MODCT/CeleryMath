@@ -29,14 +29,14 @@ from PIL import ImageGrab
 
 from pynput.mouse import Controller as MouseController
 
-from .logger import get_logger
+from .logger import CeleryLogger
 
 QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
 QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
 
 
 class CeleryScreenShotWidget(QMainWindow):
-    logger = get_logger("screen_image")
+    logger = CeleryLogger("screen_image")
     draw_ltop = QPoint()
     draw_rbot = QPoint()
     img_ltop = (0, 0)
