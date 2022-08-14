@@ -5,8 +5,11 @@ tmp/
 bak/
 venv*/
 .vscode/
-build/
+build*/
+*.xcf
 conf.json*
 log/
 module/
 dependencies/
+depends/
+logo_old.ico
