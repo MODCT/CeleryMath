@@ -23,14 +23,16 @@
     <normaloff>:/icon/icons/logo.png</normaloff>:/icon/icons/logo.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">QMainWindow
+   <string notr="true">QMainWindow,
+QScrollArea #scroll_tex_lines_contents
 {
 	background-color: rgb(239, 246, 252);
 }
 
 QPushButton,
 QDoubleSpinBox,
-QLineEdit
+QLineEdit,
+QScrollArea
 {
 	border: 1px solid #000000;
 	border-radius: 6px;
@@ -64,23 +66,134 @@ QPushButton::pressed
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_2">
-    <property name="leftMargin">
-     <number>3</number>
-    </property>
-    <property name="topMargin">
-     <number>3</number>
-    </property>
-    <property name="rightMargin">
-     <number>3</number>
-    </property>
-    <property name="bottomMargin">
-     <number>3</number>
-    </property>
-    <item row="0" column="0">
-     <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QSplitter" name="splitter_tex_group">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <widget class="QGroupBox" name="groupBox">
+       <property name="title">
+        <string/>
+       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <property name="leftMargin">
+         <number>3</number>
+        </property>
+        <property name="topMargin">
+         <number>3</number>
+        </property>
+        <property name="rightMargin">
+         <number>3</number>
+        </property>
+        <property name="bottomMargin">
+         <number>3</number>
+        </property>
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QSplitter" name="splitter_tex_img">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="opaqueResize">
+           <bool>true</bool>
+          </property>
+          <property name="handleWidth">
+           <number>3</number>
+          </property>
+          <property name="childrenCollapsible">
+           <bool>true</bool>
+          </property>
+          <widget class="CeleryImageView" name="imview_original">
+           <property name="font">
+            <font>
+             <family>MiSans Demibold</family>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">border: none;</string>
+           </property>
+          </widget>
+          <widget class="QWebEngineView" name="webTexView">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>80</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>MiSans Demibold</family>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+           <property name="url">
+            <url>
+             <string>about:blank</string>
+            </url>
+           </property>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QScrollArea" name="scroll_tex_lines">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="widgetResizable">
+        <bool>true</bool>
+       </property>
+       <widget class="QWidget" name="scroll_tex_lines_contents">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>738</width>
+          <height>175</height>
+         </rect>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <property name="spacing">
+          <number>2</number>
+         </property>
+        </layout>
+       </widget>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <property name="spacing">
-       <number>5</number>
+       <number>6</number>
       </property>
       <property name="leftMargin">
        <number>3</number>
@@ -95,408 +208,57 @@ QPushButton::pressed
        <number>3</number>
       </property>
       <item>
-       <widget class="QGroupBox" name="groupBox">
-        <property name="title">
-         <string/>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
-        <layout class="QGridLayout" name="gridLayout">
-         <property name="leftMargin">
-          <number>3</number>
-         </property>
-         <property name="topMargin">
-          <number>3</number>
-         </property>
-         <property name="rightMargin">
-          <number>3</number>
-         </property>
-         <property name="bottomMargin">
-          <number>3</number>
-         </property>
-         <property name="spacing">
-          <number>0</number>
-         </property>
-         <item row="0" column="0">
-          <widget class="QSplitter" name="splitter_tex_img">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="opaqueResize">
-            <bool>true</bool>
-           </property>
-           <property name="handleWidth">
-            <number>3</number>
-           </property>
-           <property name="childrenCollapsible">
-            <bool>true</bool>
-           </property>
-           <widget class="CeleryImageView" name="imview_original">
-            <property name="font">
-             <font>
-              <family>MiSans Demibold</family>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">border: none;</string>
-            </property>
-           </widget>
-           <widget class="QWebEngineView" name="webTexView">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>80</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <family>MiSans Demibold</family>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"/>
-            </property>
-            <property name="url">
-             <url>
-              <string>about:blank</string>
-             </url>
-            </property>
-           </widget>
-          </widget>
-         </item>
-        </layout>
-       </widget>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <property name="spacing">
-         <number>5</number>
+       <widget class="QPushButton" name="pushButton">
+        <property name="enabled">
+         <bool>false</bool>
         </property>
-        <property name="leftMargin">
-         <number>3</number>
+        <property name="font">
+         <font>
+          <family>MiSans Demibold</family>
+          <pointsize>10</pointsize>
+         </font>
         </property>
-        <property name="topMargin">
-         <number>3</number>
+        <property name="whatsThis">
+         <string>Temperature</string>
         </property>
-        <property name="rightMargin">
-         <number>3</number>
-        </property>
-        <property name="bottomMargin">
-         <number>3</number>
-        </property>
-        <item>
-         <widget class="QLineEdit" name="ledit_tex1">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>30</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <family>MiSans</family>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="clearButtonEnabled">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="btn_copy1">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <family>MiSans Demibold</family>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="statusTip">
-           <string>Copy</string>
-          </property>
-          <property name="whatsThis">
-           <string>Copy</string>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton{
-	width: 25px;
-}</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="icon">
-           <iconset resource="../celeryMath.qrc">
-            <normaloff>:/icon/icons/content_copy_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icon/icons/content_copy_FILL0_wght400_GRAD0_opsz48.svg</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <property name="spacing">
-         <number>5</number>
-        </property>
-        <property name="leftMargin">
-         <number>3</number>
-        </property>
-        <property name="topMargin">
-         <number>3</number>
-        </property>
-        <property name="rightMargin">
-         <number>3</number>
-        </property>
-        <property name="bottomMargin">
-         <number>3</number>
-        </property>
-        <item>
-         <widget class="QLineEdit" name="ledit_tex2">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <family>MiSans</family>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="btn_copy2">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <family>MiSans Demibold</family>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="statusTip">
-           <string>Copy</string>
-          </property>
-          <property name="whatsThis">
-           <string>Copy</string>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton{
-	width: 25px;
-}</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="icon">
-           <iconset resource="../celeryMath.qrc">
-            <normaloff>:/icon/icons/content_copy_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icon/icons/content_copy_FILL0_wght400_GRAD0_opsz48.svg</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <property name="spacing">
-         <number>6</number>
-        </property>
-        <property name="leftMargin">
-         <number>3</number>
-        </property>
-        <property name="topMargin">
-         <number>3</number>
-        </property>
-        <property name="rightMargin">
-         <number>3</number>
-        </property>
-        <property name="bottomMargin">
-         <number>3</number>
-        </property>
-        <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item>
-         <widget class="QPushButton" name="pushButton">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="font">
-           <font>
-            <family>MiSans Demibold</family>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="whatsThis">
-           <string>Temperature</string>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton{
+        <property name="styleSheet">
+         <string notr="true">QPushButton{
 	border: none;
 	background-color: rgb(255, 255, 255);
 }</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="icon">
-           <iconset resource="../celeryMath.qrc">
-            <normaloff>:/icon/icons/thermometer_FILL0_wght400_GRAD0_opsz48.svg</normaloff>
-            <disabledoff>:/icon/icons/thermometer_FILL0_wght400_GRAD0_opsz48.svg</disabledoff>
-            <disabledon>:/icon/icons/thermometer_FILL0_wght400_GRAD0_opsz48.svg</disabledon>:/icon/icons/thermometer_FILL0_wght400_GRAD0_opsz48.svg</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>22</width>
-            <height>22</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDoubleSpinBox" name="spinbox_tempe">
-          <property name="font">
-           <font>
-            <family>MiSans Demibold</family>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="statusTip">
-           <string>Temprature</string>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QDoubleSpinBox
-{
-	border: none;
-}</string>
-          </property>
-          <property name="prefix">
-           <string/>
-          </property>
-          <property name="maximum">
-           <double>10.000000000000000</double>
-          </property>
-          <property name="singleStep">
-           <double>0.010000000000000</double>
-          </property>
-          <property name="value">
-           <double>0.200000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QPushButton" name="btn_settings">
-          <property name="font">
-           <font>
-            <family>MiSans Demibold</family>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="statusTip">
-           <string>Settings</string>
-          </property>
-          <property name="whatsThis">
-           <string>Settings</string>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton{
-	width: 25px;
-}</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="icon">
-           <iconset resource="../celeryMath.qrc">
-            <normaloff>:/icon/icons/settings_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icon/icons/settings_FILL0_wght400_GRAD0_opsz48.svg</iconset>
-          </property>
-          <property name="iconSize">
-           <size>
-            <width>20</width>
-            <height>20</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../celeryMath.qrc">
+          <normaloff>:/icon/icons/thermometer_FILL0_wght400_GRAD0_opsz48.svg</normaloff>
+          <disabledoff>:/icon/icons/thermometer_FILL0_wght400_GRAD0_opsz48.svg</disabledoff>
+          <disabledon>:/icon/icons/thermometer_FILL0_wght400_GRAD0_opsz48.svg</disabledon>:/icon/icons/thermometer_FILL0_wght400_GRAD0_opsz48.svg</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>22</width>
+          <height>22</height>
+         </size>
+        </property>
+       </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btn_snip">
+       <widget class="QDoubleSpinBox" name="spinbox_tempe">
         <property name="font">
          <font>
           <family>MiSans Demibold</family>
@@ -504,32 +266,110 @@ QPushButton::pressed
          </font>
         </property>
         <property name="statusTip">
-         <string>Screenshot</string>
+         <string>Temprature</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QDoubleSpinBox
+{
+	border: none;
+}</string>
+        </property>
+        <property name="prefix">
+         <string/>
+        </property>
+        <property name="maximum">
+         <double>10.000000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.010000000000000</double>
+        </property>
+        <property name="value">
+         <double>0.200000000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_settings">
+        <property name="font">
+         <font>
+          <family>MiSans Demibold</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="statusTip">
+         <string>Settings</string>
         </property>
         <property name="whatsThis">
-         <string>Screenshot</string>
+         <string>Settings</string>
         </property>
         <property name="styleSheet">
          <string notr="true">QPushButton{
-	
+	width: 25px;
 }</string>
         </property>
         <property name="text">
-         <string>Screenshot</string>
+         <string/>
         </property>
         <property name="icon">
          <iconset resource="../celeryMath.qrc">
-          <normaloff>:/icon/icons/screenshot_monitor_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icon/icons/screenshot_monitor_FILL0_wght400_GRAD0_opsz48.svg</iconset>
+          <normaloff>:/icon/icons/settings_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icon/icons/settings_FILL0_wght400_GRAD0_opsz48.svg</iconset>
         </property>
         <property name="iconSize">
          <size>
-          <width>25</width>
-          <height>25</height>
+          <width>20</width>
+          <height>20</height>
          </size>
         </property>
        </widget>
       </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
      </layout>
+    </item>
+    <item>
+     <widget class="QPushButton" name="btn_snip">
+      <property name="font">
+       <font>
+        <family>MiSans Demibold</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="statusTip">
+       <string>Screenshot</string>
+      </property>
+      <property name="whatsThis">
+       <string>Screenshot</string>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton{
+	
+}</string>
+      </property>
+      <property name="text">
+       <string>Screenshot</string>
+      </property>
+      <property name="icon">
+       <iconset resource="../celeryMath.qrc">
+        <normaloff>:/icon/icons/screenshot_monitor_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icon/icons/screenshot_monitor_FILL0_wght400_GRAD0_opsz48.svg</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>25</width>
+        <height>25</height>
+       </size>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

@@ -3,6 +3,9 @@ from PySide6.QtCore import QUrl, Qt
 from PySide6.QtWidgets import (
     QMainWindow,
     QMessageBox,
+    QGridLayout,
+    QVBoxLayout,
+    QWidget,
 )
 from PySide6.QtGui import QPixmap, QClipboard, QKeyEvent, QCloseEvent
 
@@ -14,6 +17,7 @@ import re
 from .celeryMathUI import Ui_MainWindow
 from .widgets.dialogSettings import DialogSettings
 from .widgets.celeryScreenShotWidget import CeleryScreenShotWidget
+from .widgets.celeryTexLinesWidget import CeleryTexLineWidget, CeleryTexDispWidget
 from .utils.logger import CeleryLogger
 from .celeryThread import CeleryInferThread
 from .lib.models.model import LatexModelONNX, get_model
@@ -25,7 +29,8 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
     logger = CeleryLogger("celeryMath")
     conf: Config = Config("conf/conf.json")
     model: LatexModelONNX = None
-    img = None
+    img: Image.Image = None
+    crt_tex: str = ""
 
     def __init__(self, parent=None):
         super(CeleryMath, self).__init__(parent)
@@ -36,6 +41,7 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
 
         self.init_settings()
         self.init_signals()
+        self.init_ui()
 
     def init_settings(self):
         self.webTexView.load(QUrl("qrc:/html/index.html"))
@@ -44,20 +50,37 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         self.update_model()
         self.btn_snip.setText(f"Screenshot({self.conf.snip_hotkey})")
 
-        self.splitter_tex_img.setStretchFactor(0, 1)
-        self.splitter_tex_img.setStretchFactor(1, 2)
-
     def init_signals(self):
-        self.ledit_tex1.textEdited.connect(self.ledit_val_changed)
-        self.ledit_tex2.textEdited.connect(self.ledit_val_changed)
-        self.btn_copy1.clicked.connect(self.btn_copy1_clicked)
-        self.btn_copy2.clicked.connect(self.btn_copy2_clicked)
+        # self.ledit_tex1.textEdited.connect(self.ledit_val_changed)
+        # self.ledit_tex2.textEdited.connect(self.ledit_val_changed)
+        # self.btn_copy1.clicked.connect(self.btn_copy1_clicked)
+        # self.btn_copy2.clicked.connect(self.btn_copy2_clicked)
         self.spinbox_tempe.valueChanged.connect(self.tempe_changed)
         self.btn_settings.clicked.connect(self.btn_settings_clicked)
         self.btn_snip.clicked.connect(self.btn_screenshot_clicked)
         self.settings_dialog.hotkey_sc.pressed.connect(self.btn_screenshot_clicked)
         self.settings_dialog.conf_updated.connect(self.on_conf_updated)
         self.splitter_tex_img.splitterMoved.connect(self.on_splitter_tex_img_moved)
+
+    def init_ui(self):
+        self.splitter_tex_img.setStretchFactor(0, 1)
+        self.splitter_tex_img.setStretchFactor(1, 2)
+        self.splitter_tex_group.setStretchFactor(0, 3)
+        self.splitter_tex_group.setStretchFactor(1, 2)
+        self.update_tex_lines([""])
+
+    def update_tex_lines(self, tex: List[str]):
+        self.scroll_layout = QVBoxLayout()
+        self.scroll_tex_lines_contents = QWidget()
+        for t in tex:
+            texline = CeleryTexLineWidget(text=t, clipboard=self.clipboard)
+            texline.ledit_tex.textEdited.connect(self.ledit_val_changed)
+            texline.ledit_tex.focussed.connect(self.render_tex)
+            self.scroll_layout.addWidget(texline)
+        self.scroll_layout.setContentsMargins(3, 6, 3, 6)
+        self.scroll_layout.setSpacing(8)
+        self.scroll_tex_lines_contents.setLayout(self.scroll_layout)
+        self.scroll_tex_lines.setWidget(self.scroll_tex_lines_contents)
 
     def show_model_error_box(self):
         QMessageBox(
@@ -91,20 +114,6 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         v = v.replace("$", "").replace("\[", "").replace("\]", "")
         self.render_tex(v)
 
-    def btn_copy1_clicked(self):
-        txt = self.ledit_tex1.text()
-        if txt:
-            self.clipboard.setText(txt, QClipboard.Clipboard)
-            self.logger.debug(f"copy to clipboard: {txt}")
-        return
-
-    def btn_copy2_clicked(self):
-        txt = self.ledit_tex2.text()
-        if txt:
-            self.clipboard.setText(txt, QClipboard.Clipboard)
-            self.logger.debug(f"copy to clipboard: {txt}")
-        return
-
     def btn_settings_clicked(self):
         self.settings_dialog.show()
 
@@ -125,22 +134,23 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         return res
 
     def render_tex(self, s: str):
-        self.logger.debug(f"prediction: {s}")
+        if len(s) == 0:
+            return
         js = rf"""updateMath("$${re.escape(s)}$$");"""
         self.webTexView.page().runJavaScript(js)
 
-    def on_infer_finished(self, s: Union[List[str], str, Dict[str, Any]]):
-        if isinstance(s, dict):
-            if s["status"]:
-                tex: Union[List, str] = s["data"]
-                if isinstance(tex, list):
-                    tex = "\n".join(tex)
-        if isinstance(s, list):
-            tex = "\n".join(s)
-        self.render_tex(tex)
+    def on_infer_finished(self, tex: Union[List[List[str]], str, Dict[str, Any]]):
+        if isinstance(tex, dict):
+            if tex["status"]:
+                tex: Union[List[List[str]], str] = tex["data"]
+        if isinstance(tex, list):
+            tex = tex[0]
+        msg = "\n".join(tex)
+        self.logger.debug(f"prediction: \n{msg}")
+        self.crt_tex = tex[0]
+        self.render_tex(self.crt_tex)
 
-        self.ledit_tex1.setText(f"${tex}$")
-        self.ledit_tex2.setText(f"\[{tex}\]")
+        self.update_tex_lines(tex)
         self.setWindowState(self.windowState() & ~Qt.WindowMinimized | Qt.WindowActive)
         self.activateWindow()
 
@@ -153,11 +163,11 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         self.infer_thread.finished.connect(self.on_infer_finished)
         self.infer_thread.finished.connect(self.infer_thread.deleteLater)
         self.infer_thread.start()
+        self.render_tex("\mathrm{Loading...}")
         # res = self.predict(img)
         # self.on_infer_finished(res)
         self.img = img
         self.set_original_img(img)
-        self.render_tex("\mathrm{Loading...}")
 
     def set_original_img(self, img: Union[Image.Image, QPixmap] = None):
         if img is None:

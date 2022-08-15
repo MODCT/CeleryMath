@@ -54,7 +54,10 @@ class CeleryImageView(QGraphicsView):
         if not self.scene() or rect.isNull():
             return
         unity = self.transform().mapRect(QRectF(0, 0, 1, 1))
-        self.scale(1 / unity.width(), 1 / unity.height())
+        w, h = unity.width(), unity.height()
+        if any([w==0, h==0]):
+            return
+        self.scale(1 / w, 1 / h)
         viewRect = self.viewport().rect()
         sceneRect = self.transform().mapRect(rect)
         x_ratio = viewRect.width() / sceneRect.width()

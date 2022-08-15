@@ -16,10 +16,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWebEngineWidgets import QWebEngineView
-from PySide6.QtWidgets import (QApplication, QDoubleSpinBox, QGridLayout, QGroupBox,
-    QHBoxLayout, QLineEdit, QMainWindow, QPushButton,
-    QSizePolicy, QSpacerItem, QSplitter, QStatusBar,
-    QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QDoubleSpinBox, QFrame, QGridLayout,
+    QGroupBox, QHBoxLayout, QMainWindow, QPushButton,
+    QScrollArea, QSizePolicy, QSpacerItem, QSplitter,
+    QStatusBar, QVBoxLayout, QWidget)
 
 from src.widgets.celeryImageView import CeleryImageView
 import celeryMath_rc
@@ -35,14 +35,16 @@ class Ui_MainWindow(object):
         icon = QIcon()
         icon.addFile(u":/icon/icons/logo.png", QSize(), QIcon.Normal, QIcon.Off)
         MainWindow.setWindowIcon(icon)
-        MainWindow.setStyleSheet(u"QMainWindow\n"
+        MainWindow.setStyleSheet(u"QMainWindow,\n"
+"QScrollArea #scroll_tex_lines_contents\n"
 "{\n"
 "	background-color: rgb(239, 246, 252);\n"
 "}\n"
 "\n"
 "QPushButton,\n"
 "QDoubleSpinBox,\n"
-"QLineEdit\n"
+"QLineEdit,\n"
+"QScrollArea\n"
 "{\n"
 "	border: 1px solid #000000;\n"
 "	border-radius: 6px;\n"
@@ -76,14 +78,12 @@ class Ui_MainWindow(object):
 "}")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.gridLayout_2 = QGridLayout(self.centralwidget)
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.gridLayout_2.setContentsMargins(3, 3, 3, 3)
-        self.verticalLayout = QVBoxLayout()
-        self.verticalLayout.setSpacing(5)
+        self.verticalLayout = QVBoxLayout(self.centralwidget)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.verticalLayout.setContentsMargins(3, 3, 3, 3)
-        self.groupBox = QGroupBox(self.centralwidget)
+        self.splitter_tex_group = QSplitter(self.centralwidget)
+        self.splitter_tex_group.setObjectName(u"splitter_tex_group")
+        self.splitter_tex_group.setOrientation(Qt.Vertical)
+        self.groupBox = QGroupBox(self.splitter_tex_group)
         self.groupBox.setObjectName(u"groupBox")
         self.gridLayout = QGridLayout(self.groupBox)
         self.gridLayout.setSpacing(0)
@@ -117,83 +117,27 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.splitter_tex_img, 0, 0, 1, 1)
 
-
-        self.verticalLayout.addWidget(self.groupBox)
-
-        self.horizontalLayout_2 = QHBoxLayout()
-        self.horizontalLayout_2.setSpacing(5)
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.horizontalLayout_2.setContentsMargins(3, 3, 3, 3)
-        self.ledit_tex1 = QLineEdit(self.centralwidget)
-        self.ledit_tex1.setObjectName(u"ledit_tex1")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.splitter_tex_group.addWidget(self.groupBox)
+        self.scroll_tex_lines = QScrollArea(self.splitter_tex_group)
+        self.scroll_tex_lines.setObjectName(u"scroll_tex_lines")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.ledit_tex1.sizePolicy().hasHeightForWidth())
-        self.ledit_tex1.setSizePolicy(sizePolicy1)
-        self.ledit_tex1.setMinimumSize(QSize(30, 30))
-        font2 = QFont()
-        font2.setFamilies([u"MiSans"])
-        font2.setPointSize(10)
-        self.ledit_tex1.setFont(font2)
-        self.ledit_tex1.setClearButtonEnabled(False)
+        sizePolicy1.setHeightForWidth(self.scroll_tex_lines.sizePolicy().hasHeightForWidth())
+        self.scroll_tex_lines.setSizePolicy(sizePolicy1)
+        self.scroll_tex_lines.setFrameShape(QFrame.StyledPanel)
+        self.scroll_tex_lines.setWidgetResizable(True)
+        self.scroll_tex_lines_contents = QWidget()
+        self.scroll_tex_lines_contents.setObjectName(u"scroll_tex_lines_contents")
+        self.scroll_tex_lines_contents.setGeometry(QRect(0, 0, 738, 175))
+        self.gridLayout_2 = QGridLayout(self.scroll_tex_lines_contents)
+        self.gridLayout_2.setSpacing(2)
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.scroll_tex_lines.setWidget(self.scroll_tex_lines_contents)
+        self.splitter_tex_group.addWidget(self.scroll_tex_lines)
 
-        self.horizontalLayout_2.addWidget(self.ledit_tex1)
-
-        self.btn_copy1 = QPushButton(self.centralwidget)
-        self.btn_copy1.setObjectName(u"btn_copy1")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.btn_copy1.sizePolicy().hasHeightForWidth())
-        self.btn_copy1.setSizePolicy(sizePolicy2)
-        self.btn_copy1.setMinimumSize(QSize(0, 0))
-        font3 = QFont()
-        font3.setFamilies([u"MiSans Demibold"])
-        font3.setPointSize(10)
-        self.btn_copy1.setFont(font3)
-        self.btn_copy1.setStyleSheet(u"QPushButton{\n"
-"	width: 25px;\n"
-"}")
-        icon1 = QIcon()
-        icon1.addFile(u":/icon/icons/content_copy_FILL0_wght400_GRAD0_opsz48.svg", QSize(), QIcon.Normal, QIcon.Off)
-        self.btn_copy1.setIcon(icon1)
-        self.btn_copy1.setIconSize(QSize(20, 20))
-
-        self.horizontalLayout_2.addWidget(self.btn_copy1)
-
-
-        self.verticalLayout.addLayout(self.horizontalLayout_2)
-
-        self.horizontalLayout_3 = QHBoxLayout()
-        self.horizontalLayout_3.setSpacing(5)
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.horizontalLayout_3.setContentsMargins(3, 3, 3, 3)
-        self.ledit_tex2 = QLineEdit(self.centralwidget)
-        self.ledit_tex2.setObjectName(u"ledit_tex2")
-        sizePolicy1.setHeightForWidth(self.ledit_tex2.sizePolicy().hasHeightForWidth())
-        self.ledit_tex2.setSizePolicy(sizePolicy1)
-        self.ledit_tex2.setMinimumSize(QSize(0, 30))
-        self.ledit_tex2.setFont(font2)
-
-        self.horizontalLayout_3.addWidget(self.ledit_tex2)
-
-        self.btn_copy2 = QPushButton(self.centralwidget)
-        self.btn_copy2.setObjectName(u"btn_copy2")
-        sizePolicy2.setHeightForWidth(self.btn_copy2.sizePolicy().hasHeightForWidth())
-        self.btn_copy2.setSizePolicy(sizePolicy2)
-        self.btn_copy2.setMinimumSize(QSize(0, 30))
-        self.btn_copy2.setFont(font3)
-        self.btn_copy2.setStyleSheet(u"QPushButton{\n"
-"	width: 25px;\n"
-"}")
-        self.btn_copy2.setIcon(icon1)
-        self.btn_copy2.setIconSize(QSize(20, 20))
-
-        self.horizontalLayout_3.addWidget(self.btn_copy2)
-
-
-        self.verticalLayout.addLayout(self.horizontalLayout_3)
+        self.verticalLayout.addWidget(self.splitter_tex_group)
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setSpacing(6)
@@ -206,23 +150,26 @@ class Ui_MainWindow(object):
         self.pushButton = QPushButton(self.centralwidget)
         self.pushButton.setObjectName(u"pushButton")
         self.pushButton.setEnabled(False)
-        self.pushButton.setFont(font3)
+        font2 = QFont()
+        font2.setFamilies([u"MiSans Demibold"])
+        font2.setPointSize(10)
+        self.pushButton.setFont(font2)
         self.pushButton.setStyleSheet(u"QPushButton{\n"
 "	border: none;\n"
 "	background-color: rgb(255, 255, 255);\n"
 "}")
-        icon2 = QIcon()
-        icon2.addFile(u":/icon/icons/thermometer_FILL0_wght400_GRAD0_opsz48.svg", QSize(), QIcon.Normal, QIcon.Off)
-        icon2.addFile(u":/icon/icons/thermometer_FILL0_wght400_GRAD0_opsz48.svg", QSize(), QIcon.Disabled, QIcon.Off)
-        icon2.addFile(u":/icon/icons/thermometer_FILL0_wght400_GRAD0_opsz48.svg", QSize(), QIcon.Disabled, QIcon.On)
-        self.pushButton.setIcon(icon2)
+        icon1 = QIcon()
+        icon1.addFile(u":/icon/icons/thermometer_FILL0_wght400_GRAD0_opsz48.svg", QSize(), QIcon.Normal, QIcon.Off)
+        icon1.addFile(u":/icon/icons/thermometer_FILL0_wght400_GRAD0_opsz48.svg", QSize(), QIcon.Disabled, QIcon.Off)
+        icon1.addFile(u":/icon/icons/thermometer_FILL0_wght400_GRAD0_opsz48.svg", QSize(), QIcon.Disabled, QIcon.On)
+        self.pushButton.setIcon(icon1)
         self.pushButton.setIconSize(QSize(22, 22))
 
         self.horizontalLayout.addWidget(self.pushButton)
 
         self.spinbox_tempe = QDoubleSpinBox(self.centralwidget)
         self.spinbox_tempe.setObjectName(u"spinbox_tempe")
-        self.spinbox_tempe.setFont(font3)
+        self.spinbox_tempe.setFont(font2)
         self.spinbox_tempe.setStyleSheet(u"QDoubleSpinBox\n"
 "{\n"
 "	border: none;\n"
@@ -235,13 +182,13 @@ class Ui_MainWindow(object):
 
         self.btn_settings = QPushButton(self.centralwidget)
         self.btn_settings.setObjectName(u"btn_settings")
-        self.btn_settings.setFont(font3)
+        self.btn_settings.setFont(font2)
         self.btn_settings.setStyleSheet(u"QPushButton{\n"
 "	width: 25px;\n"
 "}")
-        icon3 = QIcon()
-        icon3.addFile(u":/icon/icons/settings_FILL0_wght400_GRAD0_opsz48.svg", QSize(), QIcon.Normal, QIcon.Off)
-        self.btn_settings.setIcon(icon3)
+        icon2 = QIcon()
+        icon2.addFile(u":/icon/icons/settings_FILL0_wght400_GRAD0_opsz48.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.btn_settings.setIcon(icon2)
         self.btn_settings.setIconSize(QSize(20, 20))
 
         self.horizontalLayout.addWidget(self.btn_settings)
@@ -255,19 +202,16 @@ class Ui_MainWindow(object):
 
         self.btn_snip = QPushButton(self.centralwidget)
         self.btn_snip.setObjectName(u"btn_snip")
-        self.btn_snip.setFont(font3)
+        self.btn_snip.setFont(font2)
         self.btn_snip.setStyleSheet(u"QPushButton{\n"
 "	\n"
 "}")
-        icon4 = QIcon()
-        icon4.addFile(u":/icon/icons/screenshot_monitor_FILL0_wght400_GRAD0_opsz48.svg", QSize(), QIcon.Normal, QIcon.Off)
-        self.btn_snip.setIcon(icon4)
+        icon3 = QIcon()
+        icon3.addFile(u":/icon/icons/screenshot_monitor_FILL0_wght400_GRAD0_opsz48.svg", QSize(), QIcon.Normal, QIcon.Off)
+        self.btn_snip.setIcon(icon3)
         self.btn_snip.setIconSize(QSize(25, 25))
 
         self.verticalLayout.addWidget(self.btn_snip)
-
-
-        self.gridLayout_2.addLayout(self.verticalLayout, 0, 0, 1, 1)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QStatusBar(MainWindow)
@@ -282,20 +226,6 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"CeleryMath", None))
         self.groupBox.setTitle("")
-#if QT_CONFIG(statustip)
-        self.btn_copy1.setStatusTip(QCoreApplication.translate("MainWindow", u"Copy", None))
-#endif // QT_CONFIG(statustip)
-#if QT_CONFIG(whatsthis)
-        self.btn_copy1.setWhatsThis(QCoreApplication.translate("MainWindow", u"Copy", None))
-#endif // QT_CONFIG(whatsthis)
-        self.btn_copy1.setText("")
-#if QT_CONFIG(statustip)
-        self.btn_copy2.setStatusTip(QCoreApplication.translate("MainWindow", u"Copy", None))
-#endif // QT_CONFIG(statustip)
-#if QT_CONFIG(whatsthis)
-        self.btn_copy2.setWhatsThis(QCoreApplication.translate("MainWindow", u"Copy", None))
-#endif // QT_CONFIG(whatsthis)
-        self.btn_copy2.setText("")
 #if QT_CONFIG(whatsthis)
         self.pushButton.setWhatsThis(QCoreApplication.translate("MainWindow", u"Temperature", None))
 #endif // QT_CONFIG(whatsthis)

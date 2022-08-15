@@ -16,6 +16,7 @@ class Config(object):
     min_img_size = [32, 32]
     max_img_size = [192, 896]
     snip_hotkey = "Ctrl+Alt+S"
+    search_method = "beam"
 
     def __init__(self, conf_path: str = "conf/conf.json"):
         self.conf_path = conf_path
