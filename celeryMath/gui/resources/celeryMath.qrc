@@ -30,6 +30,10 @@
     <file>html/index.html</file>
   </qresource>
   <qresource prefix="icon">
+    <file>icons/radio_button_checked_hover_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/radio_button_unchecked_hover_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/radio_button_checked_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/radio_button_unchecked_FILL0_wght400_GRAD0_opsz48.svg</file>
     <file>icons/device_reset_FILL0_wght400_GRAD0_opsz48.svg</file>
     <file>icons/folder_open_FILL0_wght400_GRAD0_opsz48.svg</file>
     <file>icons/info_FILL0_wght400_GRAD0_opsz48.svg</file>

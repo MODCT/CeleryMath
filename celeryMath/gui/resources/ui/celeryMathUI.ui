@@ -63,6 +63,47 @@ QPushButton::hover
 QPushButton::pressed
 {
 	background-color: #a2aec0;
+}
+
+QRadioButton
+{
+	height: 25px;
+}
+
+QRadioButton::indicator
+{
+    width:16px;
+    height: 16px;
+}
+
+QRadioButton::indicator::unchecked
+{
+   image: url(:/icon/icons/radio_button_unchecked_FILL0_wght400_GRAD0_opsz48.svg);
+}
+
+QRadioButton::indicator:unchecked:hover
+{
+image: url(:/icon/icons/radio_button_unchecked_hover_FILL0_wght400_GRAD0_opsz48.svg);
+}
+
+QRadioButton::indicator:unchecked:pressed
+{
+
+}
+
+QRadioButton::indicator::checked 
+{
+    image: url(:/icon/icons/radio_button_checked_FILL0_wght400_GRAD0_opsz48.svg);
+}
+
+QRadioButton::indicator:checked:hover 
+{
+image: url(:/icon/icons/radio_button_checked_hover_FILL0_wght400_GRAD0_opsz48.svg);
+}
+
+QRadioButton::indicator:checked:pressed 
+{
+
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -221,6 +262,31 @@ QPushButton::pressed
        </spacer>
       </item>
       <item>
+       <widget class="QRadioButton" name="rdbtn_greedy">
+        <property name="font">
+         <font>
+          <family>MiSans Demibold</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="statusTip">
+         <string>Greedy Search</string>
+        </property>
+        <property name="whatsThis">
+         <string>Greedy Search</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string>Greedy</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="pushButton">
         <property name="enabled">
          <bool>false</bool>
@@ -319,6 +385,25 @@ QPushButton::pressed
           <width>20</width>
           <height>20</height>
          </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="rdbtn_beam">
+        <property name="font">
+         <font>
+          <family>MiSans Demibold</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="statusTip">
+         <string>Beam Search</string>
+        </property>
+        <property name="whatsThis">
+         <string>Beam Search</string>
+        </property>
+        <property name="text">
+         <string>Beam</string>
         </property>
        </widget>
       </item>

@@ -18,8 +18,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWebEngineWidgets import QWebEngineView
 from PySide6.QtWidgets import (QApplication, QDoubleSpinBox, QFrame, QGridLayout,
     QGroupBox, QHBoxLayout, QMainWindow, QPushButton,
-    QScrollArea, QSizePolicy, QSpacerItem, QSplitter,
-    QStatusBar, QVBoxLayout, QWidget)
+    QRadioButton, QScrollArea, QSizePolicy, QSpacerItem,
+    QSplitter, QStatusBar, QVBoxLayout, QWidget)
 
 from src.widgets.celeryImageView import CeleryImageView
 import celeryMath_rc
@@ -75,6 +75,48 @@ class Ui_MainWindow(object):
 "QPushButton::pressed\n"
 "{\n"
 "	background-color: #a2aec0;\n"
+"}\n"
+"\n"
+"QRadioButton\n"
+"{\n"
+"	height: 25px;\n"
+"}\n"
+"\n"
+"QRadioButton::indicator\n"
+"{\n"
+"    width:16px;\n"
+"    height: 16px;\n"
+"}\n"
+"\n"
+"QRadioButton::indicator::unchecked\n"
+"{\n"
+"   image: url(:/icon/icons/radio_button_unchecked_FILL0_wght400_GRAD0_opsz48.svg);\n"
+"}\n"
+"\n"
+"QRadioButton::indicator:unchecked:hover\n"
+"{\n"
+"image: url(:"
+                        "/icon/icons/radio_button_unchecked_hover_FILL0_wght400_GRAD0_opsz48.svg);\n"
+"}\n"
+"\n"
+"QRadioButton::indicator:unchecked:pressed\n"
+"{\n"
+"\n"
+"}\n"
+"\n"
+"QRadioButton::indicator::checked \n"
+"{\n"
+"    image: url(:/icon/icons/radio_button_checked_FILL0_wght400_GRAD0_opsz48.svg);\n"
+"}\n"
+"\n"
+"QRadioButton::indicator:checked:hover \n"
+"{\n"
+"image: url(:/icon/icons/radio_button_checked_hover_FILL0_wght400_GRAD0_opsz48.svg);\n"
+"}\n"
+"\n"
+"QRadioButton::indicator:checked:pressed \n"
+"{\n"
+"\n"
 "}")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
@@ -147,12 +189,20 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout.addItem(self.horizontalSpacer)
 
-        self.pushButton = QPushButton(self.centralwidget)
-        self.pushButton.setObjectName(u"pushButton")
-        self.pushButton.setEnabled(False)
+        self.rdbtn_greedy = QRadioButton(self.centralwidget)
+        self.rdbtn_greedy.setObjectName(u"rdbtn_greedy")
         font2 = QFont()
         font2.setFamilies([u"MiSans Demibold"])
         font2.setPointSize(10)
+        self.rdbtn_greedy.setFont(font2)
+        self.rdbtn_greedy.setStyleSheet(u"")
+        self.rdbtn_greedy.setChecked(True)
+
+        self.horizontalLayout.addWidget(self.rdbtn_greedy)
+
+        self.pushButton = QPushButton(self.centralwidget)
+        self.pushButton.setObjectName(u"pushButton")
+        self.pushButton.setEnabled(False)
         self.pushButton.setFont(font2)
         self.pushButton.setStyleSheet(u"QPushButton{\n"
 "	border: none;\n"
@@ -193,6 +243,12 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout.addWidget(self.btn_settings)
 
+        self.rdbtn_beam = QRadioButton(self.centralwidget)
+        self.rdbtn_beam.setObjectName(u"rdbtn_beam")
+        self.rdbtn_beam.setFont(font2)
+
+        self.horizontalLayout.addWidget(self.rdbtn_beam)
+
         self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.horizontalLayout.addItem(self.horizontalSpacer_2)
@@ -226,6 +282,13 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"CeleryMath", None))
         self.groupBox.setTitle("")
+#if QT_CONFIG(statustip)
+        self.rdbtn_greedy.setStatusTip(QCoreApplication.translate("MainWindow", u"Greedy Search", None))
+#endif // QT_CONFIG(statustip)
+#if QT_CONFIG(whatsthis)
+        self.rdbtn_greedy.setWhatsThis(QCoreApplication.translate("MainWindow", u"Greedy Search", None))
+#endif // QT_CONFIG(whatsthis)
+        self.rdbtn_greedy.setText(QCoreApplication.translate("MainWindow", u"Greedy", None))
 #if QT_CONFIG(whatsthis)
         self.pushButton.setWhatsThis(QCoreApplication.translate("MainWindow", u"Temperature", None))
 #endif // QT_CONFIG(whatsthis)
@@ -241,6 +304,13 @@ class Ui_MainWindow(object):
         self.btn_settings.setWhatsThis(QCoreApplication.translate("MainWindow", u"Settings", None))
 #endif // QT_CONFIG(whatsthis)
         self.btn_settings.setText("")
+#if QT_CONFIG(statustip)
+        self.rdbtn_beam.setStatusTip(QCoreApplication.translate("MainWindow", u"Beam Search", None))
+#endif // QT_CONFIG(statustip)
+#if QT_CONFIG(whatsthis)
+        self.rdbtn_beam.setWhatsThis(QCoreApplication.translate("MainWindow", u"Beam Search", None))
+#endif // QT_CONFIG(whatsthis)
+        self.rdbtn_beam.setText(QCoreApplication.translate("MainWindow", u"Beam", None))
 #if QT_CONFIG(statustip)
         self.btn_snip.setStatusTip(QCoreApplication.translate("MainWindow", u"Screenshot", None))
 #endif // QT_CONFIG(statustip)

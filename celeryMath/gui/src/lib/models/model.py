@@ -12,6 +12,7 @@ from ..utils.beam_search import CeleryBeamSearch
 
 
 class LatexModelONNX(object):
+    __supported_methods__ = ("greedy", "beam")
     transforms = None
 
     def __init__(
@@ -121,6 +122,12 @@ class LatexModelONNX(object):
         )
         assert len(imgs.shape) == 3, "Image must be at least 3D"
         return np.expand_dims(imgs, 1)  # B C H W
+
+    def greedy(self):
+        self.search_method = "greedy"
+
+    def beam(self):
+        self.search_method = "beam"
 
     def softmax(self, x: np.ndarray, dim=-1):
         """Compute softmax values for each sets of scores in x."""
@@ -232,8 +239,12 @@ class LatexModelONNX(object):
         self,
         src: List[Union[Image.Image, np.ndarray]],
         temperature: float = 0.2,
+        method: str = None,
         out_list=False,
     ) -> List[str]:
+        if method is not None:
+            assert method in self.__supported_methods__, f"method {method} not supported"
+            self.search_method = method
         src: np.ndarray = self.preprocess(src)  # B C H W
         output = self.forward(src, temperature)
         # output = [self.post_process(s) for s in self.token2str(output)]

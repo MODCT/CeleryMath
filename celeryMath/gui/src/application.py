@@ -1,11 +1,13 @@
 from typing import Any, Dict, List, Union
-from PySide6.QtCore import QUrl, Qt
+from PySide6.QtCore import QUrl, Qt, Signal, Slot
 from PySide6.QtWidgets import (
     QMainWindow,
     QMessageBox,
     QGridLayout,
     QVBoxLayout,
     QWidget,
+    QButtonGroup,
+    QAbstractButton,
 )
 from PySide6.QtGui import QPixmap, QClipboard, QKeyEvent, QCloseEvent
 
@@ -19,6 +21,7 @@ from .widgets.dialogSettings import DialogSettings
 from .widgets.celeryScreenShotWidget import CeleryScreenShotWidget
 from .widgets.celeryTexLinesWidget import CeleryTexLineWidget, CeleryTexDispWidget
 from .utils.logger import CeleryLogger
+from .utils.emun import CeleryRadioButton
 from .celeryThread import CeleryInferThread
 from .lib.models.model import LatexModelONNX, get_model
 from .lib.utils.config import Config
@@ -39,9 +42,9 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         self.snip_widget = CeleryScreenShotWidget(self)
         self.settings_dialog = DialogSettings(conf=self.conf)
 
-        self.init_settings()
-        self.init_signals()
         self.init_ui()
+        self.init_signals()
+        self.init_settings()
 
     def init_settings(self):
         self.webTexView.load(QUrl("qrc:/html/index.html"))
@@ -49,18 +52,23 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         self.tempe: float = self.conf.temperature
         self.update_model()
         self.btn_snip.setText(f"Screenshot({self.conf.snip_hotkey})")
+        if self.conf.search_method == "beam":
+            self.rdbtn_beam.setChecked(True)
 
     def init_signals(self):
-        # self.ledit_tex1.textEdited.connect(self.ledit_val_changed)
-        # self.ledit_tex2.textEdited.connect(self.ledit_val_changed)
-        # self.btn_copy1.clicked.connect(self.btn_copy1_clicked)
-        # self.btn_copy2.clicked.connect(self.btn_copy2_clicked)
         self.spinbox_tempe.valueChanged.connect(self.tempe_changed)
         self.btn_settings.clicked.connect(self.btn_settings_clicked)
         self.btn_snip.clicked.connect(self.btn_screenshot_clicked)
         self.settings_dialog.hotkey_sc.pressed.connect(self.btn_screenshot_clicked)
         self.settings_dialog.conf_updated.connect(self.on_conf_updated)
         self.splitter_tex_img.splitterMoved.connect(self.on_splitter_tex_img_moved)
+
+        self.btngrp_greedy_beam = QButtonGroup(self)
+        self.btngrp_greedy_beam.addButton(
+            self.rdbtn_greedy, CeleryRadioButton.GREEDY.value
+        )
+        self.btngrp_greedy_beam.addButton(self.rdbtn_beam, CeleryRadioButton.BEAM.value)
+        self.btngrp_greedy_beam.buttonClicked.connect(self.on_greedy_beam_clicked)
 
     def init_ui(self):
         self.splitter_tex_img.setStretchFactor(0, 1)
@@ -69,6 +77,54 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         self.splitter_tex_group.setStretchFactor(1, 2)
         self.update_tex_lines([""])
 
+    ###############################################################################
+    # Slots
+    ###############################################################################
+    def on_greedy_beam_clicked(self):
+        if self.btngrp_greedy_beam.checkedId() == CeleryRadioButton.GREEDY.value:
+            self.conf.search_method = "greedy"
+            self.conf.save()
+        elif self.btngrp_greedy_beam.checkedId() == CeleryRadioButton.BEAM.value:
+            self.conf.search_method = "beam"
+            self.conf.save()
+        else:
+            return
+
+    def on_splitter_tex_img_moved(self, pos: int, idx: int):
+        self.set_original_img(self.img)
+
+    def on_conf_updated(self, conf: Config):
+        self.conf = conf
+        self.logger.debug(f"conf updated with: {self.conf.json}")
+        self.update_model()
+        self.btn_snip.setText(f"Screenshot({self.conf.snip_hotkey})")
+
+    @Slot(str)
+    def ledit_val_changed(self, v: str):
+        v = v.replace("$", "").replace("\[", "").replace("\]", "")
+        self.render_tex(v)
+
+    @Slot()
+    def btn_settings_clicked(self):
+        self.settings_dialog.show()
+
+    @Slot(float)
+    def tempe_changed(self, d: float):
+        self.conf.temperature = d
+
+    @Slot()
+    def btn_screenshot_clicked(self):
+        if self.model is None:
+            self.show_model_error_box()
+            return
+        self.logger.debug(f"taking screenshot")
+        # self.hide()
+        self.showMinimized()
+        self.snip_widget.take_screenshot()
+
+    ########################################################################
+    # Functions
+    ########################################################################
     def update_tex_lines(self, tex: List[str]):
         self.scroll_layout = QVBoxLayout()
         self.scroll_tex_lines_contents = QWidget()
@@ -101,36 +157,8 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         else:
             self.show_model_error_box()
 
-    def on_splitter_tex_img_moved(self, pos: int, idx: int):
-        self.set_original_img(self.img)
-
-    def on_conf_updated(self, conf: Config):
-        self.conf = conf
-        self.logger.debug(f"conf updated with: {self.conf.json}")
-        self.update_model()
-        self.btn_snip.setText(f"Screenshot({self.conf.snip_hotkey})")
-
-    def ledit_val_changed(self, v: str):
-        v = v.replace("$", "").replace("\[", "").replace("\]", "")
-        self.render_tex(v)
-
-    def btn_settings_clicked(self):
-        self.settings_dialog.show()
-
-    def tempe_changed(self, d: float):
-        self.tempe = d
-
-    def btn_screenshot_clicked(self):
-        if self.model is None:
-            self.show_model_error_box()
-            return
-        self.logger.debug(f"taking screenshot")
-        # self.hide()
-        self.showMinimized()
-        self.snip_widget.take_screenshot()
-
     def predict(self, img: Image.Image):
-        res = self.model(img, temperature=self.tempe)
+        res = self.model(img, temperature=self.conf.temperature)
         return res
 
     def render_tex(self, s: str):
@@ -159,7 +187,12 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
             return
         self.showNormal()
         self.logger.debug(f"screen shot finished")
-        self.infer_thread = CeleryInferThread(img, self.model)
+        self.infer_thread = CeleryInferThread(
+            img,
+            self.model,
+            temp=self.conf.temperature,
+            method=self.conf.search_method,
+        )
         self.infer_thread.finished.connect(self.on_infer_finished)
         self.infer_thread.finished.connect(self.infer_thread.deleteLater)
         self.infer_thread.start()
@@ -176,6 +209,9 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
             img = img.toqpixmap()
         self.imview_original.setPixmap(img)
 
+    #############################################################################
+    # Life Cycle
+    #############################################################################
     def keyPressEvent(self, event: QKeyEvent):
         event.accept()
 

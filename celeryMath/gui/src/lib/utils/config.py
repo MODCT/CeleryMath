@@ -39,6 +39,7 @@ class Config(object):
             "encoder_path": self.encoder_path,
             "decoder_path": self.decoder_path,
             "snip_hotkey": self.snip_hotkey,
+            "search_method": self.search_method,
             "temperature": self.temperature,
         }
         return js
@@ -49,6 +50,7 @@ class Config(object):
             "encoder_path": self.encoder_path,
             "decoder_path": self.decoder_path,
             "snip_hotkey": self.snip_hotkey,
+            "search_method": self.search_method,
             "temperature": self.temperature,
             "device": self.device,
             "pad_token": self.pad_token,
