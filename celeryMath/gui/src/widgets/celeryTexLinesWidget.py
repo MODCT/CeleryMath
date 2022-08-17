@@ -2,7 +2,7 @@
 Description: 
 Author: Rainyl
 Date: 2022-08-15 21:26:29
-LastEditTime: 2022-08-15 23:26:36
+LastEditTime: 2022-08-17 19:04:11
 '''
 from typing import Callable, List
 from PySide6.QtGui import QClipboard
@@ -11,7 +11,7 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QScrollArea
 from .celeryTexLineUI import Ui_CeleryTexLine
 
 class CeleryTexLineWidget(QWidget, Ui_CeleryTexLine):
-    def __init__(self, parent=None, text: str=None, clipboard: QClipboard=None) -> None:
+    def __init__(self, parent=None, text: str=None, prob=None, clipboard: QClipboard=None) -> None:
         super(CeleryTexLineWidget, self).__init__(parent=parent)
         self.setupUi(self)
 
@@ -19,6 +19,8 @@ class CeleryTexLineWidget(QWidget, Ui_CeleryTexLine):
 
         if not text is None:
             self.ledit_tex.setText(text)
+        if prob is not None:
+            self.btn_info.setText(f"{prob*100:.0f}%")
         
         self.setup_signals()
 

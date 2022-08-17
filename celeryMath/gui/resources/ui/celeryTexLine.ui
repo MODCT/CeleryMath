@@ -116,11 +116,11 @@ QPushButton::pressed
       <widget class="QPushButton" name="btn_info">
        <property name="styleSheet">
         <string notr="true">QPushButton{
-	width: 25px;
+	width: auto;
 }</string>
        </property>
        <property name="text">
-        <string/>
+        <string>0%</string>
        </property>
       </widget>
      </item>

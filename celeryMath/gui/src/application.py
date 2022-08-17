@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Tuple, Union
 from PySide6.QtCore import QUrl, Qt, Signal, Slot
 from PySide6.QtWidgets import (
     QMainWindow,
@@ -75,7 +75,7 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         self.splitter_tex_img.setStretchFactor(1, 2)
         self.splitter_tex_group.setStretchFactor(0, 3)
         self.splitter_tex_group.setStretchFactor(1, 2)
-        self.update_tex_lines([""])
+        self.update_tex_lines([("", 0)])
 
     ###############################################################################
     # Slots
@@ -125,11 +125,11 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
     ########################################################################
     # Functions
     ########################################################################
-    def update_tex_lines(self, tex: List[str]):
+    def update_tex_lines(self, tex: List[Tuple[str, float]]):
         self.scroll_layout = QVBoxLayout()
         self.scroll_tex_lines_contents = QWidget()
         for t in tex:
-            texline = CeleryTexLineWidget(text=t, clipboard=self.clipboard)
+            texline = CeleryTexLineWidget(text=t[0], prob=t[1], clipboard=self.clipboard)
             texline.ledit_tex.textEdited.connect(self.ledit_val_changed)
             texline.ledit_tex.focussed.connect(self.render_tex)
             self.scroll_layout.addWidget(texline)
@@ -158,7 +158,7 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
             self.show_model_error_box()
 
     def predict(self, img: Image.Image):
-        res = self.model(img, temperature=self.conf.temperature)
+        res = self.model(img, temperature=self.conf.temperature, method=self.conf.search_method)
         return res
 
     def render_tex(self, s: str):
@@ -167,18 +167,21 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         js = rf"""updateMath("$${re.escape(s)}$$");"""
         self.webTexView.page().runJavaScript(js)
 
-    def on_infer_finished(self, tex: Union[List[List[str]], str, Dict[str, Any]]):
+    def on_infer_finished(self, tex: Union[List[List[str]], Dict[str, Any]]):
+        tex_res = []  # (B, BW, (str, float))
         if isinstance(tex, dict):
             if tex["status"]:
-                tex: Union[List[List[str]], str] = tex["data"]
-        if isinstance(tex, list):
-            tex = tex[0]
-        msg = "\n".join(tex)
-        self.logger.debug(f"prediction: \n{msg}")
-        self.crt_tex = tex[0]
-        self.render_tex(self.crt_tex)
+                tex_res: List[List[str]] = tex["data"]
+        else:
+            tex_res = tex
+        if tex_res is None:
+            self.render_tex(f"Prediction Error!")
+            return
+        tex_res = tex_res[0]
+        self.logger.debug(f"prediction: \n{tex_res}")
+        self.render_tex(tex_res[0][0])
 
-        self.update_tex_lines(tex)
+        self.update_tex_lines(tex_res)
         self.setWindowState(self.windowState() & ~Qt.WindowMinimized | Qt.WindowActive)
         self.activateWindow()
 

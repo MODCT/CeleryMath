@@ -100,7 +100,7 @@ class Ui_CeleryTexLine(object):
         self.btn_info = QPushButton(CeleryTexLine)
         self.btn_info.setObjectName(u"btn_info")
         self.btn_info.setStyleSheet(u"QPushButton{\n"
-"	width: 25px;\n"
+"	width: auto;\n"
 "}")
 
         self.horizontalLayout_2.addWidget(self.btn_info)
@@ -135,7 +135,7 @@ class Ui_CeleryTexLine(object):
 
     def retranslateUi(self, CeleryTexLine):
         CeleryTexLine.setWindowTitle(QCoreApplication.translate("CeleryTexLine", u"Form", None))
-        self.btn_info.setText("")
+        self.btn_info.setText(QCoreApplication.translate("CeleryTexLine", u"0%", None))
 #if QT_CONFIG(statustip)
         self.btn_copy.setStatusTip(QCoreApplication.translate("CeleryTexLine", u"Copy", None))
 #endif // QT_CONFIG(statustip)

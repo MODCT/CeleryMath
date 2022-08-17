@@ -52,14 +52,8 @@ class LatexModelONNX(object):
         self.tokenizer = tokenizer.from_file(tokenizer_path)
 
     def token2str(self, tokens: Union[np.ndarray, List]) -> List[str]:
-        if isinstance(tokens, list):
-            tokens = np.array(tokens, dtype=int)
-        assert len(tokens.shape) == 3
-        dec: List[List[str]] = [
-            [self.tokenizer.decode(ids=t, skip_special_tokens=False) for t in tok]
-            for tok in tokens.tolist()
-        ]
-        return [
+        dec = [self.tokenizer.decode_batch([tbw[0] for tbw in tb]) for tb in tokens]
+        dec = [
             [
                 "".join(d.split(" "))
                 .replace("Ġ", " ")  # space
@@ -68,25 +62,28 @@ class LatexModelONNX(object):
                 .replace("[BOS]", "")
                 .replace("[PAD]", "")
                 .strip()
-                for d in detok
+                for d in dbw
             ]
-            for detok in dec
+            for dbw in dec
         ]
+        # (B, BW)
+        return dec
 
-    # TODO
     def detokenize(self, tokens: Union[np.ndarray, List]):
-        if isinstance(tokens, list):
-            tokens = np.array(tokens)
-        if len(tokens.shape) == 1:
-            tokens = tokens[np.newaxis, ...]
-        toks: List[List[str]] = [[self.tokenizer.id_to_token(t) for t in tok] for tok in tokens.tolist()]  # type: ignore
-        for b in range(len(toks)):
-            for i in reversed(range(len(toks[b]))):
-                if toks[b][i] is None:
-                    toks[b][i] = ""
-                toks[b][i] = toks[b][i].replace("Ġ", " ").replace("Ċ", "").strip()
-                if toks[b][i] in ("[BOS]", "[EOS]", "[PAD]"):
-                    del toks[b][i]
+        # TODO: complete the decode to return list
+        # tokens: (B, BW, (N, float))
+        toks: List[List[List[str]]] = [
+            [[self.tokenizer.id_to_token(t) for t in tb] for tb in tbw]
+            for tbw in tokens
+        ]
+        for bw in range(len(toks)):
+            for b in range(len(bw)):
+                for i in reversed(range(len(toks[b]))):
+                    if toks[b][i] is None:
+                        toks[b][i] = ""
+                    toks[b][i] = toks[b][i].replace("Ġ", " ").replace("Ċ", "").strip()
+                    if toks[b][i] in ("[BOS]", "[EOS]", "[PAD]"):
+                        del toks[b][i]
         return toks
 
     def post_process(self, s: str) -> str:
@@ -140,7 +137,7 @@ class LatexModelONNX(object):
         memory: List[np.ndarray],
         temperature: float = 0.2,
     ):
-        beam_width = 5
+        beam_width = 10
         beam_searcher = CeleryBeamSearch(
             memory=memory,
             decode_fn=self.decoder_run,
@@ -149,8 +146,8 @@ class LatexModelONNX(object):
             eos=self.eos_token,
             max_iter=self.max_seq_len,
         )
-        out = beam_searcher.search(start_tokens=start_tokens)
-        return out  # B * BW * N
+        preds = beam_searcher.search(start_tokens=start_tokens)
+        return preds
 
     def decoder_run(self, x: np.ndarray, memory: List[np.ndarray]):
         tgt_mask = np.triu(np.full((x.shape[1]), -np.inf), k=1).astype(bool)
@@ -171,10 +168,12 @@ class LatexModelONNX(object):
         temperature: float = 0.2,
     ):
         out = start_tokens.astype(np.int64)  # B * N
+        prob = None
         for _ in range(self.max_seq_len):
             x = out[:, -self.max_seq_len :]
             logits = self.decoder_run(x, memory=memory)
             # TODO: finish sample generate
+            # TODO: add more sampling method
             # k = int((1 - self.filter_thres) * logits.shape[-1])
             # idx: np.ndarray = np.argpartition(logits, -k, axis=1)[:, :-k]
             # for i in range(idx.shape[0]):
@@ -185,6 +184,7 @@ class LatexModelONNX(object):
             # argmax prob sample
             probs: np.ndarray = self.softmax(logits / temperature, dim=1)
             sample = probs.argmax(axis=1)[..., np.newaxis]
+            prob = [probs[b][sample[b]] for b in range(sample.shape[0])]
             # if generate all pad_token, stop
             end_pad = (sample == self.pad_token).all()
             if end_pad:
@@ -193,7 +193,7 @@ class LatexModelONNX(object):
             end_eos = (np.cumsum(out == self.eos_token, 1)[:, -1] >= 1).all()
             if end_eos:
                 break
-        return np.expand_dims(out, axis=1)
+        return [[[out[b], prob[b][0]]] for b in range(out.shape[0])]
 
     def generate(
         self,
@@ -243,15 +243,22 @@ class LatexModelONNX(object):
         out_list=False,
     ) -> List[str]:
         if method is not None:
-            assert method in self.__supported_methods__, f"method {method} not supported"
+            assert (
+                method in self.__supported_methods__
+            ), f"method {method} not supported"
             self.search_method = method
         src: np.ndarray = self.preprocess(src)  # B C H W
-        output = self.forward(src, temperature)
-        # output = [self.post_process(s) for s in self.token2str(output)]
+        # (List[(B, N)])
+        preds = self.forward(src, temperature)
+        if preds is None:
+            return None
+        b, bw = len(preds), len(preds[0])
         if out_list:
-            output = self.detokenize(output)
+            outstr = self.detokenize(preds)
         else:
-            output = self.token2str(output)
+            outstr = self.token2str(preds)
+        # (B, BW, (str, float))
+        output = [[[outstr[i][j], preds[i][j][1]] for j in range(bw)] for i in range(b)]
         return output
 
 
