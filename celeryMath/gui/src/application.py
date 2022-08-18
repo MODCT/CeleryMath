@@ -192,12 +192,12 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
             sampling=self.conf.sampling,
         )
         self.logger.info(f"inference starting with:\n{str(self.conf)}")
-        # self.infer_thread.finished.connect(self.on_infer_finished)
-        # self.infer_thread.finished.connect(self.infer_thread.deleteLater)
-        # self.infer_thread.start()
+        self.infer_thread.finished.connect(self.on_infer_finished)
+        self.infer_thread.finished.connect(self.infer_thread.deleteLater)
+        self.infer_thread.start()
         self.render_tex("\mathrm{Loading...}")
-        res = self.predict(img)
-        self.on_infer_finished(res)
+        # res = self.predict(img)
+        # self.on_infer_finished(res)
         self.img = img
         self.set_original_img(img)
 
