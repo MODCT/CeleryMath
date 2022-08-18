@@ -13,6 +13,11 @@ from ..utils.beam_search import CeleryBeamSearch
 
 class LatexModelONNX(object):
     __supported_methods__ = ("greedy", "beam")
+    # temperature, nucleus
+    __supported_sampling__ = (
+        "random",
+        "nucleus",
+    )
     transforms = None
 
     def __init__(
@@ -29,6 +34,7 @@ class LatexModelONNX(object):
         filter_thres: float = 0.9,
         temperature: float = 0.5,
         search_method="greedy",
+        sampling="random",
     ):
         super(LatexModelONNX, self).__init__()
         self.encoder = onnxruntime.InferenceSession(encoder)
@@ -41,6 +47,8 @@ class LatexModelONNX(object):
         self.filter_thres = filter_thres
         self.temperature = temperature
         self.search_method = search_method
+        self.sampling = sampling
+        self.seed = 241
 
         self.transforms = get_transforms(min_img_size, max_img_size)
         assert tokenizer_path is not None, "Tokenizer path must be provided"
@@ -126,10 +134,10 @@ class LatexModelONNX(object):
     def beam(self):
         self.search_method = "beam"
 
-    def softmax(self, x: np.ndarray, dim=-1):
+    def softmax(self, x: np.ndarray, axis=-1):
         """Compute softmax values for each sets of scores in x."""
         e_x = np.exp(x - np.max(x))
-        return e_x / e_x.sum(axis=dim, keepdims=True)  # B*T
+        return e_x / e_x.sum(axis=axis, keepdims=True)  # B*T
 
     def beam_search(
         self,
@@ -161,30 +169,63 @@ class LatexModelONNX(object):
         ]  # B * vocab_size
         return logits
 
+    def random_sampling(self, logits: np.ndarray, temperature: float = 0.2):
+        rng = np.random.default_rng(self.seed)
+        # (B, vocab_size)
+        probs: np.ndarray = self.softmax(logits / temperature, axis=1)
+        # (B,)
+        sample = np.asarray([rng.choice(np.arange(b.size), size=1, p=b) for b in probs])
+        # (B,)
+        prob = probs[:, sample.ravel()]
+        return sample, prob
+
+    def nucleus_sampling(self, logits: np.ndarray, p=0.9):
+        rng = np.random.default_rng(self.seed)
+        bs, vs = logits.shape
+        # (B, vocab_size)
+        probs: np.ndarray = self.softmax(logits, axis=1)
+        probs_p = np.zeros_like(probs, dtype=np.float32)
+        # (B, vocab_size)
+        idxs = np.argsort(probs, axis=1)
+        for i, idx in enumerate(idxs):
+            # probs_p[i, j] = probs[i, idxs[j]]
+            probs_p[i, :] = probs[i, idx]
+        # (B, vocab_size)
+        idxp = probs_p.cumsum(axis=1) >= p
+        probs_p[~idxp] = -1e6
+        for i in range(bs):
+            probs[i, idxs[i]] = probs_p[i, :]
+        probs_new = self.softmax(probs, axis=1)
+        sample = np.asarray(
+            [rng.choice(np.arange(b.size), size=1, p=b) for b in probs_new]
+        )
+        prob = probs_new[:, sample.ravel()]
+        return sample, prob
+
     def greedy_search(
         self,
         start_tokens: np.ndarray,
         memory: List[np.ndarray],
         temperature: float = 0.2,
+        p_n: float = 0.9,
     ):
         out = start_tokens.astype(np.int64)  # B * N
-        prob = None
+        prob = []
+        self.sampling = "nucleus"
         for _ in range(self.max_seq_len):
             x = out[:, -self.max_seq_len :]
             logits = self.decoder_run(x, memory=memory)
-            # TODO: finish sample generate
-            # TODO: add more sampling method
-            # k = int((1 - self.filter_thres) * logits.shape[-1])
-            # idx: np.ndarray = np.argpartition(logits, -k, axis=1)[:, :-k]
-            # for i in range(idx.shape[0]):
-            #     logits[i, idx[i]] = -np.inf
-            # probs: np.ndarray = self.softmax(logits/temperature, dim=1)
-            # sample = [np.random.choice(np.arange(probs.shape[1]), 1, p=pp) for pp in probs]
-            # sample = np.array(sample, dtype=int)
-            # argmax prob sample
-            probs: np.ndarray = self.softmax(logits / temperature, dim=1)
-            sample = probs.argmax(axis=1)[..., np.newaxis]
-            prob = [probs[b][sample[b]] for b in range(sample.shape[0])]
+
+            if self.sampling == "random":
+                # random sample
+                sample, prob = self.random_sampling(logits, temperature)
+            elif self.sampling == "nucleus":
+                sample, prob = self.nucleus_sampling(logits, p=p_n)
+            else:
+                raise NotImplementedError(
+                    f"sampling method {self.sampling} not supported"
+                )
+
             # if generate all pad_token, stop
             end_pad = (sample == self.pad_token).all()
             if end_pad:
@@ -240,6 +281,7 @@ class LatexModelONNX(object):
         src: List[Union[Image.Image, np.ndarray]],
         temperature: float = 0.2,
         method: str = None,
+        sampling: str = None,
         out_list=False,
     ) -> List[str]:
         if method is not None:
@@ -247,6 +289,11 @@ class LatexModelONNX(object):
                 method in self.__supported_methods__
             ), f"method {method} not supported"
             self.search_method = method
+        if sampling is not None:
+            assert (
+                sampling in self.__supported_sampling__
+            ), f"sampling method {sampling} not supported"
+            self.sampling = sampling
         src: np.ndarray = self.preprocess(src)  # B C H W
         # (List[(B, N)])
         preds = self.forward(src, temperature)

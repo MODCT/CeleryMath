@@ -17,6 +17,7 @@ class Config(object):
     max_img_size = [192, 896]
     snip_hotkey = "Ctrl+Alt+S"
     search_method = "beam"
+    sampling = "nucleus"
 
     def __init__(self, conf_path: str = "conf/conf.json"):
         self.conf_path = conf_path
@@ -24,6 +25,19 @@ class Config(object):
             self.load(conf_path)
         else:
             self.save(conf_path)
+
+    def __str__(self) -> str:
+        s = (
+            f"Config(\n"
+            f"\tencoder: {self.encoder_path},\n"
+            f"\tdecoder: {self.decoder_path},\n"
+            f"\ttokenizer: {self.tokenizer_path},\n"
+            f"\ttemperature: {self.temperature},\n"
+            f"\tsearch method: {self.search_method},\n"
+            f"\tsampling: {self.sampling},\n"
+            f")"
+        )
+        return  s
 
     def load(self, conf_path: str):
         with open(conf_path, "r", encoding="utf-8") as f:
@@ -40,17 +54,19 @@ class Config(object):
             "decoder_path": self.decoder_path,
             "snip_hotkey": self.snip_hotkey,
             "search_method": self.search_method,
+            "sampling": self.sampling,
             "temperature": self.temperature,
         }
         return js
 
-    def save(self, p: str=None):
+    def save(self, p: str = None):
         conf = {
             "tokenizer_path": self.tokenizer_path,
             "encoder_path": self.encoder_path,
             "decoder_path": self.decoder_path,
             "snip_hotkey": self.snip_hotkey,
             "search_method": self.search_method,
+            "sampling": self.sampling,
             "temperature": self.temperature,
             "device": self.device,
             "pad_token": self.pad_token,

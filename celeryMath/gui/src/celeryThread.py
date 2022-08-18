@@ -14,12 +14,14 @@ class CeleryInferThread(QThread):
         model: LatexModelONNX,
         temp: float = 0.2,
         method: str = "greedy",
+        sampling: str = "nucleus",
     ):
         super().__init__()
         self.img: Image.Image = img
         self.model: LatexModelONNX = model
         self.temp = temp
         self.method = method
+        self.sampling = sampling
 
     def run(self):
         try:

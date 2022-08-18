@@ -16,10 +16,11 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWebEngineWidgets import QWebEngineView
-from PySide6.QtWidgets import (QApplication, QDoubleSpinBox, QFrame, QGridLayout,
-    QGroupBox, QHBoxLayout, QMainWindow, QPushButton,
-    QRadioButton, QScrollArea, QSizePolicy, QSpacerItem,
-    QSplitter, QStatusBar, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QComboBox, QDoubleSpinBox, QFrame,
+    QGridLayout, QGroupBox, QHBoxLayout, QMainWindow,
+    QPushButton, QRadioButton, QScrollArea, QSizePolicy,
+    QSpacerItem, QSplitter, QStatusBar, QVBoxLayout,
+    QWidget)
 
 from src.widgets.celeryImageView import CeleryImageView
 import celeryMath_rc
@@ -61,6 +62,8 @@ class Ui_MainWindow(object):
 "	padding: 3px;\n"
 "}\n"
 "\n"
+"\n"
+"\n"
 "QPushButton\n"
 "{\n"
 "	background-color: #d3e0f3;\n"
@@ -95,8 +98,8 @@ class Ui_MainWindow(object):
 "\n"
 "QRadioButton::indicator:unchecked:hover\n"
 "{\n"
-"image: url(:"
-                        "/icon/icons/radio_button_unchecked_hover_FILL0_wght400_GRAD0_opsz48.svg);\n"
+"im"
+                        "age: url(:/icon/icons/radio_button_unchecked_hover_FILL0_wght400_GRAD0_opsz48.svg);\n"
 "}\n"
 "\n"
 "QRadioButton::indicator:unchecked:pressed\n"
@@ -127,10 +130,14 @@ class Ui_MainWindow(object):
         self.splitter_tex_group.setOrientation(Qt.Vertical)
         self.groupBox = QGroupBox(self.splitter_tex_group)
         self.groupBox.setObjectName(u"groupBox")
+        self.groupBox.setStyleSheet(u"QGroupBox #imview_original\n"
+"{\n"
+"	border: none;\n"
+"}")
         self.gridLayout = QGridLayout(self.groupBox)
         self.gridLayout.setSpacing(0)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.gridLayout.setContentsMargins(3, 3, 3, 3)
+        self.gridLayout.setContentsMargins(2, 2, 2, 2)
         self.splitter_tex_img = QSplitter(self.groupBox)
         self.splitter_tex_img.setObjectName(u"splitter_tex_img")
         self.splitter_tex_img.setOrientation(Qt.Vertical)
@@ -142,7 +149,6 @@ class Ui_MainWindow(object):
         font1 = QFont()
         font1.setFamilies([u"MiSans Demibold"])
         self.imview_original.setFont(font1)
-        self.imview_original.setStyleSheet(u"border: none;")
         self.splitter_tex_img.addWidget(self.imview_original)
         self.webTexView = QWebEngineView(self.splitter_tex_img)
         self.webTexView.setObjectName(u"webTexView")
@@ -171,7 +177,7 @@ class Ui_MainWindow(object):
         self.scroll_tex_lines.setWidgetResizable(True)
         self.scroll_tex_lines_contents = QWidget()
         self.scroll_tex_lines_contents.setObjectName(u"scroll_tex_lines_contents")
-        self.scroll_tex_lines_contents.setGeometry(QRect(0, 0, 738, 175))
+        self.scroll_tex_lines_contents.setGeometry(QRect(0, 0, 738, 69))
         self.gridLayout_2 = QGridLayout(self.scroll_tex_lines_contents)
         self.gridLayout_2.setSpacing(2)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
@@ -200,6 +206,48 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout.addWidget(self.rdbtn_greedy)
 
+        self.cmbox_sampling = QComboBox(self.centralwidget)
+        self.cmbox_sampling.addItem("")
+        self.cmbox_sampling.addItem("")
+        self.cmbox_sampling.setObjectName(u"cmbox_sampling")
+        font3 = QFont()
+        font3.setFamilies([u"MiSans Demibold"])
+        font3.setPointSize(9)
+        self.cmbox_sampling.setFont(font3)
+        self.cmbox_sampling.setStyleSheet(u"QComboBox\n"
+"{\n"
+"	border: none;\n"
+"	border-radius: 6px;\n"
+"	height: 30px;\n"
+"	width: 55px;\n"
+"}\n"
+"\n"
+"QComboBox::drop-down\n"
+"{\n"
+"	background-color: #d3e0f3;\n"
+"	padding: 0;\n"
+"	margin: 0;\n"
+"	border: none;\n"
+"}\n"
+"\n"
+"QComboBox::down-arrow\n"
+"{\n"
+"	image: url(:/icon/icons/arrow_drop_down_FILL0_wght400_GRAD0_opsz48.svg);\n"
+"	width: 90%;\n"
+"}\n"
+"\n"
+"QComboBox::drop-down:pressed\n"
+"{\n"
+"	background-color: #a2aec0;\n"
+"}\n"
+"\n"
+"QComboBox::item\n"
+"{\n"
+"	border: none;\n"
+"}")
+
+        self.horizontalLayout.addWidget(self.cmbox_sampling)
+
         self.pushButton = QPushButton(self.centralwidget)
         self.pushButton.setObjectName(u"pushButton")
         self.pushButton.setEnabled(False)
@@ -223,6 +271,36 @@ class Ui_MainWindow(object):
         self.spinbox_tempe.setStyleSheet(u"QDoubleSpinBox\n"
 "{\n"
 "	border: none;\n"
+"	border-top-right-radius: 0px;\n"
+"	border-bottom-right-radius: 0px;\n"
+"	width: 20px;\n"
+"}\n"
+"\n"
+"QDoubleSpinBox::up-button\n"
+"{\n"
+"	image: url(:/icon/icons/arrow_drop_up_FILL0_wght400_GRAD0_opsz48.svg);\n"
+"	background-color: #d3e0f3;\n"
+"	border-radius: 0 6px 0px 0;\n"
+"	margin-bottom: 1px;\n"
+"}\n"
+"\n"
+"QDoubleSpinBox::up-button::pressed\n"
+"{\n"
+"	\n"
+"	background-color: #a2aec0;\n"
+"}\n"
+"\n"
+"QDoubleSpinBox::down-button\n"
+"{\n"
+"	image: url(:/icon/icons/arrow_drop_down_FILL0_wght400_GRAD0_opsz48.svg);\n"
+"	background-color: #d3e0f3;\n"
+"	border-radius: 0 0px 6px 0;\n"
+"	margin-top: 1px;\n"
+"}\n"
+"\n"
+"QDoubleSpinBox::down-button::pressed\n"
+"{\n"
+"	background-color: #a2aec0;\n"
 "}")
         self.spinbox_tempe.setMaximum(10.000000000000000)
         self.spinbox_tempe.setSingleStep(0.010000000000000)
@@ -289,6 +367,15 @@ class Ui_MainWindow(object):
         self.rdbtn_greedy.setWhatsThis(QCoreApplication.translate("MainWindow", u"Greedy Search", None))
 #endif // QT_CONFIG(whatsthis)
         self.rdbtn_greedy.setText(QCoreApplication.translate("MainWindow", u"Greedy", None))
+        self.cmbox_sampling.setItemText(0, QCoreApplication.translate("MainWindow", u"Nucleus", None))
+        self.cmbox_sampling.setItemText(1, QCoreApplication.translate("MainWindow", u"Random", None))
+
+#if QT_CONFIG(statustip)
+        self.cmbox_sampling.setStatusTip(QCoreApplication.translate("MainWindow", u"Sampling Method", None))
+#endif // QT_CONFIG(statustip)
+#if QT_CONFIG(whatsthis)
+        self.cmbox_sampling.setWhatsThis(QCoreApplication.translate("MainWindow", u"Sampling Method", None))
+#endif // QT_CONFIG(whatsthis)
 #if QT_CONFIG(whatsthis)
         self.pushButton.setWhatsThis(QCoreApplication.translate("MainWindow", u"Temperature", None))
 #endif // QT_CONFIG(whatsthis)

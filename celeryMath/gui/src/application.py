@@ -56,6 +56,7 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
             self.rdbtn_beam.setChecked(True)
 
     def init_signals(self):
+        self.cmbox_sampling.currentIndexChanged.connect(self.on_sampling_changed)
         self.spinbox_tempe.valueChanged.connect(self.tempe_changed)
         self.btn_settings.clicked.connect(self.btn_settings_clicked)
         self.btn_snip.clicked.connect(self.btn_screenshot_clicked)
@@ -90,6 +91,15 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         else:
             return
 
+    def on_sampling_changed(self, idx: int):
+        if idx == 0:
+            self.conf.sampling = "nucleus"
+        elif idx == 1:
+            self.conf.sampling = "random"
+        else:
+            self.logger.warning(f"sampling method {idx} not supported")
+        self.conf.save()
+
     def on_splitter_tex_img_moved(self, pos: int, idx: int):
         self.set_original_img(self.img)
 
@@ -111,6 +121,7 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
     @Slot(float)
     def tempe_changed(self, d: float):
         self.conf.temperature = d
+        self.conf.save()
 
     @Slot()
     def btn_screenshot_clicked(self):
@@ -129,7 +140,9 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         self.scroll_layout = QVBoxLayout()
         self.scroll_tex_lines_contents = QWidget()
         for t in tex:
-            texline = CeleryTexLineWidget(text=t[0], prob=t[1], clipboard=self.clipboard)
+            texline = CeleryTexLineWidget(
+                text=t[0], prob=t[1], clipboard=self.clipboard
+            )
             texline.ledit_tex.textEdited.connect(self.ledit_val_changed)
             texline.ledit_tex.focussed.connect(self.render_tex)
             self.scroll_layout.addWidget(texline)
@@ -158,7 +171,9 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
             self.show_model_error_box()
 
     def predict(self, img: Image.Image):
-        res = self.model(img, temperature=self.conf.temperature, method=self.conf.search_method)
+        res = self.model(
+            img, temperature=self.conf.temperature, method=self.conf.search_method
+        )
         return res
 
     def render_tex(self, s: str):
@@ -166,6 +181,28 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
             return
         js = rf"""updateMath("$${re.escape(s)}$$");"""
         self.webTexView.page().runJavaScript(js)
+
+    def on_sc_returned(self, img: Union[Image.Image, None] = None):
+        if img is None:
+            return
+        self.showNormal()
+        self.logger.debug(f"screen shot finished")
+        self.infer_thread = CeleryInferThread(
+            img,
+            self.model,
+            temp=self.conf.temperature,
+            method=self.conf.search_method,
+            sampling=self.conf.sampling,
+        )
+        self.logger.info(f"inference starting with:\n{str(self.conf)}")
+        # self.infer_thread.finished.connect(self.on_infer_finished)
+        # self.infer_thread.finished.connect(self.infer_thread.deleteLater)
+        # self.infer_thread.start()
+        self.render_tex("\mathrm{Loading...}")
+        res = self.predict(img)
+        self.on_infer_finished(res)
+        self.img = img
+        self.set_original_img(img)
 
     def on_infer_finished(self, tex: Union[List[List[str]], Dict[str, Any]]):
         tex_res = []  # (B, BW, (str, float))
@@ -184,26 +221,6 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         self.update_tex_lines(tex_res)
         self.setWindowState(self.windowState() & ~Qt.WindowMinimized | Qt.WindowActive)
         self.activateWindow()
-
-    def on_sc_returned(self, img: Union[Image.Image, None] = None):
-        if img is None:
-            return
-        self.showNormal()
-        self.logger.debug(f"screen shot finished")
-        self.infer_thread = CeleryInferThread(
-            img,
-            self.model,
-            temp=self.conf.temperature,
-            method=self.conf.search_method,
-        )
-        self.infer_thread.finished.connect(self.on_infer_finished)
-        self.infer_thread.finished.connect(self.infer_thread.deleteLater)
-        self.infer_thread.start()
-        self.render_tex("\mathrm{Loading...}")
-        # res = self.predict(img)
-        # self.on_infer_finished(res)
-        self.img = img
-        self.set_original_img(img)
 
     def set_original_img(self, img: Union[Image.Image, QPixmap] = None):
         if img is None:
