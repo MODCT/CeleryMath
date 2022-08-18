@@ -29,7 +29,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(764, 556)
+        MainWindow.resize(519, 364)
         font = QFont()
         font.setFamilies([u"Segoe UI"])
         MainWindow.setFont(font)
@@ -177,7 +177,7 @@ class Ui_MainWindow(object):
         self.scroll_tex_lines.setWidgetResizable(True)
         self.scroll_tex_lines_contents = QWidget()
         self.scroll_tex_lines_contents.setObjectName(u"scroll_tex_lines_contents")
-        self.scroll_tex_lines_contents.setGeometry(QRect(0, 0, 738, 69))
+        self.scroll_tex_lines_contents.setGeometry(QRect(0, 0, 493, 69))
         self.gridLayout_2 = QGridLayout(self.scroll_tex_lines_contents)
         self.gridLayout_2.setSpacing(2)
         self.gridLayout_2.setObjectName(u"gridLayout_2")

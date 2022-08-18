@@ -19,7 +19,7 @@ import re
 from .celeryMathUI import Ui_MainWindow
 from .widgets.dialogSettings import DialogSettings
 from .widgets.celeryScreenShotWidget import CeleryScreenShotWidget
-from .widgets.celeryTexLinesWidget import CeleryTexLineWidget, CeleryTexDispWidget
+from .widgets.celeryTexLinesWidget import CeleryTexLineWidget
 from .utils.logger import CeleryLogger
 from .utils.emun import CeleryRadioButton
 from .celeryThread import CeleryInferThread
@@ -28,12 +28,10 @@ from .lib.utils.config import Config
 
 
 class CeleryMath(QMainWindow, Ui_MainWindow):
-    tempe: float = 0.2
     logger = CeleryLogger("celeryMath")
     conf: Config = Config("conf/conf.json")
     model: LatexModelONNX = None
     img: Image.Image = None
-    crt_tex: str = ""
 
     def __init__(self, parent=None):
         super(CeleryMath, self).__init__(parent)
@@ -49,7 +47,6 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
     def init_settings(self):
         self.webTexView.load(QUrl("qrc:/html/index.html"))
 
-        self.tempe: float = self.conf.temperature
         self.update_model()
         self.btn_snip.setText(f"Screenshot({self.conf.snip_hotkey})")
         if self.conf.search_method == "beam":

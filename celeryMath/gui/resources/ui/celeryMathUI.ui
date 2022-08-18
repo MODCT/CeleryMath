@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>764</width>
-    <height>556</height>
+    <width>519</width>
+    <height>364</height>
    </rect>
   </property>
   <property name="font">
@@ -211,7 +211,7 @@ QRadioButton::indicator:checked:pressed
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>738</width>
+          <width>493</width>
           <height>69</height>
          </rect>
         </property>
