@@ -210,7 +210,8 @@ class LatexModelONNX(object):
         p_n: float = 0.9,
     ):
         out = start_tokens.astype(np.int64)  # B * N
-        prob = []
+        # (B, 1)
+        probs = np.ones(start_tokens.shape[0])
         self.sampling = "nucleus"
         for _ in range(self.max_seq_len):
             x = out[:, -self.max_seq_len :]
@@ -225,6 +226,7 @@ class LatexModelONNX(object):
                 raise NotImplementedError(
                     f"sampling method {self.sampling} not supported"
                 )
+            probs = probs * prob[:, 0]
 
             # if generate all pad_token, stop
             end_pad = (sample == self.pad_token).all()
@@ -234,7 +236,7 @@ class LatexModelONNX(object):
             end_eos = (np.cumsum(out == self.eos_token, 1)[:, -1] >= 1).all()
             if end_eos:
                 break
-        return [[[out[b], prob[b][0]]] for b in range(out.shape[0])]
+        return [[[out[b], probs[b]]] for b in range(out.shape[0])]
 
     def generate(
         self,
