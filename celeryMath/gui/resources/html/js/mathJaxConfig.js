@@ -1,6 +1,6 @@
 MathJax={
     chtml: {
-        scale: 1.5,                      // global scaling factor for all expressions
+        scale: 1.2,                      // global scaling factor for all expressions
         minScale: .5,                  // smallest scaling factor to use
         mtextFont: 'STIX',                 // font to use for mtext, if not inheriting (empty means use MathJax fonts)
         merrorFont: 'serif',           // font to use for merror, if not inheriting (empty means use MathJax fonts)

@@ -1,6 +1,6 @@
 from typing import Tuple, Union
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageChops
 
 
 class DeployTransform(object):
@@ -21,7 +21,8 @@ class DeployTransform(object):
             TODO: make pad image more clever, ie. don't pad all image to the max shape
         """
         # img: C H W
-        new_size = self.get_new_size(img.shape[1:])
+        # new_size = self.get_new_size(img.shape[1:])
+        new_size = self.max_img_size
         pw = new_size[-1] - img.shape[-1]
         ph = new_size[-2] - img.shape[-2]
         img = np.pad(img, ((0, 0), (0, ph), (0, pw)), "constant", constant_values=(0, ))
@@ -39,15 +40,24 @@ class DeployTransform(object):
         img = (img - self.mean) / self.std
         return img
 
-    def save_img(self, img: np.ndarray, name="test.png"):
-        import matplotlib.pyplot as plt
-        plt.imsave(name, img, cmap="gray")
+    # def save_img(self, img: np.ndarray, name="test.png"):
+    #     import matplotlib.pyplot as plt
+    #     plt.imsave(name, img, cmap="gray")
 
     def resize(self, img: np.ndarray, r: float):
         new_size = (int(img.shape[2]*r), int(img.shape[1]*r))
         img = Image.fromarray(img[0].astype(np.uint8), mode="L")
         img = img.resize(new_size, Image.BILINEAR)
         img = np.array(img, dtype=np.float32)[np.newaxis, ...]
+        return img
+
+    def crop_bbox(self, img: np.ndarray):
+        img[img >= 220] = 255
+        img = Image.fromarray(img[0].astype(np.uint8), mode="L")
+        bg = Image.new(img.mode, img.size, "white")
+        diff = ImageChops.difference(img, bg)
+        # diff = ImageChops.add(diff, diff)
+        img = np.asarray(img.crop(diff.getbbox()), dtype=np.float32)[np.newaxis, ...]
         return img
 
     def __call__(self, img: Union[Image.Image, np.ndarray]):
@@ -59,6 +69,8 @@ class DeployTransform(object):
                 img = img.convert("L")
             img = np.array(img, dtype=np.float32)[np.newaxis, ...]  # C H W
         # self.save_img(img[0], "original.png")
+        img = self.crop_bbox(img)
+        # self.save_img(img[0], "crop_bbox.png")
         img = self.pad_resize(img)  # C H W
         # self.save_img(img[0], "pad_resize.png")
         img = self.normalize(img)  # C H W
