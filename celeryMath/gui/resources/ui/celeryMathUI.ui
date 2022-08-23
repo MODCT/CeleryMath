@@ -30,6 +30,7 @@ QScrollArea #scroll_tex_lines_contents
 }
 
 QPushButton,
+QSpinBox,
 QDoubleSpinBox,
 QLineEdit,
 QScrollArea
@@ -479,6 +480,73 @@ QDoubleSpinBox::down-button::pressed
           <width>20</width>
           <height>20</height>
          </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QSpinBox" name="spbox_beam_width">
+        <property name="font">
+         <font>
+          <family>MiSans Demibold</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="statusTip">
+         <string>Beam Width</string>
+        </property>
+        <property name="whatsThis">
+         <string>Beam Width</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QSpinBox
+{
+	border: none;
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 0px;
+	width: 20px;
+}
+
+QSpinBox::up-button
+{
+	image: url(:/icon/icons/arrow_drop_up_FILL0_wght400_GRAD0_opsz48.svg);
+	background-color: #d3e0f3;
+	border-radius: 0 6px 0px 0;
+	margin-bottom: 1px;
+}
+
+QSpinBox::up-button::pressed
+{
+	
+	background-color: #a2aec0;
+}
+
+QSpinBox::down-button
+{
+	image: url(:/icon/icons/arrow_drop_down_FILL0_wght400_GRAD0_opsz48.svg);
+	background-color: #d3e0f3;
+	border-radius: 0 0px 6px 0;
+	margin-top: 1px;
+}
+
+QSpinBox::down-button::pressed
+{
+	background-color: #a2aec0;
+}</string>
+        </property>
+        <property name="suffix">
+         <string/>
+        </property>
+        <property name="prefix">
+         <string>BW: </string>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>50</number>
+        </property>
+        <property name="value">
+         <number>5</number>
         </property>
        </widget>
       </item>

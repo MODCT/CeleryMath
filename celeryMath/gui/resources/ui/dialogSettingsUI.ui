@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>357</height>
+    <width>410</width>
+    <height>364</height>
    </rect>
   </property>
   <property name="font">
@@ -35,7 +35,7 @@
     <number>3</number>
    </property>
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout" stretch="1,3">
+    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,3">
      <property name="spacing">
       <number>1</number>
      </property>
@@ -45,37 +45,66 @@
         <string>General</string>
        </property>
        <layout class="QGridLayout" name="gridLayout">
+        <property name="leftMargin">
+         <number>3</number>
+        </property>
+        <property name="topMargin">
+         <number>3</number>
+        </property>
+        <property name="rightMargin">
+         <number>3</number>
+        </property>
+        <property name="bottomMargin">
+         <number>3</number>
+        </property>
+        <item row="0" column="3">
+         <widget class="QPushButton" name="btn_hotkey_reset">
+          <property name="text">
+           <string>Reset</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../celeryMath.qrc">
+            <normaloff>:/icon/icons/device_reset_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icon/icons/device_reset_FILL0_wght400_GRAD0_opsz48.svg</iconset>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Device:</string>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="0">
-         <layout class="QHBoxLayout" name="horizontalLayout">
+         <widget class="QLabel" name="label_hotkey">
+          <property name="text">
+           <string>HotKey:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QKeySequenceEdit" name="kseq_screenshot">
+          <property name="toolTip">
+           <string>Click to change screenshot hotkey</string>
+          </property>
+          <property name="keySequence">
+           <string>Ctrl+Alt+S</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QComboBox" name="cbox_device">
           <item>
-           <widget class="QLabel" name="label_hotkey">
-            <property name="text">
-             <string>HotKey:</string>
-            </property>
-           </widget>
+           <property name="text">
+            <string>CPU</string>
+           </property>
           </item>
           <item>
-           <widget class="QKeySequenceEdit" name="kseq_screenshot">
-            <property name="toolTip">
-             <string>Click to change screenshot hotkey</string>
-            </property>
-            <property name="keySequence">
-             <string>Ctrl+Alt+S</string>
-            </property>
-           </widget>
+           <property name="text">
+            <string>CUDA</string>
+           </property>
           </item>
-          <item>
-           <widget class="QPushButton" name="btn_hotkey_reset">
-            <property name="text">
-             <string>Reset</string>
-            </property>
-            <property name="icon">
-             <iconset resource="../celeryMath.qrc">
-              <normaloff>:/icon/icons/device_reset_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icon/icons/device_reset_FILL0_wght400_GRAD0_opsz48.svg</iconset>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -86,6 +115,18 @@
         <string>Path Settings</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_2">
+        <property name="leftMargin">
+         <number>3</number>
+        </property>
+        <property name="topMargin">
+         <number>3</number>
+        </property>
+        <property name="rightMargin">
+         <number>3</number>
+        </property>
+        <property name="bottomMargin">
+         <number>3</number>
+        </property>
         <item row="0" column="0">
          <layout class="QFormLayout" name="formLayout">
           <property name="verticalSpacing">
@@ -190,8 +231,23 @@
            <string>About</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_4">
+           <property name="leftMargin">
+            <number>3</number>
+           </property>
+           <property name="topMargin">
+            <number>3</number>
+           </property>
+           <property name="rightMargin">
+            <number>3</number>
+           </property>
+           <property name="bottomMargin">
+            <number>3</number>
+           </property>
            <item row="0" column="0">
             <widget class="QTextBrowser" name="textBrowser">
+             <property name="contextMenuPolicy">
+              <enum>Qt::NoContextMenu</enum>
+             </property>
              <property name="verticalScrollBarPolicy">
               <enum>Qt::ScrollBarAlwaysOff</enum>
              </property>
@@ -213,9 +269,12 @@ Author: Rainyl
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MiSans Demibold'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Microsoft YaHei UI'; font-size:16pt;&quot;&gt;CeleryMath&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Microsoft YaHei UI'; font-size:10pt;&quot;&gt;A Latex Equation OCR tool.&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Microsoft YaHei UI'; font-size:12pt;&quot;&gt;Author: Rainyl&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Microsoft YaHei UI'; font-size:14pt;&quot;&gt;CeleryMath&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Microsoft YaHei UI'; font-size:10pt;&quot;&gt;A Latex Equation OCR tool.&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Microsoft YaHei UI'; font-size:12pt;&quot;&gt;Author: Rainyl&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="textInteractionFlags">
+              <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
              </property>
             </widget>
            </item>

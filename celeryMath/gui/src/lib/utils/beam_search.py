@@ -12,36 +12,36 @@ import numpy as np
 class BeamSearchNode(object):
     def __init__(self, bos=1, eos=2, max_len=512):
         # input to fn, (B, T)
-        self._x: NDArray[np.int64] = None
-        # output of fn, (B, 1)
-        self._ids: NDArray[np.int64] = None
+        self._x: List[NDArray[np.int64]] = []
         # probs of output, (B, 1)
-        self._logp: NDArray[np.float64] = None
+        self._logp: NDArray[np.float64] = 0
         self.bos = bos
         self.eos = eos
         self.max_len = max_len
         self._length = 0
+        self._bw_len = 0
         self.p_arg1 = np.log(self.max_len)
 
     @property
+    def bw_len(self):
+        return self._bw_len
+
+    @bw_len.setter
+    def bw_len(self, l: int):
+        self._bw_len = l
+
+    @property
     def x(self):
-        return self._x
+        return np.concatenate(self._x, axis=1)
 
     @x.setter
     def x(self, _x):
         self._x = _x
-        self._length = self._x.shape[1] + 1
+        self._length = len(_x)
 
     @property
-    def ids(self):
-        return self._ids
-
-    @ids.setter
-    def ids(self, _ids):
-        idx = self._x[:, -1] == self.eos
-        if idx.any():
-            _ids[idx] = self.eos
-        self._ids = _ids
+    def length(self):
+        return self._length
 
     @property
     def log_prob(self):
@@ -52,50 +52,62 @@ class BeamSearchNode(object):
         self._logp = _logp
 
     def is_done(self):
-        d = (self._x[:, -1] == self.eos).all() or self._length > self.max_len
+        d = (self._x[-1] == self.eos).all() or self._length > self.max_len
         return d
 
     def penalize(self, x: int):
         # ln(3) ~= 1.09
-        if x < 3:
-            return -1e6
-        y = (np.log(x) - 1.09) / (self.p_arg1 - 1.09)
-        return np.log(y)
+        # if x < 3:
+        #     return -1e6
+        # y = (np.log(x) - 1.09) / (self.p_arg1 - 1.09)
+        # if self._length < self._bw_len:
+        #     return -10
+        return 0
 
     @property
     def score(self):
         # TODO: add more score methods
-        # (mean + median) * penalize
-        # penalize: [0, 1]
         # penal = self.penalize(self._length)
         # mean < 0, median < 0
-        score = (np.mean(self.log_prob) + np.median(self.log_prob)) / 2
+        # score = (np.mean(self.log_prob) + np.median(self.log_prob)) / 2
+        score = np.mean(self.log_prob)
         return score
 
     @property
     def pred_ids(self):
-        return self._x
+        return np.concatenate(self._x, axis=1)
 
 
 class NodeManagerBase(object):
-    def __init__(self, max_node: int) -> None:
+    def __init__(self, max_node: int, batch_node: int = 1) -> None:
+        assert batch_node <= max_node, f"one batch must less than max node"
         self.max_node = max_node
+        self.batch_node = batch_node
         self.node_list: List[BeamSearchNode] = []
+        self.rng = np.random.default_rng()
 
     def __len__(self):
         return len(self.node_list)
 
     def push(self, node: BeamSearchNode):
-        if len(self.node_list) + 1 >= self.max_node:
+        if len(self.node_list) + 1 > self.max_node:
             idx = self.get_worst_node_idx()
             worst_node = self.node_list[idx]
             if node.score < worst_node.score:
                 return
-            self.del_worst_node()
+            del self.node_list[idx]
         self.node_list.append(node)
 
+    def push_n(self, nodes: List[BeamSearchNode]):
+        new_nodes = sorted(
+            [*self.node_list, *nodes],
+            key=lambda node: node.score,
+            reverse=True,
+        )
+        self.node_list = new_nodes[: self.max_node]
+
     def is_empty(self):
-        return len(self.node_list) == 0
+        return len(self) == 0
 
     def get_worst_node_idx(self):
         score = 1e6
@@ -114,22 +126,17 @@ class NodeManagerBase(object):
 
 
 class ActiveNodeManager(NodeManagerBase):
-    def get_one(self):
-        if len(self.node_list) == 0:
+    def get(self):
+        l = len(self)
+        if l == 0:
             return None
-        idx = np.random.randint(0, len(self.node_list))
-        n = self.node_list[idx]
-        del self.node_list[idx]
-        return n
-
-    def push(self, node: BeamSearchNode):
-        if len(self.node_list) + 1 >= self.max_node:
-            idx = self.get_worst_node_idx()
-            worst_node = self.node_list[idx]
-            if node.score < worst_node.score:
-                return
-            self.del_worst_node()
-        self.node_list.append(node)
+        if self.batch_node <= l:
+            idxs = self.rng.choice(np.arange(l), size=self.batch_node, replace=False)
+        else:
+            idxs = np.arange(l)
+        nodes = [self.node_list[i] for i in idxs]
+        self.node_list = np.delete(self.node_list, idxs).tolist()
+        return nodes
 
     def delete(self, node: BeamSearchNode):
         for i, n in enumerate(self.node_list):
@@ -139,23 +146,12 @@ class ActiveNodeManager(NodeManagerBase):
 
 
 class DoneNodeManager(NodeManagerBase):
-    def push(self, node: BeamSearchNode):
-        if len(self.node_list) + 1 > self.max_node:
-            idx = self.get_worst_node_idx()
-            worst_node = self.node_list[idx]
-            if node.score < worst_node.score:
-                return
-            self.del_worst_node()
-        self.node_list.append(node)
-
-    def sort(self):
-        scores = [n.score for n in self.node_list]
-        idx = np.argsort(scores)[::-1]
-        self.node_list = [self.node_list[i] for i in idx]
+    def sort_(self):
+        self.node_list = sorted(self.node_list, key=lambda n: n.score, reverse=True)
 
     @property
     def all_nodes(self):
-        self.sort()
+        self.sort_()
         return self.node_list
 
 
@@ -178,8 +174,11 @@ class CeleryBeamSearch(object):
         self._bos = bos
         self._eos = eos
         self._max_iter = max_iter
-        self._max_done_counter = beam_width * 2
-        self.active_nodes = ActiveNodeManager(max_node=self._beam_width*2)
+        self._max_done_counter = beam_width
+        self.active_nodes = ActiveNodeManager(
+            max_node=beam_width**2,
+            batch_node=beam_width**2,
+        )
         self.done_nodes = DoneNodeManager(max_node=beam_width)
 
     def search(self, start_tokens: np.ndarray):
@@ -240,40 +239,67 @@ class CeleryBeamSearch(object):
     def nuc_sample(self, probs: NDArray[np.float32], p: float = 0.9):
         ...
 
-    def step_one(self, x_in: BeamSearchNode) -> List[BeamSearchNode]:
-        # (B, vocab_size)
-        logits = self._decoder(x_in.x, self._memory)
-        # (B, vocab_size)
-        log_prob = np.log(self.softmax(logits, axis=1))
-        # (B, beam_width)
-        top_ids = np.argsort(logits, axis=1)[:, ::-1]
-        # length: beam_width
+    def stack_bw(self, nodes: List[BeamSearchNode]) -> List[np.ndarray]:
+        lens = np.unique([n.length for n in nodes])
+        node_p = [[n for n in nodes if n.length == l] for l in lens]
+        x_in = [np.concatenate([n.x for n in nn], axis=0) for nn in node_p]
+        return x_in
+
+    def step_one(self, nodes: List[BeamSearchNode]) -> List[BeamSearchNode]:
+        # nodes: [BW_B]
+        bwb = len(nodes)
+        node_p = self.stack_bw(nodes)
+        # [BW_B, (B, vocab_size)]
+        log_prob_flat = []
+        top_ids_flat = []
+        for x_ins in node_p:
+            nn: int = x_ins.shape[0]
+            _memory = [np.concatenate([self._memory[0]] * nn, axis=0)]
+            logits_stack = self._decoder(x_ins, _memory)
+            prob = np.log(self.softmax(logits_stack, axis=1))
+            ids = np.argsort(logits_stack, axis=1)[:, ::-1]
+            n: int = logits_stack.shape[0]
+            b: int = n // nn
+            prob_tmp = [prob[i : i + b] for i in range(0, n, b)]
+            ids_tmp = [ids[i : i + b] for i in range(0, n, b)]
+            log_prob_flat.extend(prob_tmp)
+            top_ids_flat.extend(ids_tmp)
+        # logits_flat = [self._decoder(node.x, self._memory) for node in nodes]
+        # BW_B*BW
         out = []
-        for i in range(self._beam_width):
-            top_id = top_ids[:, i]  # (B, 1)
-            node = BeamSearchNode(bos=self._bos, eos=self._eos, max_len=self._max_iter)
-            node.x = np.vstack((x_in.x.T, top_id)).T
-            node.ids = top_id
-            # (B, 1)
-            node.log_prob = x_in.log_prob + log_prob[:, top_id]
-            out.append(node)
+        for i in range(bwb):
+            # (B, vocab_size)
+            log_prob = log_prob_flat[i]
+            # (B, vocab_size)
+            top_ids = top_ids_flat[i]
+            # length: beam_width
+            for j in range(self._beam_width):
+                top_id = top_ids[:, j]  # (B, 1)
+                node = BeamSearchNode(
+                    bos=self._bos,
+                    eos=self._eos,
+                    max_len=self._max_iter,
+                )
+                node.x = [*nodes[i]._x, top_id[..., np.newaxis]]
+                # (B, 1)
+                node.log_prob = nodes[i].log_prob + log_prob[:, top_id]
+                out.append(node)
         return out
 
     def step(self):
-        # TODO: parallel
-        in_node = self.active_nodes.get_one()
-        out_nodes = self.step_one(in_node)
-        for node in out_nodes:
-            if node.is_done():
-                self.done_nodes.push(node)
-                self.crt_done_counter += 1
-            else:
-                self.active_nodes.push(node)
+        in_nodes = self.active_nodes.get()
+        out_nodes = self.step_one(in_nodes)
+        done_nodes = [n for n in out_nodes if n.is_done()]
+        act_nodes = [n for n in out_nodes if not n.is_done()]
+        self.crt_done_counter += len(done_nodes)
+        if len(done_nodes) > 0:
+            self.done_nodes.push_n(done_nodes)
+        self.active_nodes.push_n(act_nodes)
 
     def init_state(self, start_tokens: np.ndarray):
         # start_tokens: (B, 1)
         node = BeamSearchNode(self._bos, self._eos, self._max_iter)
-        node.x = start_tokens
+        node.x = [start_tokens]
         node.log_prob = np.zeros((start_tokens.shape[0], 1))
         self.active_nodes.push(node)
 

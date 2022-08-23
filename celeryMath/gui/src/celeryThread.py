@@ -12,24 +12,14 @@ class CeleryInferThread(QThread):
         self,
         img: Image.Image,
         model: LatexModelONNX,
-        temp: float = 0.2,
-        method: str = "greedy",
-        sampling: str = "nucleus",
     ):
         super().__init__()
         self.img: Image.Image = img
         self.model: LatexModelONNX = model
-        self.temp = temp
-        self.method = method
-        self.sampling = sampling
 
     def run(self):
         try:
-            prediction = self.model(
-                self.img,
-                temperature=self.temp,
-                method=self.method,
-            )
+            prediction = self.model(self.img)
             self.finished.emit({"status": True, "data": prediction})
         except Exception as e:
             import traceback

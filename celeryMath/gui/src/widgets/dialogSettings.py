@@ -20,12 +20,7 @@ class DialogSettings(QDialog, Ui_diaglog_settings):
         self.hotkey_sc = CeleryGlobalHotkey(self)
 
         self.conf = conf
-        self.update_settings(
-            t=self.conf.tokenizer_path,
-            e=self.conf.encoder_path,
-            d=self.conf.decoder_path,
-            sh=self.conf.snip_hotkey,
-        )
+        self.update_settings()
 
         self.btn_tokenizer_path.clicked.connect(self.btn_tokenizer_path_clicked)
         self.btn_encoder_path.clicked.connect(self.btn_encoer_path_clicked)
@@ -34,18 +29,27 @@ class DialogSettings(QDialog, Ui_diaglog_settings):
         self.buttonBox.accepted.connect(self.save_settings)
         self.buttonBox.clicked.connect(self.save_settings)
         self.kseq_screenshot.editingFinished.connect(self.update_hotkey)
+        self.cbox_device.currentIndexChanged.connect(self.update_device)
 
-    def update_settings(self, t="", e="", d="", sh=""):
-        self.conf.tokenizer_path = t or self.conf.tokenizer_path
-        self.conf.encoder_path = e or self.conf.encoder_path
-        self.conf.decoder_path = d or self.conf.decoder_path
+    def update_settings(self):
         self.ledit_tokenizer_path.setText(self.conf.tokenizer_path)
         self.ledit_encoder_path.setText(self.conf.encoder_path)
         self.ledit_decoder_path.setText(self.conf.decoder_path)
+        device = 1 if self.conf.device == "cuda" else 0
+        self.cbox_device.setCurrentIndex(device)
 
+        sh = self.conf.snip_hotkey
         self.snip_hotkey = QKeySequence(sh) if sh else self._default_sc_hotkey_
         self.kseq_screenshot.setKeySequence(self.snip_hotkey)
         self.update_hotkey()
+
+    def update_device(self, idx: int):
+        if idx == 0:
+            self.conf.device = "cpu"
+        elif idx == 1:
+            self.conf.device = "cuda"
+        else:
+            return
 
     def btn_hotk_reset_clicked(self):
         self.kseq_screenshot.setKeySequence(self._default_sc_hotkey_)

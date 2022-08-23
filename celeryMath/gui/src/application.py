@@ -48,6 +48,8 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         self.webTexView.load(QUrl("qrc:/html/index.html"))
 
         self.update_model()
+        self.spbox_beam_width.setValue(self.conf.beam_width)
+        self.spinbox_tempe.setValue(self.conf.temperature)
         self.btn_snip.setText(f"Screenshot({self.conf.snip_hotkey})")
         if self.conf.search_method == "beam":
             self.rdbtn_beam.setChecked(True)
@@ -55,6 +57,7 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
     def init_signals(self):
         self.cmbox_sampling.currentIndexChanged.connect(self.on_sampling_changed)
         self.spinbox_tempe.valueChanged.connect(self.tempe_changed)
+        self.spbox_beam_width.valueChanged.connect(self.on_spbox_beam_width_changed)
         self.btn_settings.clicked.connect(self.btn_settings_clicked)
         self.btn_snip.clicked.connect(self.btn_screenshot_clicked)
         self.settings_dialog.hotkey_sc.pressed.connect(self.btn_screenshot_clicked)
@@ -87,6 +90,10 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
             self.conf.save()
         else:
             return
+
+    def on_spbox_beam_width_changed(self, bw: int):
+        self.conf.beam_width = bw
+        self.conf.save()
 
     def on_sampling_changed(self, idx: int):
         if idx == 0:
@@ -167,10 +174,19 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         else:
             self.show_model_error_box()
 
+    def update_model_config(self):
+        self.model.temperature = self.conf.temperature
+        self.model.p_n = 0.95
+        self.model.beam_width = self.conf.beam_width
+        self.model.sampling = self.conf.sampling
+        self.model.search_method = self.conf.search_method
+
     def predict(self, img: Image.Image):
-        res = self.model(
-            img, temperature=self.conf.temperature, method=self.conf.search_method
-        )
+        self.update_model_config()
+        try:
+            res = self.model(img)
+        except Exception as e:
+            res = None
         return res
 
     def render_tex(self, s: str):
@@ -184,20 +200,18 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
             return
         self.showNormal()
         self.logger.debug(f"screen shot finished")
-        self.infer_thread = CeleryInferThread(
-            img,
-            self.model,
-            temp=self.conf.temperature,
-            method=self.conf.search_method,
-            sampling=self.conf.sampling,
-        )
+        self.update_model_config()
+        self.infer_thread = CeleryInferThread(img, self.model)
         self.logger.info(f"inference starting with:\n{str(self.conf)}")
         self.infer_thread.finished.connect(self.on_infer_finished)
         self.infer_thread.finished.connect(self.infer_thread.deleteLater)
         self.infer_thread.start()
         self.render_tex("\mathrm{Loading...}")
+
+        # DEBUG
         # res = self.predict(img)
         # self.on_infer_finished(res)
+
         self.img = img
         self.set_original_img(img)
 

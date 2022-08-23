@@ -49,12 +49,12 @@ def main(version: str = "0.1", enable_debug=False, jobs=CPUS):
         "./celeryMath.py "
     )
 
-    os.system(cmd)
+    # os.system(cmd)
 
     if not os.path.exists(f"{build_dir}/celeryMath.dist/conf"):
         os.mkdir(f"{build_dir}/celeryMath.dist/conf")
     shutil.copy(
-        "depends/onnxruntime_providers_shared.dll",
+        "depends/onnxruntime/onnxruntime_providers_shared.dll",
         f"{build_dir}/celeryMath.dist/onnxruntime/capi/",
     )
 

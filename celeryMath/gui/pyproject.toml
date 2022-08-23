@@ -7,19 +7,20 @@ license = "GPL-3.0"
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.11"
-numpy = "^1.23.2"
-Pillow = "^9.2.0"
+numpy = ">=1.23.2"
+Pillow = ">=9.2.0"
 onnxruntime = "^1.12.1"
-tokenizers = "^0.12.1"
-PySide6 = "^6.3.1"
+tokenizers = ">=0.12.1"
+PySide6 = ">=6.3.1"
 pynput = "^1.7.6"
 coloredlogs = "^15.0.1"
 pyhotkey = {git = "https://github.com/rainyl/PyHotKey.git", rev = "3175397b290e140d671e13493493bde499e2ada0"}
+onnxruntime-gpu = "^1.12.1"
 
 [tool.poetry.dev-dependencies]
-Nuitka = "^1.0.3"
-orderedset = "^2.0.3"
-black = "^22.6.0"
+Nuitka = ">=1.0.3"
+orderedset = ">=2.0.3"
+black = ">=22.6.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

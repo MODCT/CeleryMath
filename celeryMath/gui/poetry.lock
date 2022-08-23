@@ -102,7 +102,7 @@ python-versions = "*"
 
 [[package]]
 name = "nuitka"
-version = "1.0.3"
+version = "1.0.5"
 description = "Python compiler with full language support and CPython compatibility"
 category = "dev"
 optional = false
@@ -118,6 +118,22 @@ python-versions = ">=3.8"
 
 [[package]]
 name = "onnxruntime"
+version = "1.12.1"
+description = "ONNX Runtime is a runtime accelerator for Machine Learning models"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+coloredlogs = "*"
+flatbuffers = "*"
+numpy = ">=1.21.0"
+packaging = "*"
+protobuf = "*"
+sympy = "*"
+
+[[package]]
+name = "onnxruntime-gpu"
 version = "1.12.1"
 description = "ONNX Runtime is a runtime accelerator for Machine Learning models"
 category = "main"
@@ -392,7 +408,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.9,<3.11"
-content-hash = "a0e3f0b18e61ef285bd97b39acc2ad199cbb2ea8b3814f686495c2966358a622"
+content-hash = "8b2144c4c960f8480a0b182f2f3ab70d8e4473c2ad0554bad52e620328ffa853"
 
 [metadata.files]
 black = []
@@ -410,9 +426,21 @@ mypy-extensions = [
     {file = "mypy_extensions-0.4.3-py2.py3-none-any.whl", hash = "sha256:090fedd75945a69ae91ce1303b5824f428daf5a028d2f6ab8a299250a846f15d"},
     {file = "mypy_extensions-0.4.3.tar.gz", hash = "sha256:2d82818f5bb3e369420cb3c4060a7970edba416647068eb4c5343488a6c604a8"},
 ]
-nuitka = []
+nuitka = [
+    {file = "Nuitka-1.0.5.tar.gz", hash = "sha256:6505607b1a841ab385a2b8d3e680eff53f98e2720d5ae45d0d600aaae2c72d14"},
+]
 numpy = []
 onnxruntime = []
+onnxruntime-gpu = [
+    {file = "onnxruntime_gpu-1.12.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:42b0393c5122ed90fa2eb76192a486261d86e9526ccb78b2a98923c22791d2d1"},
+    {file = "onnxruntime_gpu-1.12.1-cp310-cp310-win_amd64.whl", hash = "sha256:ecfe97335027e569d4f46725ba89316041e562b8c499690e25e11cfee4601cd1"},
+    {file = "onnxruntime_gpu-1.12.1-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e2be6f7f5a1ce0bc8471ce42e10eab92cfb19d0748b857edcb5320b5e98311b7"},
+    {file = "onnxruntime_gpu-1.12.1-cp37-cp37m-win_amd64.whl", hash = "sha256:d73204323aefebe4eecab9fcf76e22b1a00394e3d838c2962a28a27301186b73"},
+    {file = "onnxruntime_gpu-1.12.1-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:b37872527d03d3df10756408ca44014bd6ac354a044ab1c4286cd42dc138e518"},
+    {file = "onnxruntime_gpu-1.12.1-cp38-cp38-win_amd64.whl", hash = "sha256:296bd9733986cb7517d15bef5535c555d3f863963a71e6575e92d2a854aee61d"},
+    {file = "onnxruntime_gpu-1.12.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:8e46d0724ce54c5908c5760037b78de741fbd48962b370c29ebc20e608b30eda"},
+    {file = "onnxruntime_gpu-1.12.1-cp39-cp39-win_amd64.whl", hash = "sha256:fd919373be35b9ba54210688265df38ad5e19a530449385c40dab51da407345d"},
+]
 orderedset = []
 packaging = [
     {file = "packaging-21.3-py3-none-any.whl", hash = "sha256:ef103e05f519cdc783ae24ea4e2e0f508a9c99b2d4969652eed6a2e1ea5bd522"},

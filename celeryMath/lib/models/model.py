@@ -24,6 +24,7 @@ class LatexModelONNX(object):
         self,
         encoder: str,
         decoder: str,
+        device: str="cpu",
         min_img_size=(32, 32),
         max_img_size=(192, 896),
         max_seq_len: int = 512,
@@ -33,12 +34,29 @@ class LatexModelONNX(object):
         tokenizer_path: str = None,
         filter_thres: float = 0.9,
         temperature: float = 0.5,
-        search_method="greedy",
-        sampling="random",
+        search_method: str = "greedy",
+        sampling: str = "random",
+        beam_width: int = 5,
     ):
         super(LatexModelONNX, self).__init__()
-        self.encoder = onnxruntime.InferenceSession(encoder)
-        self.decoder = onnxruntime.InferenceSession(decoder)
+        _providers = [
+            (
+                "CUDAExecutionProvider",
+                {
+                    "device_id": 0,
+                    "arena_extend_strategy": "kNextPowerOfTwo",
+                    "gpu_mem_limit": 2 * 1024 * 1024 * 1024 * 1024,
+                    "cudnn_conv_algo_search": "EXHAUSTIVE",
+                    "do_copy_in_default_stream": True,
+                },
+            ),
+            "CPUExecutionProvider",
+        ]
+        providers = [_providers[1],]
+        if device == "cuda":
+            providers = _providers
+        self.encoder = onnxruntime.InferenceSession(encoder, providers=providers)
+        self.decoder = onnxruntime.InferenceSession(decoder, providers=providers)
 
         self.max_seq_len = max_seq_len
         self.bos_token = bos_token
@@ -48,7 +66,9 @@ class LatexModelONNX(object):
         self.temperature = temperature
         self.search_method = search_method
         self.sampling = sampling
-        self.seed = 241
+        self.beam_width = beam_width
+        self.seed: int = 241
+        self.p_n: float = 0.95
 
         self.transforms = get_transforms(min_img_size, max_img_size)
         assert tokenizer_path is not None, "Tokenizer path must be provided"
@@ -143,13 +163,11 @@ class LatexModelONNX(object):
         self,
         start_tokens: np.ndarray,
         memory: List[np.ndarray],
-        temperature: float = 0.2,
     ):
-        beam_width = 10
         beam_searcher = CeleryBeamSearch(
             memory=memory,
             decode_fn=self.decoder_run,
-            beam_width=beam_width,
+            beam_width=self.beam_width,
             bos=self.bos_token,
             eos=self.eos_token,
             max_iter=self.max_seq_len,
@@ -169,10 +187,10 @@ class LatexModelONNX(object):
         ]  # B * vocab_size
         return logits
 
-    def random_sampling(self, logits: np.ndarray, temperature: float = 0.2):
+    def random_sampling(self, logits: np.ndarray):
         rng = np.random.default_rng(self.seed)
         # (B, vocab_size)
-        probs: np.ndarray = self.softmax(logits / temperature, axis=1)
+        probs: np.ndarray = self.softmax(logits / self.temperature, axis=1)
         # (B,)
         sample = np.asarray([rng.choice(np.arange(b.size), size=1, p=b) for b in probs])
         # (B,)
@@ -206,8 +224,6 @@ class LatexModelONNX(object):
         self,
         start_tokens: np.ndarray,
         memory: List[np.ndarray],
-        temperature: float = 0.2,
-        p_n: float = 0.9,
     ):
         out = start_tokens.astype(np.int64)  # B * N
         # (B, 1)
@@ -219,9 +235,9 @@ class LatexModelONNX(object):
 
             if self.sampling == "random":
                 # random sample
-                sample, prob = self.random_sampling(logits, temperature)
+                sample, prob = self.random_sampling(logits)
             elif self.sampling == "nucleus":
-                sample, prob = self.nucleus_sampling(logits, p=p_n)
+                sample, prob = self.nucleus_sampling(logits, p=self.p_n)
             else:
                 raise NotImplementedError(
                     f"sampling method {self.sampling} not supported"
@@ -242,24 +258,21 @@ class LatexModelONNX(object):
         self,
         start_tokens: np.ndarray,
         memory: List[np.ndarray],
-        temperature: float = 0.2,
     ):
         if self.search_method == "greedy":
             return self.greedy_search(
                 start_tokens=start_tokens,
                 memory=memory,
-                temperature=temperature,
             )
         elif self.search_method == "beam":
             return self.beam_search(
                 start_tokens=start_tokens,
                 memory=memory,
-                temperature=temperature,
             )
         else:
             raise ValueError(f"search method {self.search_method} not supported")
 
-    def forward(self, src: np.ndarray, temperature: float = 0.2) -> List[str]:
+    def forward(self, src: np.ndarray) -> List[str]:
         enc_inputs = {
             self.encoder.get_inputs()[0].name: src,
         }
@@ -270,7 +283,6 @@ class LatexModelONNX(object):
         output = self.generate(
             start_tokens=start_tokens,
             memory=memory,
-            temperature=temperature,
         )
         return output
 
@@ -281,24 +293,11 @@ class LatexModelONNX(object):
     def __call__(
         self,
         src: List[Union[Image.Image, np.ndarray]],
-        temperature: float = 0.2,
-        method: str = None,
-        sampling: str = None,
         out_list=False,
     ) -> List[str]:
-        if method is not None:
-            assert (
-                method in self.__supported_methods__
-            ), f"method {method} not supported"
-            self.search_method = method
-        if sampling is not None:
-            assert (
-                sampling in self.__supported_sampling__
-            ), f"sampling method {sampling} not supported"
-            self.sampling = sampling
         src: np.ndarray = self.preprocess(src)  # B C H W
         # (List[(B, N)])
-        preds = self.forward(src, temperature)
+        preds = self.forward(src)
         if preds is None:
             return None
         b, bw = len(preds), len(preds[0])
@@ -315,6 +314,7 @@ def get_model(conf: Config) -> LatexModelONNX:
     model = LatexModelONNX(
         encoder=conf.encoder_path,
         decoder=conf.decoder_path,
+        device=conf.device,
         max_seq_len=conf.max_seq,
         min_img_size=conf.min_img_size,
         max_img_size=conf.max_img_size,
@@ -324,6 +324,7 @@ def get_model(conf: Config) -> LatexModelONNX:
         temperature=conf.temperature,
         tokenizer_path=conf.tokenizer_path,
         search_method=conf.search_method,
+        sampling=conf.sampling,
     )
     return model
 

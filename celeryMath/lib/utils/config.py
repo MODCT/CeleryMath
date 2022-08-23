@@ -12,6 +12,7 @@ class Config(object):
     bos_token = 1
     eos_token = 2
     temperature = 0.2
+    beam_width = 3
     max_seq = 512
     min_img_size = [32, 32]
     max_img_size = [192, 896]
@@ -35,6 +36,7 @@ class Config(object):
             f"\ttemperature: {self.temperature},\n"
             f"\tsearch method: {self.search_method},\n"
             f"\tsampling: {self.sampling},\n"
+            f"\tbeam_width: {self.beam_width},\n"
             f")"
         )
         return  s
@@ -56,6 +58,7 @@ class Config(object):
             "search_method": self.search_method,
             "sampling": self.sampling,
             "temperature": self.temperature,
+            "beam_width": self.beam_width,
         }
         return js
 
@@ -68,6 +71,7 @@ class Config(object):
             "search_method": self.search_method,
             "sampling": self.sampling,
             "temperature": self.temperature,
+            "beam_width": self.beam_width,
             "device": self.device,
             "pad_token": self.pad_token,
             "bos_token": self.bos_token,

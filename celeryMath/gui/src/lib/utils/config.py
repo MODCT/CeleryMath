@@ -12,6 +12,7 @@ class Config(object):
     bos_token = 1
     eos_token = 2
     temperature = 0.2
+    beam_width = 5
     max_seq = 512
     min_img_size = [32, 32]
     max_img_size = [192, 896]
@@ -31,10 +32,12 @@ class Config(object):
             f"Config(\n"
             f"\tencoder: {self.encoder_path},\n"
             f"\tdecoder: {self.decoder_path},\n"
+            f"\tdevice: {self.device},\n"
             f"\ttokenizer: {self.tokenizer_path},\n"
             f"\ttemperature: {self.temperature},\n"
             f"\tsearch method: {self.search_method},\n"
             f"\tsampling: {self.sampling},\n"
+            f"\tbeam_width: {self.beam_width},\n"
             f")"
         )
         return  s
@@ -52,10 +55,12 @@ class Config(object):
             "tokenizer_path": self.tokenizer_path,
             "encoder_path": self.encoder_path,
             "decoder_path": self.decoder_path,
+            "device": self.device,
             "snip_hotkey": self.snip_hotkey,
             "search_method": self.search_method,
             "sampling": self.sampling,
             "temperature": self.temperature,
+            "beam_width": self.beam_width,
         }
         return js
 
@@ -68,6 +73,7 @@ class Config(object):
             "search_method": self.search_method,
             "sampling": self.sampling,
             "temperature": self.temperature,
+            "beam_width": self.beam_width,
             "device": self.device,
             "pad_token": self.pad_token,
             "bos_token": self.bos_token,

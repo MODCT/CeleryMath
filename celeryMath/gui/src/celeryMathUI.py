@@ -19,8 +19,8 @@ from PySide6.QtWebEngineWidgets import QWebEngineView
 from PySide6.QtWidgets import (QApplication, QComboBox, QDoubleSpinBox, QFrame,
     QGridLayout, QGroupBox, QHBoxLayout, QMainWindow,
     QPushButton, QRadioButton, QScrollArea, QSizePolicy,
-    QSpacerItem, QSplitter, QStatusBar, QVBoxLayout,
-    QWidget)
+    QSpacerItem, QSpinBox, QSplitter, QStatusBar,
+    QVBoxLayout, QWidget)
 
 from src.widgets.celeryImageView import CeleryImageView
 import celeryMath_rc
@@ -43,6 +43,7 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "QPushButton,\n"
+"QSpinBox,\n"
 "QDoubleSpinBox,\n"
 "QLineEdit,\n"
 "QScrollArea\n"
@@ -96,10 +97,10 @@ class Ui_MainWindow(object):
 "   image: url(:/icon/icons/radio_button_unchecked_FILL0_wght400_GRAD0_opsz48.svg);\n"
 "}\n"
 "\n"
-"QRadioButton::indicator:unchecked:hover\n"
+"QRadioButton::indicator:unchecked:hove"
+                        "r\n"
 "{\n"
-"im"
-                        "age: url(:/icon/icons/radio_button_unchecked_hover_FILL0_wght400_GRAD0_opsz48.svg);\n"
+"image: url(:/icon/icons/radio_button_unchecked_hover_FILL0_wght400_GRAD0_opsz48.svg);\n"
 "}\n"
 "\n"
 "QRadioButton::indicator:unchecked:pressed\n"
@@ -321,6 +322,49 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout.addWidget(self.btn_settings)
 
+        self.spbox_beam_width = QSpinBox(self.centralwidget)
+        self.spbox_beam_width.setObjectName(u"spbox_beam_width")
+        self.spbox_beam_width.setFont(font2)
+        self.spbox_beam_width.setStyleSheet(u"QSpinBox\n"
+"{\n"
+"	border: none;\n"
+"	border-top-right-radius: 0px;\n"
+"	border-bottom-right-radius: 0px;\n"
+"	width: 20px;\n"
+"}\n"
+"\n"
+"QSpinBox::up-button\n"
+"{\n"
+"	image: url(:/icon/icons/arrow_drop_up_FILL0_wght400_GRAD0_opsz48.svg);\n"
+"	background-color: #d3e0f3;\n"
+"	border-radius: 0 6px 0px 0;\n"
+"	margin-bottom: 1px;\n"
+"}\n"
+"\n"
+"QSpinBox::up-button::pressed\n"
+"{\n"
+"	\n"
+"	background-color: #a2aec0;\n"
+"}\n"
+"\n"
+"QSpinBox::down-button\n"
+"{\n"
+"	image: url(:/icon/icons/arrow_drop_down_FILL0_wght400_GRAD0_opsz48.svg);\n"
+"	background-color: #d3e0f3;\n"
+"	border-radius: 0 0px 6px 0;\n"
+"	margin-top: 1px;\n"
+"}\n"
+"\n"
+"QSpinBox::down-button::pressed\n"
+"{\n"
+"	background-color: #a2aec0;\n"
+"}")
+        self.spbox_beam_width.setMinimum(1)
+        self.spbox_beam_width.setMaximum(50)
+        self.spbox_beam_width.setValue(5)
+
+        self.horizontalLayout.addWidget(self.spbox_beam_width)
+
         self.rdbtn_beam = QRadioButton(self.centralwidget)
         self.rdbtn_beam.setObjectName(u"rdbtn_beam")
         self.rdbtn_beam.setFont(font2)
@@ -391,6 +435,14 @@ class Ui_MainWindow(object):
         self.btn_settings.setWhatsThis(QCoreApplication.translate("MainWindow", u"Settings", None))
 #endif // QT_CONFIG(whatsthis)
         self.btn_settings.setText("")
+#if QT_CONFIG(statustip)
+        self.spbox_beam_width.setStatusTip(QCoreApplication.translate("MainWindow", u"Beam Width", None))
+#endif // QT_CONFIG(statustip)
+#if QT_CONFIG(whatsthis)
+        self.spbox_beam_width.setWhatsThis(QCoreApplication.translate("MainWindow", u"Beam Width", None))
+#endif // QT_CONFIG(whatsthis)
+        self.spbox_beam_width.setSuffix("")
+        self.spbox_beam_width.setPrefix(QCoreApplication.translate("MainWindow", u"BW: ", None))
 #if QT_CONFIG(statustip)
         self.rdbtn_beam.setStatusTip(QCoreApplication.translate("MainWindow", u"Beam Search", None))
 #endif // QT_CONFIG(statustip)
