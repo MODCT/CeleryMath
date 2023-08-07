@@ -1,27 +1,34 @@
-'''
+"""
 Description: 
 Author: Rainyl
 Date: 2022-08-15 21:26:29
-LastEditTime: 2022-08-17 19:04:11
-'''
+LastEditTime: 2023-08-07 11:16:02
+"""
 from typing import Callable, List
 from PySide6.QtGui import QClipboard
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QScrollArea
 
 from .celeryTexLineUI import Ui_CeleryTexLine
 
+
 class CeleryTexLineWidget(QWidget, Ui_CeleryTexLine):
-    def __init__(self, parent=None, text: str=None, prob=None, clipboard: QClipboard=None) -> None:
-        super(CeleryTexLineWidget, self).__init__(parent=parent)
+    def __init__(
+        self,
+        parent=None,
+        text: str = None,
+        prob: float = None,
+        clipboard: QClipboard = None,
+    ):
+        super(CeleryTexLineWidget, self).__init__(parent)
         self.setupUi(self)
 
         self.clipboard = QClipboard(self) if clipboard is None else clipboard
 
-        if not text is None:
+        if text is not None:
             self.ledit_tex.setText(text)
         if prob is not None:
             self.btn_info.setText(f"{prob*100:.0f}%")
-        
+
         self.setup_signals()
 
     def setup_signals(self):
@@ -43,9 +50,9 @@ class CeleryTexDispWidget(QWidget):
         self.scroll_widget.setLayout(self.scroll_layout)
         self.scroll_area.setWidget(self.scroll_widget)
 
-    def add_lines(self, lines: List[str], slot: Callable=None):
+    def add_lines(self, lines: List[str], slot: Callable = None):
         for line in lines:
             tex_line = CeleryTexLineWidget(text=line)
-            if not slot is None:
+            if slot is not None:
                 tex_line.ledit_tex.textEdited.connect(slot)
             self.scroll_layout.addWidget(tex_line)

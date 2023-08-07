@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "celeryMathGUI"
-version = "0.1.2.0"
+version = "0.1.2.1"
 description = "A LaTex Equation OCR Tool Based on ConvNeXt and Transformer"
 authors = ["rainyl <rainyliusy3@gmail.com>"]
 license = "GPL-3.0"
@@ -19,8 +19,10 @@ onnxruntime-gpu = "^1.12.1"
 
 [tool.poetry.dev-dependencies]
 Nuitka = ">=1.0.3"
-orderedset = ">=2.0.3"
 black = ">=22.6.0"
+
+[tool.ruff]
+ignore = ["E501"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

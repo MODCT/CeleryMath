@@ -1,13 +1,11 @@
 from typing import Any, Dict, List, Tuple, Union
-from PySide6.QtCore import QUrl, Qt, Signal, Slot
+from PySide6.QtCore import QUrl, Qt, Slot
 from PySide6.QtWidgets import (
     QMainWindow,
     QMessageBox,
-    QGridLayout,
     QVBoxLayout,
     QWidget,
     QButtonGroup,
-    QAbstractButton,
 )
 from PySide6.QtGui import QPixmap, QClipboard, QKeyEvent, QCloseEvent
 

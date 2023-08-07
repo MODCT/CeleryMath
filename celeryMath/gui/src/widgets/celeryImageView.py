@@ -17,8 +17,8 @@ class CeleryImageView(QGraphicsView):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setRenderHints(QPainter.Antialiasing | QPainter.SmoothPixmapTransform)
-        self.setCacheMode(self.CacheBackground)
-        self.setViewportUpdateMode(self.SmartViewportUpdate)
+        self.setCacheMode(self.CacheModeFlag.CacheBackground)
+        self.setViewportUpdateMode(self.ViewportUpdateMode.SmartViewportUpdate)
         self.im_item = QGraphicsPixmapItem()
         self.im_item.setFlags(
             QGraphicsPixmapItem.ItemIsFocusable | QGraphicsPixmapItem.ItemIsMovable
@@ -79,7 +79,7 @@ class CeleryImageView(QGraphicsView):
         if event.button() == Qt.MouseButton.LeftButton:
             self.setCursor(Qt.ClosedHandCursor)
         elif event.button() == Qt.RightButton:
-            if not self.pixmap is None:
+            if self.pixmap is not None:
                 self.fitInView(
                     QRectF(self.im_item.pos(), QSizeF(self.pixmap.size())),
                     Qt.KeepAspectRatio,

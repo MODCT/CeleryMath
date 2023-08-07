@@ -15,3 +15,18 @@ depends/
 logo_old.ico
 *.onnx
 *.bak*.py
+
+# Cython
+*.pyx
+*.pxd
+*.pyd
+*.pyi
+*.c
+celeryMath/lib/utils/*.html
+celeryMath/setup.py
+celeryMath/*.build
+celeryMath/lib/build_module.py
+celeryMath/bench.py
+celeryMath/poetry.lock
+celeryMath/pyproject.toml
+celeryMath/gui/src/utils/emun.py

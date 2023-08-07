@@ -4,7 +4,8 @@ Author: Rainyl
 Date: 2022-06-07 23:36:33
 LastEditTime: 2022-06-14 12:58:07
 """
-import coloredlogs, logging
+import coloredlogs
+import logging
 
 
 class CeleryLogger(logging.Logger):

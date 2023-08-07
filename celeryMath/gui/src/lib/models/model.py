@@ -1,5 +1,5 @@
 import re
-from typing import List, Optional, Tuple, Union
+from typing import List, Union
 import numpy as np
 import onnxruntime
 from PIL import Image
