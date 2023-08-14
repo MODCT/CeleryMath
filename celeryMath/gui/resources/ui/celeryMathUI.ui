@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>519</width>
-    <height>364</height>
+    <width>660</width>
+    <height>493</height>
    </rect>
   </property>
   <property name="font">
@@ -110,8 +110,8 @@ QRadioButton::indicator:checked:pressed
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
+   <layout class="QGridLayout" name="gridLayout_3">
+    <item row="0" column="0">
      <widget class="QSplitter" name="splitter_tex_group">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -126,35 +126,11 @@ QRadioButton::indicator:checked:pressed
        <property name="title">
         <string/>
        </property>
-       <layout class="QGridLayout" name="gridLayout">
-        <property name="leftMargin">
-         <number>2</number>
-        </property>
-        <property name="topMargin">
-         <number>2</number>
-        </property>
-        <property name="rightMargin">
-         <number>2</number>
-        </property>
-        <property name="bottomMargin">
-         <number>2</number>
-        </property>
-        <property name="spacing">
-         <number>0</number>
-        </property>
-        <item row="0" column="0">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
          <widget class="QSplitter" name="splitter_tex_img">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
-          </property>
-          <property name="opaqueResize">
-           <bool>true</bool>
-          </property>
-          <property name="handleWidth">
-           <number>3</number>
-          </property>
-          <property name="childrenCollapsible">
-           <bool>true</bool>
           </property>
           <widget class="CeleryImageView" name="imview_original">
            <property name="font">
@@ -163,33 +139,7 @@ QRadioButton::indicator:checked:pressed
             </font>
            </property>
           </widget>
-          <widget class="QWebEngineView" name="webTexView">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>80</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>MiSans Demibold</family>
-            </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true"/>
-           </property>
-           <property name="url">
-            <url>
-             <string>about:blank</string>
-            </url>
-           </property>
-          </widget>
+          <widget class="QSvgWidget" name="texView" native="true"/>
          </widget>
         </item>
        </layout>
@@ -212,8 +162,8 @@ QRadioButton::indicator:checked:pressed
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>493</width>
-          <height>69</height>
+          <width>634</width>
+          <height>81</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_2">
@@ -237,7 +187,7 @@ QRadioButton::indicator:checked:pressed
       </widget>
      </widget>
     </item>
-    <item>
+    <item row="1" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <property name="spacing">
        <number>6</number>
@@ -543,10 +493,10 @@ QSpinBox::down-button::pressed
          <number>1</number>
         </property>
         <property name="maximum">
-         <number>50</number>
+         <number>20</number>
         </property>
         <property name="value">
-         <number>5</number>
+         <number>3</number>
         </property>
        </widget>
       </item>
@@ -584,7 +534,7 @@ QSpinBox::down-button::pressed
       </item>
      </layout>
     </item>
-    <item>
+    <item row="2" column="0">
      <widget class="QPushButton" name="btn_snip">
       <property name="font">
        <font>
@@ -624,14 +574,15 @@ QSpinBox::down-button::pressed
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QWebEngineView</class>
-   <extends>QWidget</extends>
-   <header location="global">QtWebEngineWidgets/QWebEngineView</header>
-  </customwidget>
-  <customwidget>
    <class>CeleryImageView</class>
    <extends>QGraphicsView</extends>
    <header>src.widgets.celeryImageView</header>
+  </customwidget>
+  <customwidget>
+   <class>QSvgWidget</class>
+   <extends>QWidget</extends>
+   <header>PySide6.QtSvgWidgets</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

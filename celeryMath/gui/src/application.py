@@ -1,10 +1,11 @@
 import os
-import re
 from typing import Any, Dict, List, Tuple, Union
 
+import ziamath as zm
+from ziafont import config as zf_config
 from PIL import Image
 from PyHotKey import manager as hotkManager
-from PySide6.QtCore import Qt, QUrl, Slot
+from PySide6.QtCore import Qt, Slot, QByteArray
 from PySide6.QtGui import QClipboard, QCloseEvent, QKeyEvent, QPixmap
 from PySide6.QtWidgets import (
     QButtonGroup,
@@ -24,6 +25,7 @@ from .widgets.celeryScreenShotWidget import CeleryScreenShotWidget
 from .widgets.celeryTexLinesWidget import CeleryTexLineWidget
 from .widgets.dialogSettings import DialogSettings
 
+zf_config.svg2 = False
 
 class CeleryMath(QMainWindow, Ui_MainWindow):
     logger = CeleryLogger("celeryMath")
@@ -43,7 +45,8 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         self.init_settings()
 
     def init_settings(self):
-        self.webTexView.load(QUrl("qrc:/html/index.html"))
+        self.texView.renderer().setAspectRatioMode(Qt.AspectRatioMode.KeepAspectRatio)
+        self.texView.load(QByteArray.fromStdString(zm.Latex(r"\star Welcome \star").svg()))
 
         self.update_model()
         self.spbox_beam_width.setValue(self.conf.beam_width)
@@ -191,8 +194,9 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
     def render_tex(self, s: str):
         if len(s) == 0:
             return
-        js = rf"""updateMath("$${re.escape(s)}$$");"""
-        self.webTexView.page().runJavaScript(js)
+        # js = rf"""updateMath("$${re.escape(s)}$$");"""
+        # self.webTexView.page().runJavaScript(js)
+        self.texView.load(QByteArray.fromStdString(zm.Latex(s).svg()))
 
     def on_sc_returned(self, img: Union[Image.Image, None] = None):
         if img is None:

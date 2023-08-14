@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'celeryMathUI.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.3.1
+## Created by: Qt User Interface Compiler version 6.5.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -15,7 +15,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWebEngineWidgets import QWebEngineView
+from PySide6.QtSvgWidgets import QSvgWidget
 from PySide6.QtWidgets import (QApplication, QComboBox, QDoubleSpinBox, QFrame,
     QGridLayout, QGroupBox, QHBoxLayout, QMainWindow,
     QPushButton, QRadioButton, QScrollArea, QSizePolicy,
@@ -29,7 +29,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(519, 364)
+        MainWindow.resize(660, 493)
         font = QFont()
         font.setFamilies([u"Segoe UI"])
         MainWindow.setFont(font)
@@ -124,8 +124,8 @@ class Ui_MainWindow(object):
 "}")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.verticalLayout = QVBoxLayout(self.centralwidget)
-        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.gridLayout_3 = QGridLayout(self.centralwidget)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
         self.splitter_tex_group = QSplitter(self.centralwidget)
         self.splitter_tex_group.setObjectName(u"splitter_tex_group")
         self.splitter_tex_group.setOrientation(Qt.Vertical)
@@ -135,50 +135,36 @@ class Ui_MainWindow(object):
 "{\n"
 "	border: none;\n"
 "}")
-        self.gridLayout = QGridLayout(self.groupBox)
-        self.gridLayout.setSpacing(0)
-        self.gridLayout.setObjectName(u"gridLayout")
-        self.gridLayout.setContentsMargins(2, 2, 2, 2)
+        self.verticalLayout = QVBoxLayout(self.groupBox)
+        self.verticalLayout.setObjectName(u"verticalLayout")
         self.splitter_tex_img = QSplitter(self.groupBox)
         self.splitter_tex_img.setObjectName(u"splitter_tex_img")
         self.splitter_tex_img.setOrientation(Qt.Vertical)
-        self.splitter_tex_img.setOpaqueResize(True)
-        self.splitter_tex_img.setHandleWidth(3)
-        self.splitter_tex_img.setChildrenCollapsible(True)
         self.imview_original = CeleryImageView(self.splitter_tex_img)
         self.imview_original.setObjectName(u"imview_original")
         font1 = QFont()
         font1.setFamilies([u"MiSans Demibold"])
         self.imview_original.setFont(font1)
         self.splitter_tex_img.addWidget(self.imview_original)
-        self.webTexView = QWebEngineView(self.splitter_tex_img)
-        self.webTexView.setObjectName(u"webTexView")
-        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.webTexView.sizePolicy().hasHeightForWidth())
-        self.webTexView.setSizePolicy(sizePolicy)
-        self.webTexView.setMinimumSize(QSize(0, 80))
-        self.webTexView.setFont(font1)
-        self.webTexView.setStyleSheet(u"")
-        self.webTexView.setUrl(QUrl(u"about:blank"))
-        self.splitter_tex_img.addWidget(self.webTexView)
+        self.texView = QSvgWidget(self.splitter_tex_img)
+        self.texView.setObjectName(u"texView")
+        self.splitter_tex_img.addWidget(self.texView)
 
-        self.gridLayout.addWidget(self.splitter_tex_img, 0, 0, 1, 1)
+        self.verticalLayout.addWidget(self.splitter_tex_img)
 
         self.splitter_tex_group.addWidget(self.groupBox)
         self.scroll_tex_lines = QScrollArea(self.splitter_tex_group)
         self.scroll_tex_lines.setObjectName(u"scroll_tex_lines")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.scroll_tex_lines.sizePolicy().hasHeightForWidth())
-        self.scroll_tex_lines.setSizePolicy(sizePolicy1)
+        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.scroll_tex_lines.sizePolicy().hasHeightForWidth())
+        self.scroll_tex_lines.setSizePolicy(sizePolicy)
         self.scroll_tex_lines.setFrameShape(QFrame.StyledPanel)
         self.scroll_tex_lines.setWidgetResizable(True)
         self.scroll_tex_lines_contents = QWidget()
         self.scroll_tex_lines_contents.setObjectName(u"scroll_tex_lines_contents")
-        self.scroll_tex_lines_contents.setGeometry(QRect(0, 0, 493, 69))
+        self.scroll_tex_lines_contents.setGeometry(QRect(0, 0, 634, 81))
         self.gridLayout_2 = QGridLayout(self.scroll_tex_lines_contents)
         self.gridLayout_2.setSpacing(2)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
@@ -186,7 +172,7 @@ class Ui_MainWindow(object):
         self.scroll_tex_lines.setWidget(self.scroll_tex_lines_contents)
         self.splitter_tex_group.addWidget(self.scroll_tex_lines)
 
-        self.verticalLayout.addWidget(self.splitter_tex_group)
+        self.gridLayout_3.addWidget(self.splitter_tex_group, 0, 0, 1, 1)
 
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setSpacing(6)
@@ -360,8 +346,8 @@ class Ui_MainWindow(object):
 "	background-color: #a2aec0;\n"
 "}")
         self.spbox_beam_width.setMinimum(1)
-        self.spbox_beam_width.setMaximum(50)
-        self.spbox_beam_width.setValue(5)
+        self.spbox_beam_width.setMaximum(20)
+        self.spbox_beam_width.setValue(3)
 
         self.horizontalLayout.addWidget(self.spbox_beam_width)
 
@@ -376,7 +362,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addItem(self.horizontalSpacer_2)
 
 
-        self.verticalLayout.addLayout(self.horizontalLayout)
+        self.gridLayout_3.addLayout(self.horizontalLayout, 1, 0, 1, 1)
 
         self.btn_snip = QPushButton(self.centralwidget)
         self.btn_snip.setObjectName(u"btn_snip")
@@ -389,7 +375,7 @@ class Ui_MainWindow(object):
         self.btn_snip.setIcon(icon3)
         self.btn_snip.setIconSize(QSize(25, 25))
 
-        self.verticalLayout.addWidget(self.btn_snip)
+        self.gridLayout_3.addWidget(self.btn_snip, 2, 0, 1, 1)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QStatusBar(MainWindow)

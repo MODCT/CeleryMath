@@ -3,8 +3,7 @@ import sys
 from PySide6.QtWidgets import QApplication, QMessageBox
 from PySide6.QtCore import QSystemSemaphore, QSharedMemory
 
-from src.application import CeleryMath
-from src.lib.utils.utils import seed_everything
+from src import CeleryMath, seed_everything
 
 WIN_ID = "celeryMath"
 SRE_MEM_ID = "celeryMathMem"
