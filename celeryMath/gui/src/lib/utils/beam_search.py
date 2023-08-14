@@ -163,7 +163,7 @@ class CeleryBeamSearch(object):
         self,
         memory: np.ndarray,
         decode_fn: Callable[[np.ndarray, List[np.ndarray]], (np.ndarray)],
-        beam_width=5,
+        beam_width=3,
         bos=1,
         eos=2,
         max_iter=512,

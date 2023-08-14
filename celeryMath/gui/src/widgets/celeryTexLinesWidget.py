@@ -5,8 +5,9 @@ Date: 2022-08-15 21:26:29
 LastEditTime: 2023-08-07 11:16:02
 """
 from typing import Callable, List
+
 from PySide6.QtGui import QClipboard
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QScrollArea
+from PySide6.QtWidgets import QScrollArea, QVBoxLayout, QWidget
 
 from .celeryTexLineUI import Ui_CeleryTexLine
 

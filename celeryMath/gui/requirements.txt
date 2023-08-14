@@ -9,4 +9,3 @@ PyHotKey @ git+https://github.com/rainyl/PyHotKey.git@3175397b290e140d671e134934
 colorlog
 # build #
 nuitka
-orderedset

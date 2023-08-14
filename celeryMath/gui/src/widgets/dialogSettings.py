@@ -1,11 +1,11 @@
 from PySide6.QtCore import Signal
 from PySide6.QtGui import QKeySequence
-from PySide6.QtWidgets import QDialog, QFileDialog, QDialogButtonBox
+from PySide6.QtWidgets import QDialog, QDialogButtonBox, QFileDialog
 
-from ..utils.celeryGlobalHotkey import CeleryGlobalHotkey
-from .dialogSettingUI import Ui_diaglog_settings
-from ..utils.logger import CeleryLogger
 from ..lib.utils.config import Config
+from ..utils.celeryGlobalHotkey import CeleryGlobalHotkey
+from ..utils.logger import CeleryLogger
+from .dialogSettingUI import Ui_diaglog_settings
 
 
 class DialogSettings(QDialog, Ui_diaglog_settings):

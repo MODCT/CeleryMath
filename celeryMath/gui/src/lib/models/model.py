@@ -1,14 +1,15 @@
 import re
 from typing import List, Union
+
 import numpy as np
 import onnxruntime
 from PIL import Image
 from tokenizers import Tokenizer
 from tokenizers.models import BPE
 
+from ..utils.beam_search import CeleryBeamSearch
 from ..utils.config import Config
 from ..utils.transforms import get_transforms
-from ..utils.beam_search import CeleryBeamSearch
 
 
 class LatexModelONNX(object):

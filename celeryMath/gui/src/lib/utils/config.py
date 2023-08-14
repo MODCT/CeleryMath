@@ -12,7 +12,7 @@ class Config(object):
     bos_token = 1
     eos_token = 2
     temperature = 0.2
-    beam_width = 5
+    beam_width = 3
     max_seq = 512
     min_img_size = [32, 32]
     max_img_size = [192, 896]

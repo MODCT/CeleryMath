@@ -1,28 +1,28 @@
+import os
+import re
 from typing import Any, Dict, List, Tuple, Union
-from PySide6.QtCore import QUrl, Qt, Slot
+
+from PIL import Image
+from PyHotKey import manager as hotkManager
+from PySide6.QtCore import Qt, QUrl, Slot
+from PySide6.QtGui import QClipboard, QCloseEvent, QKeyEvent, QPixmap
 from PySide6.QtWidgets import (
+    QButtonGroup,
     QMainWindow,
     QMessageBox,
     QVBoxLayout,
     QWidget,
-    QButtonGroup,
 )
-from PySide6.QtGui import QPixmap, QClipboard, QKeyEvent, QCloseEvent
-
-from PIL import Image
-from PyHotKey import manager as hotkManager
-import os
-import re
 
 from .celeryMathUI import Ui_MainWindow
-from .widgets.dialogSettings import DialogSettings
-from .widgets.celeryScreenShotWidget import CeleryScreenShotWidget
-from .widgets.celeryTexLinesWidget import CeleryTexLineWidget
-from .utils.logger import CeleryLogger
-from .utils.emun import CeleryRadioButton
 from .celeryThread import CeleryInferThread
 from .lib.models.model import LatexModelONNX, get_model
 from .lib.utils.config import Config
+from .utils.emun import CeleryRadioButton
+from .utils.logger import CeleryLogger
+from .widgets.celeryScreenShotWidget import CeleryScreenShotWidget
+from .widgets.celeryTexLinesWidget import CeleryTexLineWidget
+from .widgets.dialogSettings import DialogSettings
 
 
 class CeleryMath(QMainWindow, Ui_MainWindow):
@@ -130,7 +130,7 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         if self.model is None:
             self.show_model_error_box()
             return
-        self.logger.debug(f"taking screenshot")
+        self.logger.debug("taking screenshot")
         # self.hide()
         self.showMinimized()
         self.snip_widget.take_screenshot()
@@ -184,6 +184,7 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         try:
             res = self.model(img)
         except Exception as e:
+            self.logger.critical(f"prediction error: {e}")
             res = None
         return res
 
@@ -197,7 +198,7 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         if img is None:
             return
         self.showNormal()
-        self.logger.debug(f"screen shot finished")
+        self.logger.debug("screen shot finished")
         self.update_model_config()
         self.infer_thread = CeleryInferThread(img, self.model)
         self.logger.info(f"inference starting with:\n{str(self.conf)}")
@@ -221,7 +222,7 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         else:
             tex_res = tex
         if tex_res is None:
-            self.render_tex(f"Prediction Error!")
+            self.render_tex("Prediction Error!")
             return
         tex_res = tex_res[0]
         self.logger.debug(f"prediction: \n{tex_res}")
