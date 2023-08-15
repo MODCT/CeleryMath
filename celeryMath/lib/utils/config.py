@@ -14,8 +14,8 @@ class Config(object):
     temperature = 0.2
     beam_width = 3
     max_seq = 512
-    min_img_size = [32, 32]
-    max_img_size = [192, 896]
+    min_img_size = (32, 32)
+    max_img_size = (192, 896)
     snip_hotkey = "Ctrl+Alt+S"
     search_method = "greedy"
     sampling = "nucleus"
@@ -32,6 +32,7 @@ class Config(object):
             f"Config(\n"
             f"\tencoder: {self.encoder_path},\n"
             f"\tdecoder: {self.decoder_path},\n"
+            f"\tdevice: {self.device},\n"
             f"\ttokenizer: {self.tokenizer_path},\n"
             f"\ttemperature: {self.temperature},\n"
             f"\tsearch method: {self.search_method},\n"
@@ -39,7 +40,7 @@ class Config(object):
             f"\tbeam_width: {self.beam_width},\n"
             f")"
         )
-        return  s
+        return s
 
     def load(self, conf_path: str):
         with open(conf_path, "r", encoding="utf-8") as f:
@@ -54,6 +55,7 @@ class Config(object):
             "tokenizer_path": self.tokenizer_path,
             "encoder_path": self.encoder_path,
             "decoder_path": self.decoder_path,
+            "device": self.device,
             "snip_hotkey": self.snip_hotkey,
             "search_method": self.search_method,
             "sampling": self.sampling,
@@ -62,7 +64,7 @@ class Config(object):
         }
         return js
 
-    def save(self, p: str = None):
+    def save(self, p: str | None = None):
         conf = {
             "tokenizer_path": self.tokenizer_path,
             "encoder_path": self.encoder_path,

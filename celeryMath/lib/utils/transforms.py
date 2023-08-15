@@ -1,14 +1,39 @@
 from typing import Tuple, Union
 import numpy as np
+from numpy.typing import NDArray, ArrayLike
 from PIL import Image, ImageChops
 
 
 class DeployTransform(object):
-    _buckets_ = [32, 64, 96, 128, 192, 256, 320, 384, 448, 512, 576, 640, 704, 768, 832, 896]
+    _buckets_ = [
+        32,
+        64,
+        96,
+        128,
+        192,
+        256,
+        320,
+        384,
+        448,
+        512,
+        576,
+        640,
+        704,
+        768,
+        832,
+        896,
+    ]
 
-    def __init__(self, min_img_size, max_img_size, mean=0.7931, std=0.1738, interp=Image.BILINEAR):
+    def __init__(
+        self,
+        min_img_size: Tuple[int, int],
+        max_img_size: Tuple[int, int],
+        mean=0.7931,
+        std=0.1738,
+        interp=Image.BILINEAR,
+    ):
         """
-            process for every single image
+        process for every single image
         """
         self.pad_resize = PadMaxResize(min_img_size, max_img_size, interp)
         self.max_img_size = max_img_size
@@ -16,27 +41,27 @@ class DeployTransform(object):
         self.std = std
         self.buckets = [[i, j] for i in self._buckets_ for j in self._buckets_]
 
-    def pad_image(self, img: np.ndarray):
+    def pad_image(self, img: NDArray[np.float32]) -> NDArray[np.float32]:
         """
-            TODO: make pad image more clever, ie. don't pad all image to the max shape
+        TODO: make pad image more clever, i.e., don't pad all image to the max shape
         """
         # img: C H W
         # new_size = self.get_new_size(img.shape[1:])
         new_size = self.max_img_size
         pw = new_size[-1] - img.shape[-1]
         ph = new_size[-2] - img.shape[-2]
-        img = np.pad(img, ((0, 0), (0, ph), (0, pw)), "constant", constant_values=(0, ))
+        img = np.pad(img, ((0, 0), (0, ph), (0, pw)), "constant", constant_values=(0,))
         return img
 
-    def get_new_size(self, old_size: Tuple[int]):
+    def get_new_size(self, old_size: Tuple[int, int]):
         d1, d2 = old_size
-        for (d1_b, d2_b) in self.buckets:
+        for d1_b, d2_b in self.buckets:
             if d1_b >= d1 and d2_b >= d2:
                 return d1_b, d2_b
         # no match, return max (last one)
         return self.buckets[-1]
 
-    def normalize(self, img: np.ndarray):
+    def normalize(self, img: NDArray[np.float32]) -> NDArray[np.float32]:
         img = (img - self.mean) / self.std
         return img
 
@@ -44,25 +69,29 @@ class DeployTransform(object):
     #     import matplotlib.pyplot as plt
     #     plt.imsave(name, img, cmap="gray")
 
-    def resize(self, img: np.ndarray, r: float):
-        new_size = (int(img.shape[2]*r), int(img.shape[1]*r))
-        img = Image.fromarray(img[0].astype(np.uint8), mode="L")
+    def resize(self, img_array: NDArray[np.float32], r: float) -> NDArray[np.float32]:
+        new_size = (int(img_array.shape[2] * r), int(img_array.shape[1] * r))
+        img = Image.fromarray(img_array[0].astype(np.uint8), mode="L")
         img = img.resize(new_size, Image.BILINEAR)
-        img = np.array(img, dtype=np.float32)[np.newaxis, ...]
-        return img
+        img_array = np.array(img, dtype=np.float32)[np.newaxis, ...]
+        return img_array
 
-    def crop_bbox(self, img: np.ndarray):
-        img[img >= 220] = 255
-        img = Image.fromarray(img[0].astype(np.uint8), mode="L")
+    def crop_bbox(self, img_array: NDArray[np.float32]) -> NDArray[np.float32]:
+        img_array[img_array >= 220] = 255
+        img = Image.fromarray(img_array[0].astype(np.uint8), mode="L")
         bg = Image.new(img.mode, img.size, "white")
         diff = ImageChops.difference(img, bg)
         # diff = ImageChops.add(diff, diff)
-        img = np.asarray(img.crop(diff.getbbox()), dtype=np.float32)[np.newaxis, ...]
-        return img
+        img_array = np.asarray(img.crop(diff.getbbox()), dtype=np.float32)[
+            np.newaxis, ...
+        ]
+        return img_array
 
-    def __call__(self, img: Union[Image.Image, np.ndarray]):
+    def __call__(
+        self, img: Union[Image.Image, NDArray[np.float32]]
+    ) -> NDArray[np.float32]:
         """
-            img should be either Image or np.ndarray with C*H*W
+        img should be either Image or np.ndarray with C*H*W
         """
         if isinstance(img, Image.Image):
             if img.mode != "L":
@@ -82,14 +111,19 @@ class DeployTransform(object):
 
 class PadMaxResize(object):
     __max_iter__ = 10
-    def __init__(self, min_size: Tuple[int, int],  max_size: Tuple[int, int],
-                 interpolation=Image.BILINEAR,):
+
+    def __init__(
+        self,
+        min_size: Tuple[int, int],
+        max_size: Tuple[int, int],
+        interpolation=Image.BILINEAR,
+    ):
         super(PadMaxResize, self).__init__()
         self.min_size = min_size
         self.max_size = max_size
         self.interpolation = interpolation
 
-    def pad_resize(self, img: np.ndarray):
+    def pad_resize(self, img: NDArray[np.float32]) -> NDArray[np.float32]:
         _, h, w = img.shape
         img = img[0]  # C H W -> H W
         mxh, mxw = self.max_size
@@ -105,7 +139,7 @@ class PadMaxResize(object):
         if w > mxw:
             ratio_w = w / mxw
         elif w < mnw:
-            ratio_w =  -1
+            ratio_w = -1
         else:
             ratio_w = 1
         if ratio_h == 1 and ratio_w == 1:
@@ -119,10 +153,15 @@ class PadMaxResize(object):
         if ratio_h > 1 or ratio_w > 1:
             h, w = img.shape
             ratio = max(ratio_h, ratio_w)
-            size = (int(w/ratio), int(h/ratio))
+            size = (int(w / ratio), int(h / ratio))
             # import matplotlib.pyplot as plt
             # plt.imsave("before.png", img, cmap="gray")
-            img = np.array(Image.fromarray(img.astype(np.uint8), mode="L").resize(size, self.interpolation), dtype=img.dtype)
+            img = np.array(
+                Image.fromarray(img.astype(np.uint8), mode="L").resize(
+                    size, self.interpolation  # type: ignore
+                ),
+                dtype=img.dtype,
+            )
             # plt.imsave("after0.png", img0, cmap="gray")
             # size = (int(h/ratio), int(w/ratio))
             # plt.imsave("after1.png", img1, cmap="gray")
@@ -132,26 +171,32 @@ class PadMaxResize(object):
     def is_img_valid(self, img: np.ndarray):
         _, h, w = img.shape
         c = False
-        if self.min_size[0] <= h <= self.max_size[0] and self.min_size[1] <= w <= self.max_size[1]:
+        if (
+            self.min_size[0] <= h <= self.max_size[0]
+            and self.min_size[1] <= w <= self.max_size[1]
+        ):
             c = True
         return c
 
-    def __call__(self, img: np.ndarray):
+    def __call__(self, img: NDArray[np.float32]):
         # img: C H W
         if img.shape[0] != 1:
-            img = np.array(Image.fromarray(img.astype(np.uint8), mode="RGB").convert("L"), dtype=np.float32)[np.newaxis, ...]
+            img = np.array(
+                Image.fromarray(img.astype(np.uint8), mode="RGB").convert("L"),
+                dtype=np.float32,
+            )[np.newaxis, ...]
         it = 0
         while not self.is_img_valid(img) and it < self.__max_iter__:
             img = self.pad_resize(img)
             it += 1
-        assert it < self.__max_iter__, f"pad_resize match the maximum iter, img size: {img.shape}"
+        assert (
+            it < self.__max_iter__
+        ), f"pad_resize match the maximum iter, img size: {img.shape}"
         return img
 
 
-def get_transforms(min_img_size, max_img_size):
-    transforms = DeployTransform(
-        min_img_size, max_img_size
-    )
+def get_transforms(min_img_size: Tuple[int, int], max_img_size: Tuple[int, int]):
+    transforms = DeployTransform(min_img_size, max_img_size)
     return transforms
 
 

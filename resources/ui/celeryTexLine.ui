@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CeleryTexLine</class>
+ <widget class="QWidget" name="CeleryTexLine">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>691</width>
+    <height>51</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="font">
+   <font>
+    <family>MiSans Demibold</family>
+    <pointsize>10</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QPushButton,
+QDoubleSpinBox,
+QLineEdit
+{
+	border: 1px solid #000000;
+	border-radius: 6px;
+	padding: 3px;
+	height: 25px;
+	font-size: 10pt;
+	color: #000000;
+}
+
+QLineEdit::focus
+{
+	border: 1px solid #55aaff;
+}
+
+QGroupBox
+{
+	border: 1px solid #000000;
+	border-radius: 6px;
+	padding: 3px;
+}
+
+QPushButton
+{
+	background-color: #d3e0f3;
+	border: none;
+}
+
+QPushButton::hover
+{
+	background-color: #d6e3f7;
+}
+
+QPushButton::pressed
+{
+	background-color: #a2aec0;
+}</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="spacing">
+      <number>5</number>
+     </property>
+     <item>
+      <widget class="CeleryLineEdit" name="ledit_tex">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>30</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>MiSans</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_info">
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+	width: auto;
+}</string>
+       </property>
+       <property name="text">
+        <string>0%</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_copy">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <family>MiSans Demibold</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="statusTip">
+        <string>Copy</string>
+       </property>
+       <property name="whatsThis">
+        <string>Copy</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
+	width: 25px;
+}</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../celeryMath.qrc">
+         <normaloff>:/icon/icons/content_copy_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icon/icons/content_copy_FILL0_wght400_GRAD0_opsz48.svg</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CeleryLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>src.widgets.celeryLineEdit</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../celeryMath.qrc"/>
+ </resources>
+ <connections/>
+</ui>

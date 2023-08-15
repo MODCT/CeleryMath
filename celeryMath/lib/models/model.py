@@ -1,14 +1,15 @@
 import re
-from typing import List, Optional, Tuple, Union
+from typing import List, Union, Optional
+
 import numpy as np
 import onnxruntime
 from PIL import Image
 from tokenizers import Tokenizer
 from tokenizers.models import BPE
 
+from ..utils.beam_search import CeleryBeamSearch
 from ..utils.config import Config
 from ..utils.transforms import get_transforms
-from ..utils.beam_search import CeleryBeamSearch
 
 
 class LatexModelONNX(object):
@@ -18,20 +19,19 @@ class LatexModelONNX(object):
         "random",
         "nucleus",
     )
-    transforms = None
 
     def __init__(
         self,
         encoder: str,
         decoder: str,
-        device: str="cpu",
+        tokenizer_path: str,
+        device: str = "cpu",
         min_img_size=(32, 32),
         max_img_size=(192, 896),
         max_seq_len: int = 512,
         bos_token: int = 1,
         eos_token: int = 2,
         pad_token: int = 0,
-        tokenizer_path: str = None,
         filter_thres: float = 0.9,
         temperature: float = 0.5,
         search_method: str = "greedy",
@@ -45,14 +45,16 @@ class LatexModelONNX(object):
                 {
                     "device_id": 0,
                     "arena_extend_strategy": "kNextPowerOfTwo",
-                    "gpu_mem_limit": 2 * 1024 * 1024 * 1024 * 1024,
+                    "gpu_mem_limit": 2 * 1024 * 1024 * 1024,
                     "cudnn_conv_algo_search": "EXHAUSTIVE",
                     "do_copy_in_default_stream": True,
                 },
             ),
             "CPUExecutionProvider",
         ]
-        providers = [_providers[1],]
+        providers = [
+            _providers[1],
+        ]
         if device == "cuda":
             providers = _providers
         self.encoder = onnxruntime.InferenceSession(encoder, providers=providers)
@@ -72,14 +74,13 @@ class LatexModelONNX(object):
 
         self.transforms = get_transforms(min_img_size, max_img_size)
         assert tokenizer_path is not None, "Tokenizer path must be provided"
-        self.tokenizer: Tokenizer = None
-        self.load_tokenizer(tokenizer_path)
+        self.tokenizer: Tokenizer = self.load_tokenizer(tokenizer_path)
 
     def load_tokenizer(self, tokenizer_path: str):
-        tokenizer = Tokenizer(BPE())
-        self.tokenizer = tokenizer.from_file(tokenizer_path)
+        tokenizer = Tokenizer(BPE()).from_file(tokenizer_path)
+        return tokenizer
 
-    def token2str(self, tokens: Union[np.ndarray, List]) -> List[str]:
+    def token2str(self, tokens: Union[np.ndarray, List]) -> List[List[str]]:
         dec = [self.tokenizer.decode_batch([tbw[0] for tbw in tb]) for tb in tokens]
         dec = [
             [
@@ -97,19 +98,19 @@ class LatexModelONNX(object):
         # (B, BW)
         return dec
 
-    def detokenize(self, tokens: Union[np.ndarray, List]):
+    def detokenize(self, tokens):
         # TODO: complete the decode to return list
         # tokens: (B, BW, (N, float))
-        toks: List[List[List[str]]] = [
+        toks = [
             [[self.tokenizer.id_to_token(t) for t in tb] for tb in tbw]
             for tbw in tokens
         ]
         for bw in range(len(toks)):
-            for b in range(len(bw)):
+            for b in range(len(bw)):  # type: ignore
                 for i in reversed(range(len(toks[b]))):
                     if toks[b][i] is None:
-                        toks[b][i] = ""
-                    toks[b][i] = toks[b][i].replace("Ġ", " ").replace("Ċ", "").strip()
+                        toks[b][i] = ""  # type: ignore
+                    toks[b][i] = toks[b][i].replace("Ġ", " ").replace("Ċ", "").strip()  # type: ignore
                     if toks[b][i] in ("[BOS]", "[EOS]", "[PAD]"):
                         del toks[b][i]
         return toks
@@ -125,7 +126,7 @@ class LatexModelONNX(object):
         """
         text_reg = r"(\\(operatorname|mathrm|text|mathbf)\s?\*? {.*?})"
         letter = "[a-zA-Z]"
-        noletter = "[\W_^\d]"
+        noletter = r"[\W_^\d]"
         names = [x[0].replace(" ", "") for x in re.findall(text_reg, s)]
         s = re.sub(text_reg, lambda match: str(names.pop(0)), s)
         news = s
@@ -138,9 +139,9 @@ class LatexModelONNX(object):
                 break
         return s
 
-    def preprocess(self, imgs: List[Union[Image.Image, np.ndarray]]):
+    def preprocess(self, imgs: List[Union[Image.Image, np.ndarray]]):  # type: ignore
         if not isinstance(imgs, list):
-            imgs = [imgs]
+            imgs = [imgs]  # type: ignore
         # imgs: B C H W
         imgs: np.ndarray = np.concatenate(
             [self.transforms(img) for img in imgs], axis=0
@@ -163,9 +164,9 @@ class LatexModelONNX(object):
         self,
         start_tokens: np.ndarray,
         memory: List[np.ndarray],
-    ):
+    ) -> List[List[List[str]]]:
         beam_searcher = CeleryBeamSearch(
-            memory=memory,
+            memory=memory,  # type: ignore
             decode_fn=self.decoder_run,
             beam_width=self.beam_width,
             bos=self.bos_token,
@@ -173,7 +174,7 @@ class LatexModelONNX(object):
             max_iter=self.max_seq_len,
         )
         preds = beam_searcher.search(start_tokens=start_tokens)
-        return preds
+        return preds  # type: ignore
 
     def decoder_run(self, x: np.ndarray, memory: List[np.ndarray]):
         tgt_mask = np.triu(np.full((x.shape[1]), -np.inf), k=1).astype(bool)
@@ -258,7 +259,7 @@ class LatexModelONNX(object):
         self,
         start_tokens: np.ndarray,
         memory: List[np.ndarray],
-    ):
+    ) -> List[List[List[str]]]:
         if self.search_method == "greedy":
             return self.greedy_search(
                 start_tokens=start_tokens,
@@ -272,7 +273,7 @@ class LatexModelONNX(object):
         else:
             raise ValueError(f"search method {self.search_method} not supported")
 
-    def forward(self, src: np.ndarray) -> List[str]:
+    def forward(self, src: np.ndarray) -> List[List[List[str]]]:
         enc_inputs = {
             self.encoder.get_inputs()[0].name: src,
         }
@@ -292,14 +293,15 @@ class LatexModelONNX(object):
 
     def __call__(
         self,
-        src: List[Union[Image.Image, np.ndarray]],
+        src: Union[Image.Image, List[Image.Image]],  # type: ignore
         out_list=False,
-    ) -> List[str]:
-        src: np.ndarray = self.preprocess(src)  # B C H W
+    ):
+        # B C H W
+        src: np.ndarray = self.preprocess(src)  # type: ignore
         # (List[(B, N)])
         preds = self.forward(src)
         if preds is None:
-            return None
+            return None  # type: ignore
         b, bw = len(preds), len(preds[0])
         if out_list:
             outstr = self.detokenize(preds)
@@ -307,7 +309,7 @@ class LatexModelONNX(object):
             outstr = self.token2str(preds)
         # (B, BW, (str, float))
         output = [[[outstr[i][j], preds[i][j][1]] for j in range(bw)] for i in range(b)]
-        return output
+        return output  # type: ignore
 
 
 def get_model(conf: Config) -> LatexModelONNX:

@@ -1,0 +1,50 @@
+<RCC>
+  <qresource prefix="/">
+    <file>html/js/output/svg.js</file>
+    <file>html/js/celeryMath.js</file>
+    <file>html/js/mathJaxConfig.js</file>
+    <file>html/js/output/chtml/fonts/woff-v2/MathJax_AMS-Regular.woff</file>
+    <file>html/js/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Bold.woff</file>
+    <file>html/js/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff</file>
+    <file>html/js/output/chtml/fonts/woff-v2/MathJax_Fraktur-Bold.woff</file>
+    <file>html/js/output/chtml/fonts/woff-v2/MathJax_Fraktur-Regular.woff</file>
+    <file>html/js/output/chtml/fonts/woff-v2/MathJax_Main-Bold.woff</file>
+    <file>html/js/output/chtml/fonts/woff-v2/MathJax_Main-Italic.woff</file>
+    <file>html/js/output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff</file>
+    <file>html/js/output/chtml/fonts/woff-v2/MathJax_Math-BoldItalic.woff</file>
+    <file>html/js/output/chtml/fonts/woff-v2/MathJax_Math-Italic.woff</file>
+    <file>html/js/output/chtml/fonts/woff-v2/MathJax_Math-Regular.woff</file>
+    <file>html/js/output/chtml/fonts/woff-v2/MathJax_SansSerif-Bold.woff</file>
+    <file>html/js/output/chtml/fonts/woff-v2/MathJax_SansSerif-Italic.woff</file>
+    <file>html/js/output/chtml/fonts/woff-v2/MathJax_SansSerif-Regular.woff</file>
+    <file>html/js/output/chtml/fonts/woff-v2/MathJax_Script-Regular.woff</file>
+    <file>html/js/output/chtml/fonts/woff-v2/MathJax_Size1-Regular.woff</file>
+    <file>html/js/output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff</file>
+    <file>html/js/output/chtml/fonts/woff-v2/MathJax_Size3-Regular.woff</file>
+    <file>html/js/output/chtml/fonts/woff-v2/MathJax_Size4-Regular.woff</file>
+    <file>html/js/output/chtml/fonts/woff-v2/MathJax_Typewriter-Regular.woff</file>
+    <file>html/js/output/chtml/fonts/woff-v2/MathJax_Vector-Bold.woff</file>
+    <file>html/js/output/chtml/fonts/woff-v2/MathJax_Vector-Regular.woff</file>
+    <file>html/js/output/chtml/fonts/woff-v2/MathJax_Zero.woff</file>
+    <file>html/js/tex_mml_chtml.js</file>
+    <file>html/index.html</file>
+  </qresource>
+  <qresource prefix="icon">
+    <file>icons/arrow_drop_down_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/arrow_drop_up_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/radio_button_checked_hover_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/radio_button_unchecked_hover_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/radio_button_checked_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/radio_button_unchecked_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/device_reset_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/folder_open_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/info_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/cancel_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/check_circle_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/thermometer_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/screenshot_monitor_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/settings_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/content_copy_FILL0_wght400_GRAD0_opsz48.svg</file>
+    <file>icons/logo.png</file>
+  </qresource>
+</RCC>
