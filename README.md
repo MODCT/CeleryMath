@@ -2,15 +2,11 @@
     <a href="https://github.com/MODCT/CeleryMath">
         <img src="images/logo.png" width="241"/>
     </a>
+    <h1 align="center">CeleryMath</h1>
+    <p align="center">Another LaTex OCR Project</p>
+    <p align="center">Give me a star :star: if you like this project~</p>
+    <p align="center"><a href="README.md">English</a> | <a href="README_CN.md">简体中文</a></p>
 </p>
-
-# Celery Math
-
-[English](README.md) | [简体中文](README_CN.md)
-
-Another LaTex OCR Project
-
-Give me a star :star: if you like this project~
 
 ![images/cmpreview.gif](https://github.com/MODCT/CeleryMath/blob/main/images/cmpreview.gif)
 
