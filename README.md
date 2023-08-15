@@ -4,7 +4,9 @@
 
 Another LaTex OCR Project
 
-![images/preview1.png](images/preview1.png)
+Give me a star :star: if you like this project~
+
+![images/cmpreview.gif](https://github.com/MODCT/CeleryMath/blob/main/images/cmpreview.gif)
 
 ## Usage
 

@@ -3,8 +3,9 @@
 Latex 公式识别
 
 Another LaTex OCR Project
+喜欢的话点个Star :star:
 
-![images/preview1.png](images/preview1.png)
+![images/cmpreview.gif](https://github.com/MODCT/CeleryMath/blob/main/images/cmpreview.gif)
 
 ## 使用说明
 
