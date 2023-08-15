@@ -1,3 +1,9 @@
+<p align="center">
+    <a href="https://github.com/MODCT/CeleryMath">
+        <img src="images/logo.png" width="241"/>
+    </a>
+</p>
+
 # Celery Math
 
 [English](README.md) | [简体中文](README_CN.md)
