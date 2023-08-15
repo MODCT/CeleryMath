@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://github.com/MODCT/CeleryMath">
-        <img src="images/logo.png" width="241"/>
+        <img src="images/social.png" height="241"/>
     </a>
     <h1 align="center">CeleryMath</h1>
     <p align="center">Another LaTex OCR Project</p>

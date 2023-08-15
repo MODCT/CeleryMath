@@ -36,4 +36,3 @@ log/
 *.onnx
 resources/html/
 resources/ui/tex_mml_chtml.js
-social.png

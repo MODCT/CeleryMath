@@ -1,9 +1,12 @@
-# Celery Math
-
-Latex 公式识别
-
-Another LaTex OCR Project
-喜欢的话点个Star :star:
+<p align="center">
+    <a href="https://github.com/MODCT/CeleryMath">
+        <img src="images/social.png" height="241"/>
+    </a>
+    <h1 align="center">CeleryMath</h1>
+    <p align="center">Another LaTex OCR Project</p>
+    <p align="center">喜欢的话点个Star :star: ~</p>
+    <p align="center"><a href="README.md">English</a> | <a href="README_CN.md">简体中文</a></p>
+</p>
 
 ![images/cmpreview.gif](https://github.com/MODCT/CeleryMath/blob/main/images/cmpreview.gif)
 
