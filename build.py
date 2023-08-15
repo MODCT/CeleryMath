@@ -19,6 +19,7 @@ CPUS: int = os.cpu_count()  # type: ignore
 
 
 def publish_to_7z(build_dir: str, version: str):
+    print("Compressing...")
     working_dir = Path(f"{build_dir}/celeryMath.dist/")
     exclude_pattern = re.compile(r"qtwebengine_devtools_resources")
     for file in working_dir.glob("**/*"):
@@ -28,7 +29,7 @@ def publish_to_7z(build_dir: str, version: str):
 
     save_7z_name = f"{build_dir}/CeleryMath-v{version}-Windows_x64.7z"
     filters = [{"id": FILTER_LZMA2, "preset": PRESET_DEFAULT}]
-    with SevenZipFile(save_7z_name, "w", filters=filters) as archive:
+    with SevenZipFile(save_7z_name, "w", filters=filters, mp=True) as archive:
         archive.writeall(working_dir, arcname="CeleryMath")
     print(f"Publish successfully, saved to {save_7z_name}")
 
@@ -47,8 +48,8 @@ def main(version: str, enable_debug: bool = False, jobs: int = CPUS):
         # debug = "--debug "
     cmd = (
         "nuitka "
-        "--clang "
-        # "--mingw64 "
+        # "--clang "
+        "--mingw64 "
         # "--recompile-c-only "
         "--standalone "
         f"{debug}"
@@ -66,15 +67,13 @@ def main(version: str, enable_debug: bool = False, jobs: int = CPUS):
         # "--show-progress "
         # "--show-memory  "
         "--plugin-enable=pyside6 "
-        # "--plugin-enable=numpy "  # deprecated by nuitka
         # "--plugin-enable=matplotlib "
         # "--plugin-enable=multiprocessing "
         # "--plugin-enable=upx "
-        "--include-package=ziamath "
-        "--include-package=ziafont "
-        "--include-package=latex2mathml "
-        "--include-package-data=ziamath "
-        "--include-package-data=latex2mathml "
+        # "--include-package=ziamath "
+        # "--include-package=ziafont "
+        # "--include-package=latex2mathml "
+        "--user-package-configuration-file=cm.nuitka-package.config.yml "
         "--windows-icon-from-ico=resources/icons/logo.ico "
         "./celeryMath.py "
     )
@@ -87,7 +86,7 @@ def main(version: str, enable_debug: bool = False, jobs: int = CPUS):
     ]
     for path in mkdirs:
         if not path.exists():
-            print(f"making directory: {path}")
+            print(f"Making directory: {path}")
             path.mkdir(parents=True)
 
     # # compress using 7z

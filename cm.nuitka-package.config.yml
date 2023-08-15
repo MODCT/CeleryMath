@@ -1,0 +1,12 @@
+- module-name: "ziamath"
+  implicit-imports:
+    - depends:
+        - "ziafont"
+        - "ziamath.fonts"
+  data-files:
+    dirs:
+      - "fonts"
+- module-name: "latex2mathml"
+  data-files:
+    patterns:
+      - "*.txt"

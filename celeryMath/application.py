@@ -31,7 +31,7 @@ zf_config.svg2 = False
 
 
 class CeleryMath(QMainWindow, Ui_MainWindow):
-    welcome_txt = r"\star \quad CeleryMath \quad by \quad Rainyl@MODCT \star"
+    welcome_txt = r"\star CeleryMath \quad by \quad Rainyl@MODCT \star"
     logger = CeleryLogger("CeleryMath")
     conf: Config = Config("conf/conf.json")
 
