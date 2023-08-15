@@ -14,6 +14,25 @@ Another LaTex OCR Project
 4. Open `celeryMath.exe` and Click settings to config path.
 5. Have fun!
 
+## Build from source
+
+Install python-poetry first
+
+1. clone repo and creat environment
+
+```console
+git clone https://github.com/MODCT/CeleryMath.git
+cd CeleryMath
+poetry install
+```
+
+2. build
+
+```console
+poe build  // using default settings, details canbe found in build.py
+poe build -j 32  // multithread
+```
+
 ## NOTE
 
 We take **NO Responsibility** for the OCR results, you can open an issue when you have any errors, users should take care and check the results carefully themselves.
