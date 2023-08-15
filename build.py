@@ -5,7 +5,6 @@ LastEditTime: 2022-08-04 17:33:48
 """
 import os
 import re
-import shutil
 from argparse import ArgumentParser
 from pathlib import Path
 
@@ -74,37 +73,24 @@ def main(version: str, enable_debug: bool = False, jobs: int = CPUS):
         "--include-package=ziamath "
         "--include-package=ziafont "
         "--include-package=latex2mathml "
+        "--include-package-data=ziamath "
+        "--include-package-data=latex2mathml "
         "--windows-icon-from-ico=resources/icons/logo.ico "
         "./celeryMath.py "
     )
 
-    # os.system(cmd)
+    os.system(cmd)
 
     # make directories and copy necessary files
     mkdirs = [
         Path(f"{build_dir}/celeryMath.dist/conf"),
-        Path(f"{build_dir}/celeryMath.dist/ziamath/fonts"),
-        Path(f"{build_dir}/celeryMath.dist/latex2mathml"),
     ]
     for path in mkdirs:
         if not path.exists():
             print(f"making directory: {path}")
             path.mkdir(parents=True)
-    copy_files = [
-        (
-            "resources/build_include/STIXTwoMath-Regular.ttf",
-            f"{build_dir}/celeryMath.dist/ziamath/fonts/",
-        ),
-        (
-            "resources/build_include/unimathsymbols.txt",
-            f"{build_dir}/celeryMath.dist/latex2mathml/",
-        ),
-    ]
-    for file in copy_files:
-        shutil.copy(file[0], file[1])
-        print(f"{file[0]} -> {file[1]}")
 
-    # compress using 7z
+    # # compress using 7z
     publish_to_7z(build_dir, version)
 
 
