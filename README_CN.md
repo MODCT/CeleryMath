@@ -44,7 +44,7 @@ poe build -j 32  // 启用多线程
 - [x] Desktop Deploy
 - [x] ONNX
 - [ ] Compile to module
-- [ ] Reduce package size
+- [x] Reduce package size
 - [ ] Beam Search
 
 ## License
