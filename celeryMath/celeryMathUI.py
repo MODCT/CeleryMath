@@ -172,7 +172,7 @@ class Ui_MainWindow(object):
         self.scroll_tex_lines.setWidgetResizable(True)
         self.scroll_tex_lines_contents = QWidget()
         self.scroll_tex_lines_contents.setObjectName(u"scroll_tex_lines_contents")
-        self.scroll_tex_lines_contents.setGeometry(QRect(0, 0, 634, 69))
+        self.scroll_tex_lines_contents.setGeometry(QRect(0, 0, 634, 274))
         self.gridLayout_2 = QGridLayout(self.scroll_tex_lines_contents)
         self.gridLayout_2.setSpacing(2)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
