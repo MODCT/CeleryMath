@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "CeleryMath"
-version = "0.1.5"
+version = "0.2.0"
 description = "A LaTex Equation OCR Tool Based on ConvNeXt and Transformer"
 authors = ["rainyl <rainyliusy3@gmail.com>"]
 license = "GPL-3.0"
@@ -17,7 +17,6 @@ coloredlogs = "^15.0.1"
 pyhotkey = { git = "https://github.com/rainyl/PyHotKey.git", rev = "3175397b290e140d671e13493493bde499e2ada0" }
 onnxruntime-gpu = "^1.15.1"
 toml = "^0.10.2"
-matplotlib = "^3.7.2"
 ziamath = "^0.8.1"
 
 [tool.poetry.group.dev.dependencies]

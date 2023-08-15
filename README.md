@@ -24,7 +24,7 @@ We take **NO Responsibility** for the OCR results, you can open an issue when yo
 - [x] Desktop Deploy
 - [x] ONNX
 - [ ] Compile to module
-- [ ] Reduce package size
+- [x] Reduce package size
 - [ ] Beam Search
 
 ## Developers

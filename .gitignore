@@ -10,7 +10,8 @@ tests/
 .vscode/
 
 # build
-build*/
+build/
+build_debug/
 
 # Cython
 *.pyx

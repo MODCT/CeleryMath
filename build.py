@@ -5,6 +5,7 @@ LastEditTime: 2022-08-04 17:33:48
 """
 import os
 import re
+import shutil
 from argparse import ArgumentParser
 from pathlib import Path
 
@@ -15,7 +16,8 @@ project = toml.load(Path(__file__).parent / "pyproject.toml")
 __version__ = project["tool"]["poetry"]["version"]
 
 
-CPUS = os.cpu_count()
+CPUS: int = os.cpu_count()  # type: ignore
+
 
 def publish_to_7z(build_dir: str, version: str):
     working_dir = Path(f"{build_dir}/celeryMath.dist/")
@@ -26,13 +28,13 @@ def publish_to_7z(build_dir: str, version: str):
             print(f"Pattern mached, remove {file}")
 
     save_7z_name = f"{build_dir}/CeleryMath-v{version}-Windows_x64.7z"
-    filters = [{'id': FILTER_LZMA2, 'preset': PRESET_DEFAULT}]
-    with SevenZipFile(save_7z_name, 'w', filters=filters) as archive:
+    filters = [{"id": FILTER_LZMA2, "preset": PRESET_DEFAULT}]
+    with SevenZipFile(save_7z_name, "w", filters=filters) as archive:
         archive.writeall(working_dir, arcname="CeleryMath")
     print(f"Publish successfully, saved to {save_7z_name}")
 
 
-def main(version: str, enable_debug: bool=False, jobs: int=CPUS):
+def main(version: str, enable_debug: bool = False, jobs: int = CPUS):
     std_out = "--force-stdout-spec=celerymath_out.log "
     std_err = "--force-stderr-spec=celerymath_error.log "
     disable_console = "--windows-disable-console "
@@ -69,22 +71,49 @@ def main(version: str, enable_debug: bool=False, jobs: int=CPUS):
         # "--plugin-enable=matplotlib "
         # "--plugin-enable=multiprocessing "
         # "--plugin-enable=upx "
+        "--include-package=ziamath "
+        "--include-package=ziafont "
+        "--include-package=latex2mathml "
         "--windows-icon-from-ico=resources/icons/logo.ico "
         "./celeryMath.py "
     )
 
-    os.system(cmd)
+    # os.system(cmd)
 
-    if not os.path.exists(f"{build_dir}/celeryMath.dist/conf"):
-        os.mkdir(f"{build_dir}/celeryMath.dist/conf")
+    # make directories and copy necessary files
+    mkdirs = [
+        Path(f"{build_dir}/celeryMath.dist/conf"),
+        Path(f"{build_dir}/celeryMath.dist/ziamath/fonts"),
+        Path(f"{build_dir}/celeryMath.dist/latex2mathml"),
+    ]
+    for path in mkdirs:
+        if not path.exists():
+            print(f"making directory: {path}")
+            path.mkdir(parents=True)
+    copy_files = [
+        (
+            "resources/build_include/STIXTwoMath-Regular.ttf",
+            f"{build_dir}/celeryMath.dist/ziamath/fonts/",
+        ),
+        (
+            "resources/build_include/unimathsymbols.txt",
+            f"{build_dir}/celeryMath.dist/latex2mathml/",
+        ),
+    ]
+    for file in copy_files:
+        shutil.copy(file[0], file[1])
+        print(f"{file[0]} -> {file[1]}")
 
+    # compress using 7z
     publish_to_7z(build_dir, version)
 
 
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("-v", dest="version", type=str)
-    parser.add_argument("--debug", dest="debug", action="store_true", help="enable build for debug")
+    parser.add_argument(
+        "--debug", dest="debug", action="store_true", help="enable build for debug"
+    )
     parser.add_argument("-j", dest="jobs", type=int, default=CPUS)
     args = parser.parse_args()
     # if provide version manully, use the provided version number
