@@ -1,20 +1,16 @@
+# cache
 __pycache__/
+.pytest_cache/
+
+# test
 test/
-tmp/
-*/checkpoint*/*
-bak/
-venv*/
+tests/
+
+# vscode settings
 .vscode/
+
+# build
 build*/
-*.xcf
-conf.json*
-log/
-module/
-dependencies/
-depends/
-logo_old.ico
-*.onnx
-*.bak*.py
 
 # Cython
 *.pyx
@@ -22,11 +18,20 @@ logo_old.ico
 *.pyd
 *.pyi
 *.c
-celeryMath/lib/utils/*.html
-celeryMath/setup.py
-celeryMath/*.build
-celeryMath/lib/build_module.py
-celeryMath/bench.py
-celeryMath/poetry.lock
-celeryMath/pyproject.toml
-celeryMath/gui/src/utils/emun.py
+
+# others
+tmp/
+*/checkpoint*/*
+bak/
+venv*/
+*.xcf
+conf.json*
+module/
+dependencies/
+depends/
+logo_old.ico
+*.bak*.py
+log/
+*.onnx
+resources/html/
+resources/ui/tex_mml_chtml.js
