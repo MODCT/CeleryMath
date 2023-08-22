@@ -12,7 +12,7 @@ class DialogSettings(QDialog, Ui_diaglog_settings):
     _default_sc_hotkey_ = QKeySequence("Ctrl+Alt+S")
     logger = CeleryLogger("dialog_settings")
     conf_updated = Signal(Config)
-    snip_hotkey: QKeySequence = None
+    snip_hotkey: QKeySequence | None = None
 
     def __init__(self, conf: Config, parent=None) -> None:
         super(DialogSettings, self).__init__(parent)
@@ -91,7 +91,7 @@ class DialogSettings(QDialog, Ui_diaglog_settings):
         self.ledit_decoder_path.setText(self.conf.decoder_path)
 
     def save_settings(self, button=None):
-        if button == self.buttonBox.button(QDialogButtonBox.Apply):
+        if button == self.buttonBox.button(QDialogButtonBox.StandardButton.Apply):
             self.conf_updated.emit(self.conf)
             self.conf.save()
 

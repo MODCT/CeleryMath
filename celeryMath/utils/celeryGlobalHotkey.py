@@ -10,7 +10,7 @@ hotkManager.setLogPath("log/hotkey.log")
 class CeleryGlobalHotkey(QObject):
     pressed = Signal()
 
-    def __init__(self, parent: QObject = None):
+    def __init__(self, parent: QObject | None = None):
         super(CeleryGlobalHotkey, self).__init__(parent)
         self.hotkey = None
 

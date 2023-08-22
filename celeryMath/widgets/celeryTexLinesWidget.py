@@ -16,9 +16,9 @@ class CeleryTexLineWidget(QWidget, Ui_CeleryTexLine):
     def __init__(
         self,
         parent=None,
-        text: str = None,
-        prob: float = None,
-        clipboard: QClipboard = None,
+        text: str | None = None,
+        prob: float | None = None,
+        clipboard: QClipboard | None = None,
     ):
         super(CeleryTexLineWidget, self).__init__(parent)
         self.setupUi(self)
@@ -38,7 +38,7 @@ class CeleryTexLineWidget(QWidget, Ui_CeleryTexLine):
     def btn_clicked(self):
         txt = self.ledit_tex.text()
         if txt:
-            self.clipboard.setText(txt, QClipboard.Clipboard)
+            self.clipboard.setText(txt, QClipboard.Mode.Clipboard)
 
 
 class CeleryTexDispWidget(QWidget):
@@ -51,7 +51,7 @@ class CeleryTexDispWidget(QWidget):
         self.scroll_widget.setLayout(self.scroll_layout)
         self.scroll_area.setWidget(self.scroll_widget)
 
-    def add_lines(self, lines: List[str], slot: Callable = None):
+    def add_lines(self, lines: List[str], slot: Callable | None = None):
         for line in lines:
             tex_line = CeleryTexLineWidget(text=line)
             if slot is not None:

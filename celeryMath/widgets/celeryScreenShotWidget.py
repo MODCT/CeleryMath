@@ -8,12 +8,12 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
+from typing import List
 from PIL import ImageGrab
 from pynput.mouse import Controller as MouseController
 from PySide6.QtCore import QPoint, QRect, Qt
 from PySide6.QtGui import (
     QColor,
-    QCursor,
     QKeyEvent,
     QMouseEvent,
     QPainter,
@@ -27,8 +27,8 @@ from PySide6.QtWidgets import (
 
 from ..utils.logger import CeleryLogger
 
-QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
-QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
+QApplication.setAttribute(Qt.ApplicationAttribute.AA_EnableHighDpiScaling, True)
+QApplication.setAttribute(Qt.ApplicationAttribute.AA_UseHighDpiPixmaps, True)
 
 
 class CeleryScreenShotWidget(QMainWindow):
@@ -41,16 +41,17 @@ class CeleryScreenShotWidget(QMainWindow):
 
     def __init__(self, parent=None) -> None:
         super(CeleryScreenShotWidget, self).__init__()
-        self.parent = parent
+        self.parent = parent  # type: ignore
 
-        self.setWindowFlags(Qt.WindowStaysOnTopHint)
-        self.setWindowFlags(Qt.FramelessWindowHint)
-        self.setCursor(QCursor(Qt.CrossCursor))
+        self.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
+        self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
+        self.setCursor(Qt.CursorShape.CrossCursor)
         self.mouse = MouseController()
 
     def set_image(self):
         screens = QApplication.screens()
-        xs, ys = [], []
+        xs: List[int] = []
+        ys: List[int] = []
         for screen in screens:
             rect = screen.geometry()
             scale = screen.devicePixelRatio()
@@ -79,7 +80,7 @@ class CeleryScreenShotWidget(QMainWindow):
         self.img_rbot = (0, 0)
 
     def keyPressEvent(self, event: QKeyEvent):
-        if event.key() == Qt.Key_Escape:
+        if event.key() == Qt.Key.Key_Escape:
             self.is_snipping = False
             QApplication.restoreOverrideCursor()
             self.reset_rect()
@@ -89,10 +90,15 @@ class CeleryScreenShotWidget(QMainWindow):
 
     def take_screenshot(self):
         self.is_snipping = True
-        self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
+        self.setWindowFlags(
+            Qt.WindowType.WindowStaysOnTopHint | Qt.WindowType.FramelessWindowHint
+        )
         self.set_image()
         self.show()
-        self.setWindowState(self.windowState() & ~Qt.WindowMinimized | Qt.WindowActive)
+        self.setWindowState(
+            self.windowState() & ~Qt.WindowState.WindowMinimized
+            | Qt.WindowState.WindowActive
+        )
         self.activateWindow()
         self.raise_()
 
