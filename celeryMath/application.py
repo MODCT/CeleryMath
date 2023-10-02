@@ -191,9 +191,15 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
     def render_tex(self, s: str):
         if len(s) == 0:
             return
-        svg = Latex(s).svg()
-        self.tex_view.load(QByteArray.fromStdString(svg))
-        self.tex_view.renderer().setAspectRatioMode(Qt.AspectRatioMode.KeepAspectRatio)
+        try:
+            svg = Latex(s).svg()
+            self.tex_view.load(QByteArray.fromStdString(svg))
+            self.tex_view.renderer().setAspectRatioMode(
+                Qt.AspectRatioMode.KeepAspectRatio,
+            )
+        except Exception as e:
+            self.tex_view.load(QByteArray.fromStdString(f"{e}"))
+            self.logger.error(f"render failed: {e}")
 
     def on_sc_returned(self, img: Union[Image.Image, None] = None):
         if img is None:
@@ -206,7 +212,7 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         self.infer_thread.finished.connect(self.on_infer_finished)
         self.infer_thread.finished.connect(self.infer_thread.deleteLater)
         self.infer_thread.start()
-        self.render_tex(r"Loading...")
+        self.render_tex(r"\quad \small Loading... \quad")
 
         # DEBUG
         # res = self.predict(img)

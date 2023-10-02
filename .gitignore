@@ -34,5 +34,9 @@ logo_old.ico
 *.bak*.py
 log/
 *.onnx
+*.pth
 resources/html/
 resources/ui/tex_mml_chtml.js
+nuitka_help.txt
+nuitka-crash-report.xml
+test.py

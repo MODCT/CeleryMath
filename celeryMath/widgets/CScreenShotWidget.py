@@ -10,7 +10,8 @@
 
 from typing import List
 
-from PIL import ImageGrab
+import numpy as np
+from PIL import ImageGrab, Image, ImageOps
 from pynput.mouse import Controller as MouseController
 from PySide6.QtCore import QPoint, QRect, Qt
 from PySide6.QtGui import (
@@ -103,6 +104,23 @@ class CScreenShotWidget(QMainWindow):
         self.activateWindow()
         self.raise_()
 
+    def post_process_img(self, img: Image.Image):
+        # convert dark ground image to white
+        img = img.convert("L")
+        colors = sorted(
+            img.getcolors(img.height * img.width),
+            key=lambda c: c[0],
+            reverse=True,
+        )
+        bg = colors[0][1]
+        if bg < 200:
+            img_array = np.array(img, dtype=np.float32)
+            img_array += bg
+            img_array[img_array <= bg * 2 + np.random.randint(5, 50)] = 0
+            img = Image.fromarray(img_array.astype(np.uint8), mode="L")
+            img = ImageOps.invert(img)
+        return img
+
     def mousePressEvent(self, event: QMouseEvent):
         self.draw_ltop = event.pos()
         self.draw_rbot = event.pos()
@@ -137,7 +155,7 @@ class CScreenShotWidget(QMainWindow):
 
         self.reset_rect()
         self.close()
-        self.parent.on_sc_returned(img)
+        self.parent.on_sc_returned(self.post_process_img(img))
 
     def paintEvent(self, event: QPaintEvent):
         if self.is_snipping:
