@@ -12,4 +12,4 @@ import coloredlogs
 class CeleryLogger(logging.Logger):
     def __init__(self, name: str, level=logging.DEBUG):
         super(CeleryLogger, self).__init__(name=name, level=level)
-        coloredlogs.install(level='DEBUG', logger=self)
+        coloredlogs.install(level="DEBUG", logger=self)

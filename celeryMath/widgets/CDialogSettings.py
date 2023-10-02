@@ -3,21 +3,22 @@ from PySide6.QtGui import QKeySequence
 from PySide6.QtWidgets import QDialog, QDialogButtonBox, QFileDialog
 
 from ..lib.utils.config import Config
-from ..utils.celeryGlobalHotkey import CeleryGlobalHotkey
+from ..utils import CGlobalHotkey
 from ..utils.logger import CeleryLogger
-from .dialogSettingUI import Ui_diaglog_settings
+from .CDialogSettingsUI import Ui_CDialogSettings
 
 
-class DialogSettings(QDialog, Ui_diaglog_settings):
+class CDialogSettings(QDialog, Ui_CDialogSettings):
     _default_sc_hotkey_ = QKeySequence("Ctrl+Alt+S")
     logger = CeleryLogger("dialog_settings")
     conf_updated = Signal(Config)
     snip_hotkey: QKeySequence | None = None
+    last_open_path: str = "."
 
     def __init__(self, conf: Config, parent=None) -> None:
-        super(DialogSettings, self).__init__(parent)
+        super(CDialogSettings, self).__init__(parent)
         self.setupUi(self)
-        self.hotkey_sc = CeleryGlobalHotkey(self)
+        self.hotkey_sc = CGlobalHotkey(self)
 
         self.conf = conf
         self.update_settings()
@@ -63,7 +64,10 @@ class DialogSettings(QDialog, Ui_diaglog_settings):
     def btn_tokenizer_path_clicked(self):
         file_url: str
         file_url, _ = QFileDialog.getOpenFileName(
-            self, "Select File", ".", "Json File(*.json)"
+            self,
+            "Select File",
+            self.last_open_path,
+            "Json File(*.json)",
         )
         if not file_url:
             return
@@ -73,7 +77,10 @@ class DialogSettings(QDialog, Ui_diaglog_settings):
     def btn_encoer_path_clicked(self):
         file_url: str
         file_url, _ = QFileDialog.getOpenFileName(
-            self, "Select File", ".", "ONNX Model(*.ONNX)"
+            self,
+            "Select File",
+            self.last_open_path,
+            "ONNX Model(*.ONNX)",
         )
         if not file_url:
             return
@@ -83,7 +90,10 @@ class DialogSettings(QDialog, Ui_diaglog_settings):
     def btn_decoder_path_clicked(self):
         file_url: str
         file_url, _ = QFileDialog.getOpenFileName(
-            self, "Select File", ".", "ONNX Model(*.ONNX)"
+            self,
+            "Select File",
+            self.last_open_path,
+            "ONNX Model(*.ONNX)",
         )
         if not file_url:
             return

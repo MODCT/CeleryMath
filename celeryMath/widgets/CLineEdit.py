@@ -8,11 +8,11 @@ from PySide6.QtCore import Signal
 from PySide6.QtWidgets import QLineEdit
 
 
-class CeleryLineEdit(QLineEdit):
+class CLineEdit(QLineEdit):
     focussed = Signal(str)
 
     def __init__(self, parent=None):
-        super(CeleryLineEdit, self).__init__(parent=parent)
+        super(CLineEdit, self).__init__(parent=parent)
 
     def focusInEvent(self, e) -> None:
         self.focussed.emit(self.text())

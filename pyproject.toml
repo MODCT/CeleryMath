@@ -1,42 +1,47 @@
 [tool.poetry]
 name = "CeleryMath"
-version = "0.2.0"
+version = "0.3.0"
 description = "A LaTex Equation OCR Tool Based on ConvNeXt and Transformer"
 authors = ["rainyl <rainyliusy3@gmail.com>"]
 license = "GPL-3.0"
 
 [tool.poetry.dependencies]
 python = ">=3.9,<3.12"
-numpy = "^1.25.2"
-Pillow = "^10.0.0"
-onnxruntime = "^1.15.1"
+numpy = "^1.26.0"
+Pillow = "^10.0.1"
+onnxruntime = "^1.16.0"
 tokenizers = "^0.13.3"
 PySide6 = "^6.5.2"
 pynput = "^1.7.6"
 coloredlogs = "^15.0.1"
-pyhotkey = { git = "https://github.com/rainyl/PyHotKey.git", rev = "3175397b290e140d671e13493493bde499e2ada0" }
-onnxruntime-gpu = "^1.15.1"
+onnxruntime-gpu = "^1.16.0"
 toml = "^0.10.2"
 ziamath = "^0.8.1"
+pyhotkey = "^1.5.0"
 
 [tool.poetry.group.dev.dependencies]
-Nuitka = "^1.7.9"
-black = "^23.7.0"
+Nuitka = "^1.8.3"
+black = "^23.9.1"
 poethepoet = "^0.21.1"
 py7zr = "^0.20.6"
-pytest = "^7.4.0"
+pytest = "^7.4.2"
 
 [tool.poe.tasks]
-run = "python ./celeryMath.py"
+run = "python ./CeleryMathGui.py"
 build = """python ./build.py"""
-build-debug = """python ./build.py --debug"""
 
 designer = "pyside6-designer.exe "
-uic-main = "pyside6-uic -o CeleryMath/celeryMathUI.py resources/ui/celeryMathUI.ui"
-rcc = "pyside6-rcc -o celeryMath_rc.py resources/celeryMath.qrc"
+rcc = "pyside6-rcc -o CeleryMath_rc.py resources/CeleryMath.qrc"
+
+[tool.poe.tasks.uic]
+sequence = [
+    { cmd = "pyside6-uic -o CeleryMath/CeleryMathUI.py resources/ui/CeleryMathUI.ui" },
+    { cmd = "pyside6-uic -o CeleryMath/widgets/CTexLineWidgetUI.py resources/ui/CTexLine.ui" },
+    { cmd = "pyside6-uic -o CeleryMath/widgets/CDialogSettingsUI.py resources/ui/CDialogSettingsUI.ui" },
+]
 
 [tool.ruff]
-ignore = ["E501"]
+ignore = ["E501", "F401"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

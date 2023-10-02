@@ -20,7 +20,7 @@ CPUS: int = os.cpu_count()  # type: ignore
 
 def publish_to_7z(build_dir: str, version: str):
     print("Compressing...")
-    working_dir = Path(f"{build_dir}/celeryMath.dist/")
+    working_dir = Path(f"{build_dir}/CeleryMathGui.dist/")
     exclude_pattern = re.compile(r"qtwebengine_devtools_resources")
     for file in working_dir.glob("**/*"):
         if exclude_pattern.search(str(file)):
@@ -35,14 +35,16 @@ def publish_to_7z(build_dir: str, version: str):
 
 
 def main(version: str, enable_debug: bool = False, jobs: int = CPUS):
-    std_out = "--force-stdout-spec=celerymath_out.log "
-    std_err = "--force-stderr-spec=celerymath_error.log "
-    disable_console = "--windows-disable-console "
+    # std_out = "--force-stdout-spec=celerymath_out.log "
+    # std_err = "--force-stderr-spec=celerymath_error.log "
+    std_out = ""
+    std_err = ""
+    console = "--disable-console "
     build_dir = "build"
     debug = ""
     if enable_debug:
-        disable_console = ""
-        build_dir = "build_debug"
+        console = "--enable-console "
+        build_dir = "build_debug "
         std_out = ""
         std_err = ""
         # debug = "--debug "
@@ -52,12 +54,12 @@ def main(version: str, enable_debug: bool = False, jobs: int = CPUS):
         "--mingw64 "
         # "--recompile-c-only "
         "--standalone "
-        f"{debug}"
+        f"{debug} "
         f"--output-dir={build_dir} "
-        "--follow-imports "
-        f"{disable_console}"
-        f"{std_out}"
-        f"{std_err}"
+        # "--follow-imports "
+        f"{console} "
+        f"{std_out} "
+        f"{std_err} "
         f"--jobs={jobs} "
         "--file-description=CeleryMath "
         "--company-name=rainyl@MODCT.org "
@@ -70,19 +72,17 @@ def main(version: str, enable_debug: bool = False, jobs: int = CPUS):
         # "--plugin-enable=matplotlib "
         # "--plugin-enable=multiprocessing "
         # "--plugin-enable=upx "
-        # "--include-package=ziamath "
-        # "--include-package=ziafont "
-        # "--include-package=latex2mathml "
         "--user-package-configuration-file=cm.nuitka-package.config.yml "
         "--windows-icon-from-ico=resources/icons/logo.ico "
-        "./celeryMath.py "
+        "./CeleryMathGui.py "
+        # "test.py "
     )
 
     os.system(cmd)
 
     # make directories and copy necessary files
     mkdirs = [
-        Path(f"{build_dir}/celeryMath.dist/conf"),
+        Path(f"{build_dir}/CeleryMathGui.dist/conf"),
     ]
     for path in mkdirs:
         if not path.exists():
@@ -97,7 +97,10 @@ if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("-v", dest="version", type=str)
     parser.add_argument(
-        "--debug", dest="debug", action="store_true", help="enable build for debug"
+        "--debug",
+        dest="debug",
+        action="store_true",
+        help="enable build for debug",
     )
     parser.add_argument("-j", dest="jobs", type=int, default=CPUS)
     args = parser.parse_args()

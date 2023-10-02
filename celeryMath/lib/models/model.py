@@ -84,13 +84,15 @@ class LatexModelONNX(object):
         dec = [self.tokenizer.decode_batch([tbw[0] for tbw in tb]) for tb in tokens]
         dec = [
             [
-                "".join(d.split(" "))
-                .replace("Ġ", " ")  # space
-                .replace("Ċ", "")  # newline
-                .replace("[EOS]", "")
-                .replace("[BOS]", "")
-                .replace("[PAD]", "")
-                .strip()
+                self.post_process(
+                    d.replace("Ġ", " ")  # space
+                    .replace("Ċ", "")  # newline
+                    .replace("[EOS]", "")
+                    .replace("[BOS]", "")
+                    .replace("[PAD]", "")
+                    .replace("  ", " ")
+                    .strip()
+                )
                 for d in dbw
             ]
             for dbw in dec
@@ -124,9 +126,16 @@ class LatexModelONNX(object):
         Returns:
             str: Processed latex string
         """
-        text_reg = r"(\\(operatorname|mathrm|text|mathbf)\s?\*? {.*?})"
-        letter = "[a-zA-Z]"
+        letter = r"[a-zA-Z]"
         noletter = r"[\W_^\d]"
+        text_reg = r"(\\(operatorname|mathrm|text|mathbf)\s?\*? {.*?})"
+
+        # replace `\ frac` to `\frac`
+        kws = re.findall(r"\\ [a-zA-Z]+", s)
+        rep = {re.escape(k): k.replace(" ", "") for k in kws}
+        pattern = re.compile("|".join(rep.keys()))
+        s = pattern.sub(lambda m: rep[re.escape(m.group(0))], s)
+
         names = [x[0].replace(" ", "") for x in re.findall(text_reg, s)]
         s = re.sub(text_reg, lambda match: str(names.pop(0)), s)
         news = s

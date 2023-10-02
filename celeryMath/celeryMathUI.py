@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'celeryMathUI.ui'
+## Form generated from reading UI file 'CeleryMathUI.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.5.2
 ##
@@ -22,8 +22,8 @@ from PySide6.QtWidgets import (QApplication, QComboBox, QDoubleSpinBox, QFrame,
     QSpacerItem, QSpinBox, QSplitter, QStatusBar,
     QVBoxLayout, QWidget)
 
-from CeleryMath.widgets.celeryImageView import CeleryImageView
-import celeryMath_rc
+from CeleryMath.widgets.CImageView import CImageView
+import CeleryMath_rc
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -146,7 +146,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.splitter_tex_img.sizePolicy().hasHeightForWidth())
         self.splitter_tex_img.setSizePolicy(sizePolicy)
         self.splitter_tex_img.setOrientation(Qt.Vertical)
-        self.imview_original = CeleryImageView(self.splitter_tex_img)
+        self.imview_original = CImageView(self.splitter_tex_img)
         self.imview_original.setObjectName(u"imview_original")
         font1 = QFont()
         font1.setFamilies([u"MiSans Demibold"])
@@ -172,7 +172,7 @@ class Ui_MainWindow(object):
         self.scroll_tex_lines.setWidgetResizable(True)
         self.scroll_tex_lines_contents = QWidget()
         self.scroll_tex_lines_contents.setObjectName(u"scroll_tex_lines_contents")
-        self.scroll_tex_lines_contents.setGeometry(QRect(0, 0, 634, 274))
+        self.scroll_tex_lines_contents.setGeometry(QRect(0, 0, 634, 69))
         self.gridLayout_2 = QGridLayout(self.scroll_tex_lines_contents)
         self.gridLayout_2.setSpacing(2)
         self.gridLayout_2.setObjectName(u"gridLayout_2")

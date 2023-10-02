@@ -1,5 +1,5 @@
 """
-Description: 
+Description: Tex line edit widget
 Author: Rainyl
 Date: 2022-08-15 21:26:29
 LastEditTime: 2023-08-07 11:16:02
@@ -9,10 +9,10 @@ from typing import Callable, List
 from PySide6.QtGui import QClipboard
 from PySide6.QtWidgets import QScrollArea, QVBoxLayout, QWidget
 
-from .celeryTexLineUI import Ui_CeleryTexLine
+from .CTexLineWidgetUI import Ui_CTexLine
 
 
-class CeleryTexLineWidget(QWidget, Ui_CeleryTexLine):
+class CTexLineWidget(QWidget, Ui_CTexLine):
     def __init__(
         self,
         parent=None,
@@ -20,7 +20,7 @@ class CeleryTexLineWidget(QWidget, Ui_CeleryTexLine):
         prob: float | None = None,
         clipboard: QClipboard | None = None,
     ):
-        super(CeleryTexLineWidget, self).__init__(parent)
+        super(CTexLineWidget, self).__init__(parent)
         self.setupUi(self)
 
         self.clipboard = QClipboard(self) if clipboard is None else clipboard
@@ -53,7 +53,7 @@ class CeleryTexDispWidget(QWidget):
 
     def add_lines(self, lines: List[str], slot: Callable | None = None):
         for line in lines:
-            tex_line = CeleryTexLineWidget(text=line)
+            tex_line = CTexLineWidget(text=line)
             if slot is not None:
                 tex_line.ledit_tex.textEdited.connect(slot)
             self.scroll_layout.addWidget(tex_line)

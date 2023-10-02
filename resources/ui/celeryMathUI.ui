@@ -19,7 +19,7 @@
    <string>CeleryMath</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../celeryMath.qrc">
+   <iconset resource="../CeleryMath.qrc">
     <normaloff>:/icon/icons/logo.png</normaloff>:/icon/icons/logo.png</iconset>
   </property>
   <property name="styleSheet">
@@ -150,7 +150,7 @@ QRadioButton::indicator:checked:pressed
           <property name="orientation">
            <enum>Qt::Vertical</enum>
           </property>
-          <widget class="CeleryImageView" name="imview_original">
+          <widget class="CImageView" name="imview_original">
            <property name="font">
             <font>
              <family>MiSans Demibold</family>
@@ -188,7 +188,7 @@ QRadioButton::indicator:checked:pressed
           <x>0</x>
           <y>0</y>
           <width>634</width>
-          <height>274</height>
+          <height>69</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_2">
@@ -350,7 +350,7 @@ QComboBox::item
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../celeryMath.qrc">
+         <iconset resource="../CeleryMath.qrc">
           <normaloff>:/icon/icons/thermometer_FILL0_wght400_GRAD0_opsz48.svg</normaloff>
           <disabledoff>:/icon/icons/thermometer_FILL0_wght400_GRAD0_opsz48.svg</disabledoff>
           <disabledon>:/icon/icons/thermometer_FILL0_wght400_GRAD0_opsz48.svg</disabledon>:/icon/icons/thermometer_FILL0_wght400_GRAD0_opsz48.svg</iconset>
@@ -447,7 +447,7 @@ QDoubleSpinBox::down-button::pressed
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../celeryMath.qrc">
+         <iconset resource="../CeleryMath.qrc">
           <normaloff>:/icon/icons/settings_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icon/icons/settings_FILL0_wght400_GRAD0_opsz48.svg</iconset>
         </property>
         <property name="iconSize">
@@ -582,7 +582,7 @@ QSpinBox::down-button::pressed
        <string>Screenshot</string>
       </property>
       <property name="icon">
-       <iconset resource="../celeryMath.qrc">
+       <iconset resource="../CeleryMath.qrc">
         <normaloff>:/icon/icons/screenshot_monitor_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icon/icons/screenshot_monitor_FILL0_wght400_GRAD0_opsz48.svg</iconset>
       </property>
       <property name="iconSize">
@@ -599,9 +599,9 @@ QSpinBox::down-button::pressed
  </widget>
  <customwidgets>
   <customwidget>
-   <class>CeleryImageView</class>
+   <class>CImageView</class>
    <extends>QGraphicsView</extends>
-   <header>CeleryMath.widgets.celeryImageView</header>
+   <header>CeleryMath.widgets.CImageView</header>
   </customwidget>
   <customwidget>
    <class>QSvgWidget</class>
@@ -611,7 +611,7 @@ QSpinBox::down-button::pressed
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../celeryMath.qrc"/>
+  <include location="../CeleryMath.qrc"/>
  </resources>
  <connections/>
 </ui>

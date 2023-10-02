@@ -9,9 +9,9 @@ from PySide6.QtGui import QPainter, QColor, QPixmap
 from PySide6.QtWidgets import QGraphicsView, QGraphicsPixmapItem, QGraphicsScene
 
 
-class CeleryImageView(QGraphicsView):
+class CImageView(QGraphicsView):
     def __init__(self, parent=None):
-        super(CeleryImageView, self).__init__(parent=parent)
+        super(CImageView, self).__init__(parent=parent)
         self.setCursor(Qt.CursorShape.OpenHandCursor)
         self.setBackground(QColor(Qt.GlobalColor.white))
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)

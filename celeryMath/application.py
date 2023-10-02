@@ -4,7 +4,6 @@ from typing import Any, Dict, List, Tuple, Union, Optional, ClassVar
 from ziamath.zmath import Latex
 from ziafont.config import config as zf_config
 from PIL import Image
-from PyHotKey import manager as hotkManager
 from PySide6.QtCore import Qt, Slot, QByteArray
 from PySide6.QtGui import QClipboard, QCloseEvent, QKeyEvent, QPixmap, QImage
 from PySide6.QtWidgets import (
@@ -15,15 +14,11 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from .celeryMathUI import Ui_MainWindow
-from .celeryThread import CeleryInferThread
-from .lib.models.model import LatexModelONNX, get_model
-from .lib.utils.config import Config
-from .utils.emun import CeleryRadioButton
-from .utils.logger import CeleryLogger
-from .widgets.celeryScreenShotWidget import CeleryScreenShotWidget
-from .widgets.celeryTexLinesWidget import CeleryTexLineWidget
-from .widgets.dialogSettings import DialogSettings
+from .CeleryMathUI import Ui_MainWindow
+from .CeleryThread import CeleryInferThread
+from .lib import LatexModelONNX, get_model, Config
+from .utils import CRadioButtonType, CeleryLogger
+from .widgets import CScreenShotWidget, CTexLineWidget, CDialogSettings
 
 # ensure ziamath to construct svg with better compatibility
 # TODO: It's not an elegant implementation, plan to modify the ziamath library
@@ -41,8 +36,8 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         self.model: LatexModelONNX  # inference model
         self.img: Image.Image | None = None  # current image
         self.clipboard = QClipboard(self)
-        self.snip_widget = CeleryScreenShotWidget(self)
-        self.settings_dialog = DialogSettings(conf=self.conf)
+        self.snip_widget = CScreenShotWidget(self)
+        self.settings_dialog = CDialogSettings(conf=self.conf)
 
         self.init_ui()
         self.init_signals()
@@ -70,9 +65,9 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
 
         self.btngrp_greedy_beam = QButtonGroup(self)
         self.btngrp_greedy_beam.addButton(
-            self.rdbtn_greedy, CeleryRadioButton.GREEDY.value
+            self.rdbtn_greedy, CRadioButtonType.GREEDY.value
         )
-        self.btngrp_greedy_beam.addButton(self.rdbtn_beam, CeleryRadioButton.BEAM.value)
+        self.btngrp_greedy_beam.addButton(self.rdbtn_beam, CRadioButtonType.BEAM.value)
         self.btngrp_greedy_beam.buttonClicked.connect(self.on_greedy_beam_clicked)
 
     def init_ui(self):
@@ -87,10 +82,10 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
     # Slots
     ###############################################################################
     def on_greedy_beam_clicked(self):
-        if self.btngrp_greedy_beam.checkedId() == CeleryRadioButton.GREEDY.value:
+        if self.btngrp_greedy_beam.checkedId() == CRadioButtonType.GREEDY.value:
             self.conf.search_method = "greedy"
             self.conf.save()
-        elif self.btngrp_greedy_beam.checkedId() == CeleryRadioButton.BEAM.value:
+        elif self.btngrp_greedy_beam.checkedId() == CRadioButtonType.BEAM.value:
             self.conf.search_method = "beam"
             self.conf.save()
         else:
@@ -149,9 +144,7 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
         self.scroll_layout = QVBoxLayout()
         self.scroll_tex_lines_contents = QWidget()
         for t in tex:
-            texline = CeleryTexLineWidget(
-                text=t[0], prob=t[1], clipboard=self.clipboard
-            )
+            texline = CTexLineWidget(text=t[0], prob=t[1], clipboard=self.clipboard)
             texline.ledit_tex.textEdited.connect(self.ledit_val_changed)
             texline.ledit_tex.focussed.connect(self.render_tex)
             self.scroll_layout.addWidget(texline)
@@ -270,8 +263,6 @@ class CeleryMath(QMainWindow, Ui_MainWindow):
 
     def closeEvent(self, event: QCloseEvent):
         try:
-            # keyboard.remove_all_hotkeys()
-            hotkManager.unregister_all()
             self.settings_dialog.hotkey_sc.unregister_hotkey()
         except Exception as e:
             self.logger.error(f"unregister snip hotkey error: {e}")

@@ -9,6 +9,7 @@
 ################################################################################
 
 from typing import List
+
 from PIL import ImageGrab
 from pynput.mouse import Controller as MouseController
 from PySide6.QtCore import QPoint, QRect, Qt
@@ -31,7 +32,7 @@ QApplication.setAttribute(Qt.ApplicationAttribute.AA_EnableHighDpiScaling, True)
 QApplication.setAttribute(Qt.ApplicationAttribute.AA_UseHighDpiPixmaps, True)
 
 
-class CeleryScreenShotWidget(QMainWindow):
+class CScreenShotWidget(QMainWindow):
     logger = CeleryLogger("screen_image")
     draw_ltop = QPoint()
     draw_rbot = QPoint()
@@ -40,7 +41,7 @@ class CeleryScreenShotWidget(QMainWindow):
     is_snipping = False
 
     def __init__(self, parent=None) -> None:
-        super(CeleryScreenShotWidget, self).__init__()
+        super(CScreenShotWidget, self).__init__()
         self.parent = parent  # type: ignore
 
         self.setWindowFlags(Qt.WindowType.WindowStaysOnTopHint)
@@ -131,7 +132,7 @@ class CeleryScreenShotWidget(QMainWindow):
 
         self.repaint()
         QApplication.processEvents()
-        img = ImageGrab.grab(bbox=bbox, all_screens=True)
+        img = ImageGrab.grab(bbox=bbox, all_screens=True)  # type: ignore
         QApplication.processEvents()
 
         self.reset_rect()

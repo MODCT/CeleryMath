@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CeleryTexLine</class>
- <widget class="QWidget" name="CeleryTexLine">
+ <class>CTexLine</class>
+ <widget class="QWidget" name="CTexLine">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -88,7 +88,7 @@ QPushButton::pressed
       <number>5</number>
      </property>
      <item>
-      <widget class="CeleryLineEdit" name="ledit_tex">
+      <widget class="CLineEdit" name="ledit_tex">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -159,7 +159,7 @@ QPushButton::pressed
         <string/>
        </property>
        <property name="icon">
-        <iconset resource="../celeryMath.qrc">
+        <iconset resource="../CeleryMath.qrc">
          <normaloff>:/icon/icons/content_copy_FILL0_wght400_GRAD0_opsz48.svg</normaloff>:/icon/icons/content_copy_FILL0_wght400_GRAD0_opsz48.svg</iconset>
        </property>
        <property name="iconSize">
@@ -176,13 +176,13 @@ QPushButton::pressed
  </widget>
  <customwidgets>
   <customwidget>
-   <class>CeleryLineEdit</class>
+   <class>CLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>src.widgets.celeryLineEdit</header>
+   <header>CeleryMath.widgets.CLineEdit</header>
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../celeryMath.qrc"/>
+  <include location="../CeleryMath.qrc"/>
  </resources>
  <connections/>
 </ui>

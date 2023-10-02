@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'dialogSettingsUI.ui'
+## Form generated from reading UI file 'CDialogSettingsUI.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.3.1
+## Created by: Qt User Interface Compiler version 6.5.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -20,24 +20,24 @@ from PySide6.QtWidgets import (QAbstractButton, QApplication, QComboBox, QDialog
     QHBoxLayout, QKeySequenceEdit, QLabel, QLineEdit,
     QPushButton, QSizePolicy, QTextBrowser, QVBoxLayout,
     QWidget)
-import celeryMath_rc
+import CeleryMath_rc
 
-class Ui_diaglog_settings(object):
-    def setupUi(self, diaglog_settings):
-        if not diaglog_settings.objectName():
-            diaglog_settings.setObjectName(u"diaglog_settings")
-        diaglog_settings.resize(410, 364)
+class Ui_CDialogSettings(object):
+    def setupUi(self, CDialogSettings):
+        if not CDialogSettings.objectName():
+            CDialogSettings.setObjectName(u"CDialogSettings")
+        CDialogSettings.resize(410, 364)
         font = QFont()
         font.setFamilies([u"MiSans Demibold"])
-        diaglog_settings.setFont(font)
-        self.gridLayout_3 = QGridLayout(diaglog_settings)
+        CDialogSettings.setFont(font)
+        self.gridLayout_3 = QGridLayout(CDialogSettings)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
         self.gridLayout_3.setVerticalSpacing(3)
         self.gridLayout_3.setContentsMargins(3, 3, 3, 3)
         self.verticalLayout = QVBoxLayout()
         self.verticalLayout.setSpacing(1)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.groupBox_2 = QGroupBox(diaglog_settings)
+        self.groupBox_2 = QGroupBox(CDialogSettings)
         self.groupBox_2.setObjectName(u"groupBox_2")
         self.gridLayout = QGridLayout(self.groupBox_2)
         self.gridLayout.setObjectName(u"gridLayout")
@@ -75,7 +75,7 @@ class Ui_diaglog_settings(object):
 
         self.verticalLayout.addWidget(self.groupBox_2)
 
-        self.groupBox = QGroupBox(diaglog_settings)
+        self.groupBox = QGroupBox(CDialogSettings)
         self.groupBox.setObjectName(u"groupBox")
         self.gridLayout_2 = QGridLayout(self.groupBox)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
@@ -185,49 +185,51 @@ class Ui_diaglog_settings(object):
         self.gridLayout_3.addLayout(self.verticalLayout, 0, 0, 1, 1)
 
 
-        self.retranslateUi(diaglog_settings)
-        self.buttonBox.accepted.connect(diaglog_settings.accept)
-        self.buttonBox.rejected.connect(diaglog_settings.reject)
+        self.retranslateUi(CDialogSettings)
+        self.buttonBox.accepted.connect(CDialogSettings.accept)
+        self.buttonBox.rejected.connect(CDialogSettings.reject)
 
-        QMetaObject.connectSlotsByName(diaglog_settings)
+        QMetaObject.connectSlotsByName(CDialogSettings)
     # setupUi
 
-    def retranslateUi(self, diaglog_settings):
-        diaglog_settings.setWindowTitle(QCoreApplication.translate("diaglog_settings", u"Settings", None))
-        self.groupBox_2.setTitle(QCoreApplication.translate("diaglog_settings", u"General", None))
-        self.btn_hotkey_reset.setText(QCoreApplication.translate("diaglog_settings", u"Reset", None))
-        self.label_4.setText(QCoreApplication.translate("diaglog_settings", u"Device:", None))
-        self.label_hotkey.setText(QCoreApplication.translate("diaglog_settings", u"HotKey:", None))
+    def retranslateUi(self, CDialogSettings):
+        CDialogSettings.setWindowTitle(QCoreApplication.translate("CDialogSettings", u"Settings", None))
+        self.groupBox_2.setTitle(QCoreApplication.translate("CDialogSettings", u"General", None))
+        self.btn_hotkey_reset.setText(QCoreApplication.translate("CDialogSettings", u"Reset", None))
+        self.label_4.setText(QCoreApplication.translate("CDialogSettings", u"Device:", None))
+        self.label_hotkey.setText(QCoreApplication.translate("CDialogSettings", u"HotKey:", None))
 #if QT_CONFIG(tooltip)
-        self.kseq_screenshot.setToolTip(QCoreApplication.translate("diaglog_settings", u"Click to change screenshot hotkey", None))
+        self.kseq_screenshot.setToolTip(QCoreApplication.translate("CDialogSettings", u"Click to change screenshot hotkey", None))
 #endif // QT_CONFIG(tooltip)
-        self.kseq_screenshot.setKeySequence(QCoreApplication.translate("diaglog_settings", u"Ctrl+Alt+S", None))
-        self.cbox_device.setItemText(0, QCoreApplication.translate("diaglog_settings", u"CPU", None))
-        self.cbox_device.setItemText(1, QCoreApplication.translate("diaglog_settings", u"CUDA", None))
+        self.kseq_screenshot.setKeySequence(QCoreApplication.translate("CDialogSettings", u"Ctrl+Alt+S", None))
+        self.cbox_device.setItemText(0, QCoreApplication.translate("CDialogSettings", u"CPU", None))
+        self.cbox_device.setItemText(1, QCoreApplication.translate("CDialogSettings", u"CUDA", None))
 
-        self.groupBox.setTitle(QCoreApplication.translate("diaglog_settings", u"Path Settings", None))
-        self.label.setText(QCoreApplication.translate("diaglog_settings", u"Tokenizer:", None))
-        self.btn_tokenizer_path.setText(QCoreApplication.translate("diaglog_settings", u"Browse", None))
-        self.label_2.setText(QCoreApplication.translate("diaglog_settings", u"Encoder:", None))
-        self.btn_encoder_path.setText(QCoreApplication.translate("diaglog_settings", u"Browse", None))
-        self.label_3.setText(QCoreApplication.translate("diaglog_settings", u"Decoder:", None))
-        self.btn_decoder_path.setText(QCoreApplication.translate("diaglog_settings", u"Browse", None))
-        self.groupBox_3.setTitle(QCoreApplication.translate("diaglog_settings", u"About", None))
-        self.textBrowser.setMarkdown(QCoreApplication.translate("diaglog_settings", u"CeleryMath\n"
+        self.groupBox.setTitle(QCoreApplication.translate("CDialogSettings", u"Path Settings", None))
+        self.label.setText(QCoreApplication.translate("CDialogSettings", u"Tokenizer:", None))
+        self.btn_tokenizer_path.setText(QCoreApplication.translate("CDialogSettings", u"Browse", None))
+        self.label_2.setText(QCoreApplication.translate("CDialogSettings", u"Encoder:", None))
+        self.btn_encoder_path.setText(QCoreApplication.translate("CDialogSettings", u"Browse", None))
+        self.label_3.setText(QCoreApplication.translate("CDialogSettings", u"Decoder:", None))
+        self.btn_decoder_path.setText(QCoreApplication.translate("CDialogSettings", u"Browse", None))
+        self.groupBox_3.setTitle(QCoreApplication.translate("CDialogSettings", u"About", None))
+        self.textBrowser.setMarkdown(QCoreApplication.translate("CDialogSettings", u"CeleryMath\n"
 "\n"
 "A Latex Equation OCR tool.\n"
 "\n"
 "Author: Rainyl\n"
 "\n"
 "", None))
-        self.textBrowser.setHtml(QCoreApplication.translate("diaglog_settings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        self.textBrowser.setHtml(QCoreApplication.translate("CDialogSettings", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'MiSans Demibold'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Microsoft YaHei UI'; font-size:14pt;\">CeleryMath</span></p>\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Microsoft YaHei UI'; font-size:10pt;\">A Latex Equation OCR tool.</span></p>\n"
-"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">"
-                        "<span style=\" font-family:'Microsoft YaHei UI'; font-size:12pt;\">Author: Rainyl</span></p></body></html>", None))
+"<p align=\"center\" style=\" margin-top:"
+                        "0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Microsoft YaHei UI'; font-size:12pt;\">Author: Rainyl</span></p></body></html>", None))
     # retranslateUi
 

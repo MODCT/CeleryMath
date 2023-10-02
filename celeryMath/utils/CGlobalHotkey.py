@@ -1,36 +1,42 @@
 from typing import Any, Dict, List
+
+from PyHotKey import Key, keyboard_manager as hotkey_manager
 from PySide6.QtCore import QObject, Signal
 from PySide6.QtGui import QKeySequence
-from PyHotKey import manager as hotkManager, Key
-
-hotkManager.setLogPath("log/hotkey.log")
-# hotkManager.logger = 1
 
 
-class CeleryGlobalHotkey(QObject):
+class CGlobalHotkey(QObject):
     pressed = Signal()
 
     def __init__(self, parent: QObject | None = None):
-        super(CeleryGlobalHotkey, self).__init__(parent)
-        self.hotkey = None
+        super(CGlobalHotkey, self).__init__(parent)
+        self.hotkey: int | None = None
 
     def register_hotkey(self, ksequence: QKeySequence):
-        kstr = self.keyseq2pynput(ksequence)
         if self.hotkey is not None:
             self.unregister_hotkey()
-        self.hotkey = hotkManager.RegisterHotKey(
-            lambda args: self.pressed.emit(),
-            self.keyseq2keylist(kstr),
-            count=1,
-            args=(),
+        kstr = self.keyseq2pynput(ksequence)
+        self.hotkey = hotkey_manager.register_hotkey(
+            self.keyseq2KeyList(kstr),
+            1,
+            lambda: self.pressed.emit(),
         )
 
     def unregister_hotkey(self):
-        hotkManager.UnregisterHotKey(self.hotkey)
+        hotkey_manager.unregister_hotkey_by_id(self.hotkey)
         self.hotkey = None
 
-    def keyseq2pynput(self, ksequence: QKeySequence) -> str:
-        hotkey = ksequence.toString().lower()
+    @staticmethod
+    def unregister_all_hotkey():
+        hotkey_manager.unregister_all_hotkeys()
+
+    def keyseq2KeyList(self, kseq: str) -> List[Key | str]:
+        keystrs = [k.lower() for k in kseq.split("+")]
+        keylist = [KeyModifiersMap.get(k, k) for k in keystrs]
+        return keylist
+
+    def keyseq2pynput(self, kseq: QKeySequence) -> str:
+        hotkey = kseq.toString().lower()
         return hotkey
 
     def keyseq2keylist(self, kseq: str):
